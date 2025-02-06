@@ -5,11 +5,11 @@ import org.example.game.Game;
 import org.example.game.cards.DeckAble;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
-import org.example.game.cards.basic.brown.brown.CardBeer;
-import org.example.game.cards.basic.brown.brown.CardCatBalou;
-import org.example.game.cards.basic.brown.brown.CardPanic;
-import org.example.game.cards.basic.brown.brown.CardBang;
-import org.example.game.cards.basic.brown.brown.CardMissed;
+import org.example.game.cards.brown.basic.CardBeer;
+import org.example.game.cards.brown.basic.CardCatBalou;
+import org.example.game.cards.brown.basic.CardPanic;
+import org.example.game.cards.brown.basic.CardBang;
+import org.example.game.cards.brown.basic.CardMissed;
 import org.example.game.cards.basic.characters.*;
 
 import java.util.ArrayList;
