@@ -189,7 +189,7 @@ public class Game {
         if (activePlayer != null) {
             activePlayer.showHandAndFront();
 
-            generator.generateOption(this, activePlayer);
+            generator.generateOptionAndChooseOne(this, activePlayer);
 
         }
     }
@@ -217,5 +217,9 @@ public class Game {
     public List<OptionOption> generateGlobalOption() {
         List<OptionOption> optionOptions = new ArrayList<>();
         return optionOptions;
+    }
+
+    public void resolveOption(OptionOption option) {
+
     }
 }

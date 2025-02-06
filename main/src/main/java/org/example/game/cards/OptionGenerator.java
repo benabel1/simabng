@@ -9,16 +9,20 @@ import java.util.List;
 
 public class OptionGenerator {
 
-    public void generateOption(Game game, GamePlayer player) {
+    public void generateOptionAndChooseOne(Game game, GamePlayer player) {
         List<OptionOption> allOptions = new ArrayList<>();
         allOptions.add(new SkipOption());
         allOptions.addAll(game.generateGlobalOption());
         allOptions.addAll(player.generateALlOption());
 
-        for (OptionOption option: allOptions) {
-            System.out.println("\t" + option);
+        for (int i = 0; i < allOptions.size(); i++) {
+            System.out.format("\t%2d %15s\n", i, allOptions.get(i));
+
         }
 
-        OptionScanner.scanInt("Which option", 0, 10, 0);
+        int choice = OptionScanner.scanInt("Which option", 0,  allOptions.size(), 0);
+        OptionOption option = allOptions.get(choice);
+
+        game.resolveOption(option);
     }
 }
