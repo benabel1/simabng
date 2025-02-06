@@ -11,5 +11,7 @@ public class CharPaulRegret extends GameCharacter {
         this.startHp = 3;
 
         this.startHand = 3;
+
+        this.isPassiveAbility = true;
     }
 }

@@ -20,4 +20,19 @@ public class GameCard extends DeckAble {
         this.suit = s;
         this.poker = p;
     }
+
+    @Override
+    public String toString() {
+        return "[" + suit + poker+ "]" + cardName;
+    }
+
+    @Override
+    public boolean canBePlay() {
+        return true;
+    }
+
+    @Override
+    public OptionOption generateOption(DeckAble card, GamePlayer gamePlayer) {
+        return new CardOption((GameCard) card, gamePlayer);
+    }
 }

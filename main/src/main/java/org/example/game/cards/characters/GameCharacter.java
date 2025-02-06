@@ -1,7 +1,6 @@
 package org.example.game.cards.characters;
 
-import org.example.game.Game;
-import org.example.game.GameEngine;
+import org.example.game.*;
 import org.example.game.cards.DeckAble;
 import org.example.game.cards.GameRecordAble;
 
@@ -13,6 +12,17 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
     protected int drawInTurnCards;
     protected String charAbility;
 
+    protected boolean isAbilityPhase01;
+    protected boolean isAbilityPhase02;
+    protected boolean isAbilityPhase03;
+
+
+    protected boolean isAbilityInTurnOfYour;
+    protected boolean isAbilityOutTurnOfYour;
+
+    protected boolean isPassiveAbility;
+    protected boolean isaActiveAbility;
+
     public GameCharacter() {
         //default values
         this.cardName ="set name for " + this.getClass().getCanonicalName();
@@ -21,6 +31,14 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
         this.maxHp = 4;
         this.startHp = 4;
         this.startHand = 4;
+
+        this.drawInTurnCards = 2;
+
+
+    }
+
+    public void playedCard(Game game, GameCard card) {
+
     }
 
     public int getMaxHp() {
@@ -49,5 +67,15 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
     @Override
     public String toString() {
         return getCardName();
+    }
+
+    @Override
+    public OptionOption generateOption(DeckAble card, GamePlayer gamePlayer) {
+        return new CharacterOption(this, gamePlayer);
+    }
+
+    @Override
+    public boolean canBePlay() {
+        return false;
     }
 }

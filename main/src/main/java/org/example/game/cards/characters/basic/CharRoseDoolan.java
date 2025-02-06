@@ -6,5 +6,7 @@ public class CharRoseDoolan extends GameCharacter {
 
     public CharRoseDoolan() {
         this.cardName = "RoseDoolan";
+
+        this.isPassiveAbility = true;
     }
 }

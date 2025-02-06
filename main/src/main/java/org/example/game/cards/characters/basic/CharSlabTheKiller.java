@@ -6,5 +6,7 @@ public class CharSlabTheKiller extends GameCharacter {
 
     public CharSlabTheKiller() {
         this.cardName = "SlabTheKiller";
+
+        this.isPassiveAbility = true;
     }
 }

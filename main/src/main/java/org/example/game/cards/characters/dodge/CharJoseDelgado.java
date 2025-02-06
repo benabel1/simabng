@@ -7,5 +7,8 @@ public class CharJoseDelgado extends GameCharacter {
     public CharJoseDelgado() {
 
         this.cardName = "JoseDelgado";
+
+        isAbilityInTurnOfYour = true;
+        isAbilityPhase02 = true;
     }
 }

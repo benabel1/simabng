@@ -9,5 +9,7 @@ public class CharApacheKid extends GameCharacter {
 
         this.maxHp = 3;
         this.startHp = 3;
+
+        isPassiveAbility = true;
     }
 }

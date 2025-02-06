@@ -6,5 +6,9 @@ public class CharPedroRamirez extends GameCharacter {
 
     public CharPedroRamirez() {
         this.cardName = "PedroRamirez";
+
+        this.isaActiveAbility = true;
+
+        this.isAbilityPhase01 = true;
     }
 }

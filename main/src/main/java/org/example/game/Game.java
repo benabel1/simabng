@@ -19,7 +19,8 @@ public class Game {
 
     private List<DeckAble> allCharacters;
     private List<DeckAble> allPlayingCards;
-    private List<DeckAble> allDiscardedCards;
+    private DeckOfCards playingCardDeck;
+    private DeckOfCards discardCardDeck;
     private GameExpansionSetup[] settings;
     private GamePlayer activePlayer;
 
@@ -37,14 +38,23 @@ public class Game {
 
     private void setupDecks() {
         allPlayingCards = new ArrayList<>();
-        allDiscardedCards = new ArrayList<>();
         allCharacters = new ArrayList<>();
+
+
 
         for (GameExpansionSetup setup: getSettings()) {
             if (setup.isTurnOn()){
                 setup.applySetup(this);
             }
         }
+
+        playingCardDeck = new DeckOfCards(allPlayingCards);
+        playingCardDeck.reshuffle();
+
+        discardCardDeck = new DeckOfCards(new ArrayList<>());
+
+        playingCardDeck.setPairDeck(discardCardDeck);
+        discardCardDeck.setPairDeck(playingCardDeck);
     }
 
     private GameExpansionSetup[] getSettings() {
@@ -186,21 +196,16 @@ public class Game {
         return allPlayingCards;
     }
 
-    public DeckAble drawCard(Game game) {
-        DeckAble card;
+    public DeckAble drawCard() {
+        DeckAble card = playingCardDeck.draw();
 
-        if (!allPlayingCards.isEmpty()) {
-            card = allPlayingCards.remove(0);
-
-        } else if(!allDiscardedCards.isEmpty()) {
-            //TODO: make random reshuffling
-            allPlayingCards.addAll(allDiscardedCards);
-            card = allPlayingCards.remove(0);
-        } else {
-            System.out.println("Both deck are empty");
-            card = null;
-        }
+        System.out.println("Card" + card + " was drawn");
 
         return card;
+    }
+
+    public List<OptionOption> generateGlobalOption() {
+        List<OptionOption> optionOptions = new ArrayList<>();
+        return optionOptions;
     }
 }

@@ -6,5 +6,7 @@ public class CharSidKetchum extends GameCharacter {
 
     public CharSidKetchum() {
         this.cardName = "SidKetchum";
+
+        this.isaActiveAbility = true;
     }
 }

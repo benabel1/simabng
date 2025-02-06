@@ -6,5 +6,7 @@ public class CharBlackJack extends GameCharacter {
 
     public CharBlackJack() {
         this.cardName = "BlackJack";
+
+        this.isAbilityPhase01 = true;
     }
 }
