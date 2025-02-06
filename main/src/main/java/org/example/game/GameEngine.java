@@ -33,8 +33,19 @@ public class GameEngine {
         }
     }
 
-    public List<DeckAble> drawCards(int startHand) {
-        return null;
+    public List<DeckAble> drawCards(int startHand, Game game) {
+        List<DeckAble> drawn = new ArrayList<>();
+
+
+
+        for (int i = 0; i < startHand; i++) {
+            DeckAble card = game.drawCard(game);
+            if (card != null) {
+                drawn.add(card);
+            }
+        }
+
+        return drawn;
     }
 
     public List<Roles> randomSelected(int playerCount) {

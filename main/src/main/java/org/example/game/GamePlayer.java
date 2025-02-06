@@ -90,4 +90,22 @@ public class GamePlayer {
     public GameCharacter getCurrentCharacter() {
         return currentChar;
     }
+
+    public void showHandAndFront() {
+        System.out.println("HAND");
+        for (DeckAble hand: playerHand) {
+            System.out.println("\t" + hand.getCardName());
+        }
+
+        System.out.println("FRONT");
+        for (DeckAble hand: playerFront) {
+            System.out.println(hand.getCardName());
+        }
+    }
+
+    public void drawInitialHand(Game game) {
+        if (game != null && game.getEngine() != null) {
+            playerHand.addAll(game.getEngine().drawCards(currentHp, game));
+        }
+    }
 }

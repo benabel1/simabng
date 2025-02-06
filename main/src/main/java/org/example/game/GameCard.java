@@ -13,6 +13,9 @@ public class GameCard extends DeckAble {
     protected boolean canPlayedOnSideOfTurn;
     protected boolean canPlayedOutSideOfTurn;
 
+    protected int distanceMax;
+    protected DistanceAllowedTarget alloedTarget;
+
     public GameCard(Suit s, PokerValue p) {
         this.suit = s;
         this.poker = p;
