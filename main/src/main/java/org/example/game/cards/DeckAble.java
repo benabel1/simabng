@@ -1,7 +1,7 @@
 package org.example.game.cards;
 
 import org.example.game.GamePlayer;
-import org.example.game.OptionOption;
+import org.example.game.options.OptionOption;
 
 public class DeckAble {
     protected String cardName;

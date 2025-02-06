@@ -1,10 +1,8 @@
 package org.example.game.settings;
 
-import org.example.game.DeckName;
+import org.example.game.deck.DeckName;
 import org.example.game.Game;
 import org.example.game.cards.DeckAble;
-import org.example.game.cards.PokerValue;
-import org.example.game.cards.Suit;
 
 import java.util.List;
 

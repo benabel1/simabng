@@ -1,7 +1,12 @@
 package org.example.game;
 
 import org.example.game.cards.DeckAble;
+import org.example.game.cards.OptionGenerator;
 import org.example.game.cards.characters.GameCharacter;
+import org.example.game.deck.DeckName;
+import org.example.game.deck.DeckOfCards;
+import org.example.game.options.OptionOption;
+import org.example.game.options.OptionScanner;
 import org.example.game.settings.BANGBasicGameSetup;
 import org.example.game.settings.BANGDodgeCityGameSetup;
 import org.example.game.settings.GameExpansionSetup;
@@ -12,6 +17,7 @@ import java.util.List;
 import static org.example.game.Roles.*;
 
 public class Game {
+    private final OptionGenerator generator;
     GameEngine engine;
     GameStep step;
     List<GameStep> steps;
@@ -34,13 +40,13 @@ public class Game {
         settings[1] = new BANGDodgeCityGameSetup();
 
         setupDecks();
+
+        generator = new OptionGenerator();
     }
 
     private void setupDecks() {
         allPlayingCards = new ArrayList<>();
         allCharacters = new ArrayList<>();
-
-
 
         for (GameExpansionSetup setup: getSettings()) {
             if (setup.isTurnOn()){
@@ -120,6 +126,7 @@ public class Game {
                 break;
             case PLAYING_CARDS:
                 allPlayingCards.addAll(listOfCards);
+                break;
 
             default:
                 System.out.println("Insertion of cards failed. " + deck + " was  not recognised.");
@@ -181,6 +188,9 @@ public class Game {
     private void showOption() {
         if (activePlayer != null) {
             activePlayer.showHandAndFront();
+
+            generator.generateOption(this, activePlayer);
+
         }
     }
 

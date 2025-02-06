@@ -1,4 +1,4 @@
-package org.example.game;
+package org.example.game.deck;
 
 import org.example.game.cards.DeckAble;
 
@@ -17,10 +17,14 @@ public class DeckOfCards {
     }
 
     public DeckAble draw() {
-        if (content != null && !content.isEmpty()) {
+        if (content != null)
+            if (!content.isEmpty()) {
             return content.remove(0);
         } else {
-            return null;
+            shuffle();
+            return content.remove(0);
+        } else {
+                return null;
         }
     }
 

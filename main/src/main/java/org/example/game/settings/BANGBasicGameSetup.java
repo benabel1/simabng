@@ -1,6 +1,6 @@
 package org.example.game.settings;
 
-import org.example.game.DeckName;
+import org.example.game.deck.DeckName;
 import org.example.game.Game;
 import org.example.game.cards.DeckAble;
 import org.example.game.cards.blue.basic.*;
@@ -46,7 +46,8 @@ public class BANGBasicGameSetup extends GameExpansionSetup {
     protected List<DeckAble> createListCardsPlayingDeck() {
         List<DeckAble> result = new ArrayList<>();
 
-
+        createBrownBorderCards(result);
+        createBlueBorderCards(result);
 
         return result;
     }
@@ -82,9 +83,6 @@ public class BANGBasicGameSetup extends GameExpansionSetup {
     @Override
     protected List<DeckAble> createListCardsSpecialDeck() {
         List<DeckAble> result = new ArrayList<>();
-
-        createBrownBorderCards(result);
-        createBlueBorderCards(result);
 
         return result;
     }

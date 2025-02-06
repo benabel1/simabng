@@ -1,4 +1,7 @@
-package org.example.game;
+package org.example.game.options;
+
+import org.example.game.GameCard;
+import org.example.game.GamePlayer;
 
 public class CardOption extends OptionOption {
 

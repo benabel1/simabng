@@ -1,7 +1,7 @@
 package org.example.game.cards.characters;
 
 import org.example.game.GamePlayer;
-import org.example.game.OptionOption;
+import org.example.game.options.OptionOption;
 
 public class CharacterOption extends OptionOption {
     private final GameCharacter characterSource;

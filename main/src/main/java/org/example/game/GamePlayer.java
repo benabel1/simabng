@@ -2,9 +2,9 @@ package org.example.game;
 
 import org.example.game.cards.DeckAble;
 import org.example.game.cards.characters.GameCharacter;
+import org.example.game.options.OptionOption;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static org.example.game.Roles.SHERIFF;

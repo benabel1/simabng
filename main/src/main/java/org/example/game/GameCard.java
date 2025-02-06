@@ -1,9 +1,8 @@
 package org.example.game;
 
-import org.example.game.cards.CardBorderColor;
-import org.example.game.cards.DeckAble;
-import org.example.game.cards.PokerValue;
-import org.example.game.cards.Suit;
+import org.example.game.cards.*;
+import org.example.game.options.CardOption;
+import org.example.game.options.OptionOption;
 
 public class GameCard extends DeckAble {
     protected final Suit suit;
