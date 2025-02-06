@@ -3,6 +3,7 @@ package org.example.game;
 import org.example.game.cards.DeckAble;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.settings.BANGBasicGameSetup;
+import org.example.game.settings.BANGDodgeCityGameSetup;
 import org.example.game.settings.GameExpansionSetup;
 
 import java.util.ArrayList;
@@ -18,21 +19,25 @@ public class Game {
 
     private List<DeckAble> allCharacters;
     private List<DeckAble> allPlayingCards;
+    private List<DeckAble> allDiscardedCards;
     private GameExpansionSetup[] settings;
+    private GamePlayer activePlayer;
 
     public Game() {
         steps = new ArrayList<GameStep>();
 
         players = new ArrayList<GamePlayer>();
 
-        settings = new GameExpansionSetup[1];
+        settings = new GameExpansionSetup[2];
         settings[0] = new BANGBasicGameSetup();
+        settings[1] = new BANGDodgeCityGameSetup();
 
         setupDecks();
     }
 
     private void setupDecks() {
         allPlayingCards = new ArrayList<>();
+        allDiscardedCards = new ArrayList<>();
         allCharacters = new ArrayList<>();
 
         for (GameExpansionSetup setup: getSettings()) {
@@ -52,6 +57,13 @@ public class Game {
 
     public void setup() {
         setupPlayers();
+        setupInitialHands();
+    }
+
+    private void setupInitialHands() {
+        for (GamePlayer player: players) {
+            player.drawInitialHand(this);
+        }
     }
 
     private void setupPlayers() {
@@ -65,6 +77,8 @@ public class Game {
                GamePlayer player = generatePlayerForPosition(i, roles.get(i));
                player.assignStartingCharacter((GameCharacter) characters.get(i));
         }
+
+        activePlayer = players.get(0);
 
     }
 
@@ -148,12 +162,45 @@ public class Game {
         }
         System.out.println("+-------+----+-----+----+-----+");
         System.out.println("iteration1");
+
+        showOption();
+
+        OptionScanner.scanInt("Write option", 0, 3, 2);
     }
+
+    private void showOption() {
+        if (activePlayer != null) {
+            activePlayer.showHandAndFront();
+        }
+    }
+
     private int countPlayersWithRoleAndAliveStatus(Roles role, boolean isAlive) {
         int total = 0;
         for (GamePlayer player:players) {
             total += player.matchRoleAndAliveStat(role, isAlive) ;
         }
         return total;
+    }
+
+    public List<DeckAble> getDecks() {
+        return allPlayingCards;
+    }
+
+    public DeckAble drawCard(Game game) {
+        DeckAble card;
+
+        if (!allPlayingCards.isEmpty()) {
+            card = allPlayingCards.remove(0);
+
+        } else if(!allDiscardedCards.isEmpty()) {
+            //TODO: make random reshuffling
+            allPlayingCards.addAll(allDiscardedCards);
+            card = allPlayingCards.remove(0);
+        } else {
+            System.out.println("Both deck are empty");
+            card = null;
+        }
+
+        return card;
     }
 }

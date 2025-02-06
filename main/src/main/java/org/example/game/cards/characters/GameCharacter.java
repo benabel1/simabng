@@ -33,7 +33,7 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
 
     //TODO Need implementation
     public List<DeckAble> drawInitialHand(Game game) {
-        return game.getEngine().drawCards(startHand);
+        return game.getEngine().drawCards(startHand, game);
     }
 
     //TODO Need implementation
@@ -44,5 +44,10 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
     @Override
     public String getUniqueNameForRecording() {
         return this.getClass().getName().replaceFirst("Char","");
+    }
+
+    @Override
+    public String toString() {
+        return getCardName();
     }
 }
