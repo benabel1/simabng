@@ -1,10 +1,12 @@
 package org.example.game;
 
 import org.example.game.cards.DeckAble;
-import org.example.game.cards.GameCharacter;
+import org.example.game.cards.characters.GameCharacter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.example.game.Roles.SHERIFF;
 
 public class GamePlayer {
     private final String name;
@@ -14,16 +16,19 @@ public class GamePlayer {
     private int orderElimination;
 
     private int currentHp;
+    private int maxHp;
 
     private GameCharacter startChar;
     private GameCharacter currentChar;
 
     private List<DeckAble> playerHand;
     private List<DeckAble> playerFront;
+    private Roles currentRole, startingRole;
 
-    public GamePlayer(String name, int orderNumber) {
-        this.name= name;
+    public GamePlayer(String name, int orderNumber, Roles role) {
+        this.name = name;
         this.order = orderNumber;
+        this.startingRole = this.currentRole = role;
 
         initPlayerGameElements();
 
@@ -35,9 +40,17 @@ public class GamePlayer {
         playerFront = new ArrayList<>();
     }
 
-    private void assignStartingCharacter(GameCharacter character) {
+    public void assignStartingCharacter(GameCharacter character) {
         if (this.startChar == null &&  character != null) {
-            this.startChar = character;
+            this.startChar = this.currentChar = character;
+
+            maxHp = this.startChar.getMaxHp();
+            currentHp = this.startChar.getStartHp();
+
+            if (startingRole == SHERIFF) {
+                maxHp++;
+                currentHp++;
+            }
         }
     }
 
@@ -48,5 +61,33 @@ public class GamePlayer {
     public GamePlayer setCurrentHp(int currentHp) {
         this.currentHp = currentHp;
         return this;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int matchRoleAndAliveStat(Roles role, boolean isAlive) {
+        if (role == null) {
+            return 0;
+        } else {
+            return (currentRole == role && isAlive() == isAlive)? 1 : 0;
+        }
+    }
+
+    private boolean isAlive() {
+        return currentHp > 0;
+    }
+
+    public String getCurrentRole() {
+        return (currentRole != null)? currentRole.toString() : "NONE ROLE";
+    }
+
+    public int getCurrentMaxHp() {
+        return maxHp;
+    }
+
+    public GameCharacter getCurrentCharacter() {
+        return currentChar;
     }
 }
