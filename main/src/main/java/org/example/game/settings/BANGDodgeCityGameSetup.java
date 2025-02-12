@@ -1,6 +1,6 @@
 package org.example.game.settings;
 
-import org.example.game.DeckName;
+import org.example.game.deck.DeckName;
 import org.example.game.Game;
 import org.example.game.cards.DeckAble;
 import org.example.game.cards.blue.basic.*;
@@ -13,7 +13,6 @@ import org.example.game.cards.green.dodge.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Spliterator;
 
 import static org.example.game.cards.PokerValue.*;
 import static org.example.game.cards.Suit.*;

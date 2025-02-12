@@ -7,6 +7,8 @@ public class CharJourdonnias extends GameCharacter {
 
     public CharJourdonnias(){
         this.cardName = "Jourdonnais";
+
+        this.isPassiveAbility = true;
     }
 
     @Override

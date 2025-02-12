@@ -7,6 +7,7 @@ public class CharBartCassidy extends GameCharacter implements GameRecordAble {
 
     public CharBartCassidy(){
         this.cardName = "BartCassidy";
+        isPassiveAbility = true;
     }
 
     @Override

@@ -6,5 +6,7 @@ public class CharVultureSam extends GameCharacter {
 
     public CharVultureSam() {
         this.cardName = "VultureSam";
+
+        this.isPassiveAbility = true;
     }
 }

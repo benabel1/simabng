@@ -1,7 +1,12 @@
 package org.example.game;
 
 import org.example.game.cards.DeckAble;
+import org.example.game.cards.OptionGenerator;
 import org.example.game.cards.characters.GameCharacter;
+import org.example.game.deck.DeckName;
+import org.example.game.deck.DeckOfCards;
+import org.example.game.options.OptionOption;
+import org.example.game.options.OptionScanner;
 import org.example.game.settings.BANGBasicGameSetup;
 import org.example.game.settings.BANGDodgeCityGameSetup;
 import org.example.game.settings.GameExpansionSetup;
@@ -12,6 +17,7 @@ import java.util.List;
 import static org.example.game.Roles.*;
 
 public class Game {
+    private final OptionGenerator generator;
     GameEngine engine;
     GameStep step;
     List<GameStep> steps;
@@ -19,7 +25,8 @@ public class Game {
 
     private List<DeckAble> allCharacters;
     private List<DeckAble> allPlayingCards;
-    private List<DeckAble> allDiscardedCards;
+    private DeckOfCards playingCardDeck;
+    private DeckOfCards discardCardDeck;
     private GameExpansionSetup[] settings;
     private GamePlayer activePlayer;
 
@@ -33,11 +40,12 @@ public class Game {
         settings[1] = new BANGDodgeCityGameSetup();
 
         setupDecks();
+
+        generator = new OptionGenerator();
     }
 
     private void setupDecks() {
         allPlayingCards = new ArrayList<>();
-        allDiscardedCards = new ArrayList<>();
         allCharacters = new ArrayList<>();
 
         for (GameExpansionSetup setup: getSettings()) {
@@ -45,6 +53,14 @@ public class Game {
                 setup.applySetup(this);
             }
         }
+
+        playingCardDeck = new DeckOfCards(allPlayingCards);
+        playingCardDeck.reshuffle();
+
+        discardCardDeck = new DeckOfCards(new ArrayList<>());
+
+        playingCardDeck.setPairDeck(discardCardDeck);
+        discardCardDeck.setPairDeck(playingCardDeck);
     }
 
     private GameExpansionSetup[] getSettings() {
@@ -110,6 +126,7 @@ public class Game {
                 break;
             case PLAYING_CARDS:
                 allPlayingCards.addAll(listOfCards);
+                break;
 
             default:
                 System.out.println("Insertion of cards failed. " + deck + " was  not recognised.");
@@ -171,6 +188,9 @@ public class Game {
     private void showOption() {
         if (activePlayer != null) {
             activePlayer.showHandAndFront();
+
+            generator.generateOptionAndChooseOne(this, activePlayer);
+
         }
     }
 
@@ -186,21 +206,20 @@ public class Game {
         return allPlayingCards;
     }
 
-    public DeckAble drawCard(Game game) {
-        DeckAble card;
+    public DeckAble drawCard() {
+        DeckAble card = playingCardDeck.draw();
 
-        if (!allPlayingCards.isEmpty()) {
-            card = allPlayingCards.remove(0);
-
-        } else if(!allDiscardedCards.isEmpty()) {
-            //TODO: make random reshuffling
-            allPlayingCards.addAll(allDiscardedCards);
-            card = allPlayingCards.remove(0);
-        } else {
-            System.out.println("Both deck are empty");
-            card = null;
-        }
+        System.out.println("Card" + card + " was drawn");
 
         return card;
+    }
+
+    public List<OptionOption> generateGlobalOption() {
+        List<OptionOption> optionOptions = new ArrayList<>();
+        return optionOptions;
+    }
+
+    public void resolveOption(OptionOption option) {
+
     }
 }

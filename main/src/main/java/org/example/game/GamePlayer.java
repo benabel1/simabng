@@ -2,6 +2,7 @@ package org.example.game;
 
 import org.example.game.cards.DeckAble;
 import org.example.game.cards.characters.GameCharacter;
+import org.example.game.options.OptionOption;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,12 +95,12 @@ public class GamePlayer {
     public void showHandAndFront() {
         System.out.println("HAND");
         for (DeckAble hand: playerHand) {
-            System.out.println("\t" + hand.getCardName());
+            System.out.println("\t" + hand);
         }
 
         System.out.println("FRONT");
         for (DeckAble hand: playerFront) {
-            System.out.println(hand.getCardName());
+            System.out.println("\t" + hand);
         }
     }
 
@@ -107,5 +108,21 @@ public class GamePlayer {
         if (game != null && game.getEngine() != null) {
             playerHand.addAll(game.getEngine().drawCards(currentHp, game));
         }
+    }
+
+    public void playedGameCard(Game game, GameCard card) {
+        currentChar.playedCard(game, card);
+    }
+
+    public List<OptionOption> generateALlOption() {
+        List<OptionOption> result = new ArrayList<>();
+
+        for (DeckAble card: playerHand) {
+            if (card.canBePlay()) {
+                result.add(card.generateOption(card, this));
+            }
+        }
+
+        return result;
     }
 }

@@ -9,5 +9,9 @@ public class CharVeraCuster extends GameCharacter {
 
         this.maxHp = 3;
         this.startHp = 3;
+
+        this.isaActiveAbility = true;
+
+        this.isAbilityPhase01 = true;
     }
 }

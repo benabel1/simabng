@@ -37,9 +37,8 @@ public class GameEngine {
         List<DeckAble> drawn = new ArrayList<>();
 
 
-
         for (int i = 0; i < startHand; i++) {
-            DeckAble card = game.drawCard(game);
+            DeckAble card = game.drawCard();
             if (card != null) {
                 drawn.add(card);
             }

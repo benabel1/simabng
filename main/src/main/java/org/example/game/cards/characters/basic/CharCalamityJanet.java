@@ -6,5 +6,7 @@ public class CharCalamityJanet extends GameCharacter {
 
     public CharCalamityJanet(){
         this.cardName = "CalamityJanet";
+
+        this.isPassiveAbility = true;
     }
 }

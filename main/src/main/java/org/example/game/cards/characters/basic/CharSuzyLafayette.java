@@ -6,5 +6,7 @@ public class CharSuzyLafayette extends GameCharacter {
 
     public CharSuzyLafayette() {
         this.cardName = "SuzyLafayette";
+
+        this.isPassiveAbility = true;
     }
 }

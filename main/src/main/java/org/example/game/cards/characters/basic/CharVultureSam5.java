@@ -9,5 +9,7 @@ public class CharVultureSam5 extends GameCharacter {
 
         this.maxHp = 5;
         this.startHp = 5;
+
+        this.isaActiveAbility = true;
     }
 }

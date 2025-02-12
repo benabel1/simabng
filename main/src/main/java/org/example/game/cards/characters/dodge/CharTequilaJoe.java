@@ -6,5 +6,7 @@ public class CharTequilaJoe extends GameCharacter {
 
     public CharTequilaJoe() {
         this.cardName = "TequilaJoe";
+
+        isPassiveAbility = true;
     }
 }
