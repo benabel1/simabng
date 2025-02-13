@@ -1,6 +1,4 @@
-package org.example.game;
-
-import org.example.game.options.OptionOption;
+package org.example.game.options;
 
 public class SkipOption extends OptionOption {
 

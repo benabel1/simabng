@@ -1,17 +1,26 @@
 package org.example.game.options;
 
-import org.example.game.GameCard;
+import org.example.game.Game;
+import org.example.game.cards.GameCard;
 import org.example.game.GamePlayer;
 
 public class CardOption extends OptionOption {
 
     private final GameCard cardSource;
-    private final Object sourcePlayer;
+    private final GamePlayer sourcePlayer;
 
     public CardOption(GameCard card, GamePlayer player) {
         this.cardSource = card;
         this.sourcePlayer = player;
     }
+
+    @Override
+    public void resolveInThisGame(Game game) {
+      if (canBeResolved(game)) {
+          cardSource.playCard(game, sourcePlayer);
+      }
+    }
+
 
     @Override
     public String toString() {

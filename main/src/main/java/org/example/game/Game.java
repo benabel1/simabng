@@ -1,10 +1,12 @@
 package org.example.game;
 
 import org.example.game.cards.DeckAble;
+import org.example.game.cards.GameCard;
 import org.example.game.cards.OptionGenerator;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.deck.DeckName;
 import org.example.game.deck.DeckOfCards;
+import org.example.game.history.HistoryTracker;
 import org.example.game.options.OptionOption;
 import org.example.game.options.OptionScanner;
 import org.example.game.settings.BANGBasicGameSetup;
@@ -25,12 +27,19 @@ public class Game {
 
     private List<DeckAble> allCharacters;
     private List<DeckAble> allPlayingCards;
+    private List<DeckAble> allGoldRewards;
+    private List<DeckAble> allHighNoonCards;
     private DeckOfCards playingCardDeck;
     private DeckOfCards discardCardDeck;
     private GameExpansionSetup[] settings;
     private GamePlayer activePlayer;
 
+    private HistoryTracker historyTracker;
+    private GamePlayer sheriffPlayer;
+
     public Game() {
+        historyTracker = new HistoryTracker(this);
+
         steps = new ArrayList<GameStep>();
 
         players = new ArrayList<GamePlayer>();
@@ -47,6 +56,8 @@ public class Game {
     private void setupDecks() {
         allPlayingCards = new ArrayList<>();
         allCharacters = new ArrayList<>();
+        allGoldRewards = new ArrayList<>();
+        allHighNoonCards = new ArrayList<>();
 
         for (GameExpansionSetup setup: getSettings()) {
             if (setup.isTurnOn()){
@@ -74,6 +85,16 @@ public class Game {
     public void setup() {
         setupPlayers();
         setupInitialHands();
+        setRound();
+        setTurn(sheriffPlayer);
+    }
+
+    private void setTurn(GamePlayer sheriffPlayer) {
+        historyTracker.createTurn(sheriffPlayer);
+    }
+
+    private void setRound() {
+        historyTracker.createRound();
     }
 
     private void setupInitialHands() {
@@ -90,12 +111,16 @@ public class Game {
         List<DeckAble> characters = engine.randomSelected(playersCount, allCharacters);
 
         for (int i = 0; i < playersCount; i++) {
+               Roles role = roles.get(i);
                GamePlayer player = generatePlayerForPosition(i, roles.get(i));
                player.assignStartingCharacter((GameCharacter) characters.get(i));
+
+               if (role == SHERIFF) {
+                   sheriffPlayer = player;
+               }
         }
 
-        activePlayer = players.get(0);
-
+        activePlayer = sheriffPlayer;
     }
 
     private GamePlayer generatePlayerForPosition(int i, Roles role) {
@@ -127,7 +152,12 @@ public class Game {
             case PLAYING_CARDS:
                 allPlayingCards.addAll(listOfCards);
                 break;
-
+            case GOLD_REWARDS:
+                allGoldRewards.addAll(listOfCards);
+                break;
+            case HIGH_NOON:
+                allHighNoonCards.addAll(listOfCards);
+                break;
             default:
                 System.out.println("Insertion of cards failed. " + deck + " was  not recognised.");
         }
@@ -181,13 +211,12 @@ public class Game {
         System.out.println("iteration1");
 
         showOption();
-
-        OptionScanner.scanInt("Write option", 0, 3, 2);
     }
 
     private void showOption() {
         if (activePlayer != null) {
-            activePlayer.showHandAndFront();
+           //DEBUG
+            // activePlayer.showHandAndFront();
 
             generator.generateOptionAndChooseOne(this, activePlayer);
 
@@ -202,14 +231,14 @@ public class Game {
         return total;
     }
 
-    public List<DeckAble> getDecks() {
+    public List<DeckAble> getAllPlayingCards() {
         return allPlayingCards;
     }
 
     public DeckAble drawCard() {
         DeckAble card = playingCardDeck.draw();
 
-        System.out.println("Card" + card + " was drawn");
+        System.out.println("\tCard" + card + " was drawn");
 
         return card;
     }
@@ -220,6 +249,36 @@ public class Game {
     }
 
     public void resolveOption(OptionOption option) {
+        option.resolveInThisGame(this);
+    }
 
+    public boolean wasPlayedLessThan(GameCard cardBang, int i) {
+        return getGameHistory().getCurrentTurn().getQuantity(cardBang) < i;
+    }
+
+    private HistoryTracker getGameHistory() {
+        return historyTracker;
+    }
+
+    public void notifyAllOther(String cardName, GamePlayer sourcePlayer) {
+        for (GamePlayer player: players) {
+            if (player == sourcePlayer) {
+                continue;
+            }
+            player.notifyYouAboutPlayerCardBy(cardName, sourcePlayer);
+        }
+    }
+
+    public DeckOfCards getPile(DeckName deckName) {
+        switch (deckName) {
+            case DISCARD_PILE:
+                return discardCardDeck;
+            case PLAYING_CARDS:
+                return playingCardDeck;
+            case CHARACTERS:
+                //TODO
+                return null;
+        }
+        return null;
     }
 }

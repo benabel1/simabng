@@ -1,6 +1,7 @@
 package org.example.game;
 
 import org.example.game.cards.DeckAble;
+import org.example.game.cards.GameCard;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.options.OptionOption;
 
@@ -99,8 +100,8 @@ public class GamePlayer {
         }
 
         System.out.println("FRONT");
-        for (DeckAble hand: playerFront) {
-            System.out.println("\t" + hand);
+        for (DeckAble front: playerFront) {
+            System.out.println("\t" + front);
         }
     }
 
@@ -114,15 +115,40 @@ public class GamePlayer {
         currentChar.playedCard(game, card);
     }
 
-    public List<OptionOption> generateALlOption() {
+    public List<OptionOption> generateALlOption(Game game) {
         List<OptionOption> result = new ArrayList<>();
 
         for (DeckAble card: playerHand) {
-            if (card.canBePlay()) {
+            if (card.canBePlay(game)) {
+                result.add(card.generateOption(card, this));
+            }
+        }
+
+        for (DeckAble card: playerFront) {
+            if (card.canBePlay(game)) {
                 result.add(card.generateOption(card, this));
             }
         }
 
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    public void restoreLife(int restoredAmountHp) {
+        if (currentHp < maxHp) {
+          if (currentHp + restoredAmountHp <= maxHp) {
+              currentHp = currentHp + restoredAmountHp;
+          } else {
+              currentHp = maxHp;
+          }
+        }
+    }
+
+    public void notifyYouAboutPlayerCardBy(String cardName, GamePlayer sourcePlayer) {
+        currentChar.notifyP(cardName, sourcePlayer);
     }
 }

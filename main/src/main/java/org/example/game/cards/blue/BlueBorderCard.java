@@ -1,6 +1,6 @@
 package org.example.game.cards.blue;
 
-import org.example.game.GameCard;
+import org.example.game.cards.GameCard;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 

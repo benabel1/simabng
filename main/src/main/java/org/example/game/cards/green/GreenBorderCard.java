@@ -1,10 +1,9 @@
 package org.example.game.cards.green;
 
-import org.example.game.GameCard;
+import org.example.game.cards.GameCard;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 
-import static org.example.game.cards.CardBorderColor.BROWN;
 import static org.example.game.cards.CardBorderColor.GREEN;
 
 public class GreenBorderCard extends GameCard {

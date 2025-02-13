@@ -2,6 +2,7 @@ package org.example.game.cards.characters;
 
 import org.example.game.*;
 import org.example.game.cards.DeckAble;
+import org.example.game.cards.GameCard;
 import org.example.game.cards.GameRecordAble;
 import org.example.game.options.OptionOption;
 
@@ -76,7 +77,11 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
     }
 
     @Override
-    public boolean canBePlay() {
+    public boolean canBePlay(Game game) {
         return false;
+    }
+
+    public void notifyP(String cardName, GamePlayer sourcePlayer) {
+
     }
 }
