@@ -1,22 +1,24 @@
 package org.example.game.options;
 
 import org.example.game.Game;
-import org.example.game.cards.GameCard;
 import org.example.game.GamePlayer;
+import org.example.game.cards.GameCard;
+import java.util.List;
 
-public class CardOption extends OptionOption {
+public class CardOptionAtWeaponRange extends CardOption {
+    protected int maxRange;
 
-    protected final GameCard cardSource;
-    protected final GamePlayer sourcePlayer;
-
-    public CardOption(GameCard card, GamePlayer player) {
-        this.cardSource = card;
-        this.sourcePlayer = player;
+    public CardOptionAtWeaponRange(GameCard card, GamePlayer player, int maxRange) {
+        super(card, player);
+        this.maxRange = maxRange;
     }
 
     @Override
     public void resolveInThisGame(Game game) {
       if (canBeResolved(game)) {
+
+          List<PairPlayerDistance> potencialTargets = game.getPlayersFromPlayerAtMaxDistance(sourcePlayer, maxRange);
+
           cardSource.playCardFromHand(game, sourcePlayer);
       }
     }

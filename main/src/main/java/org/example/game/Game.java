@@ -12,6 +12,7 @@ import org.example.game.history.*;
 import org.example.game.options.OptionGenerator;
 import org.example.game.options.OptionOption;
 import org.example.game.options.OptionScanner;
+import org.example.game.options.PairPlayerDistance;
 import org.example.game.settings.BANGArmedAndDangerous;
 import org.example.game.settings.BANGBasicGameSetup;
 import org.example.game.settings.BANGDodgeCityGameSetup;
@@ -235,6 +236,11 @@ public class Game {
     }
 
     public void executeOneInteration() {
+        if (!activePlayer.isAlive(this)) {
+            nextPlayerOrTurn(activePlayer);
+            return;
+        }
+
         for (GamePlayer p: players) {
             System.out.println("+-------+----+-----+----+-----+");
             System.out.println(p.getName() + " " + p.getCurrentRole() + " " + p.getCurrentCharacter().getCardName() + "[" + p. getCurrentHp()+"/"+ p.getCurrentMaxHp()+"]");
@@ -448,5 +454,13 @@ public class Game {
             activePlayer = gamePlayersWheel.getActive();
             historyTracker.createTurn(activePlayer);
         }
+    }
+
+    public List<PairPlayerDistance> getPlayersFromPlayerAtMaxDistance(GamePlayer sourcePlayer, int maxRange) {
+        List<PairPlayerDistance> playesBelowDistance = new ArrayList();
+
+        playesBelowDistance.addAll(gamePlayersWheel.calculateDistancesFromDeadCount(sourcePlayer, false));
+
+        return playesBelowDistance;
     }
 }
