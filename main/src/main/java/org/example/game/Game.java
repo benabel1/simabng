@@ -1,20 +1,32 @@
 package org.example.game;
 
-import org.example.game.cards.DeckAble;
-import org.example.game.cards.OptionGenerator;
+import org.example.game.cards.CARD_ATTRIBUTE;
+import org.example.game.cards.Roles;
+import org.example.game.cards.ZONE;
+import org.example.game.deck.DeckAble;
+import org.example.game.cards.GameCard;
+import org.example.game.history.GameStep;
+import org.example.game.options.OptionGenerator;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.deck.DeckName;
 import org.example.game.deck.DeckOfCards;
+import org.example.game.history.GameTurn;
+import org.example.game.history.HistoryTracker;
 import org.example.game.options.OptionOption;
 import org.example.game.options.OptionScanner;
+import org.example.game.settings.BANGArmedAndDangerous;
 import org.example.game.settings.BANGBasicGameSetup;
 import org.example.game.settings.BANGDodgeCityGameSetup;
 import org.example.game.settings.GameExpansionSetup;
+import org.example.game.wheel.GamePlayersWheel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.example.game.Roles.*;
+import static org.example.game.cards.CARD_ATTRIBUTE.CAUSE_FOR_ANY;
+import static org.example.game.cards.CARD_ATTRIBUTE.CAUSE_FOR_STEAL;
+import static org.example.game.cards.Roles.*;
+import static org.example.game.cards.ZONE.HAND;
 
 public class Game {
     private final OptionGenerator generator;
@@ -25,19 +37,29 @@ public class Game {
 
     private List<DeckAble> allCharacters;
     private List<DeckAble> allPlayingCards;
+    private List<DeckAble> allGoldRewards;
+    private List<DeckAble> allHighNoonCards;
     private DeckOfCards playingCardDeck;
     private DeckOfCards discardCardDeck;
     private GameExpansionSetup[] settings;
     private GamePlayer activePlayer;
 
+    private HistoryTracker historyTracker;
+    private GamePlayer sheriffPlayer;
+    private GamePlayersWheel gamePlayersWheel;
+
     public Game() {
+        this.gamePlayersWheel = new GamePlayersWheel(this);
+        historyTracker = new HistoryTracker(this);
+
         steps = new ArrayList<GameStep>();
 
         players = new ArrayList<GamePlayer>();
 
-        settings = new GameExpansionSetup[2];
+        settings = new GameExpansionSetup[3];
         settings[0] = new BANGBasicGameSetup();
         settings[1] = new BANGDodgeCityGameSetup();
+        settings[2] = new BANGArmedAndDangerous();
 
         setupDecks();
 
@@ -47,6 +69,8 @@ public class Game {
     private void setupDecks() {
         allPlayingCards = new ArrayList<>();
         allCharacters = new ArrayList<>();
+        allGoldRewards = new ArrayList<>();
+        allHighNoonCards = new ArrayList<>();
 
         for (GameExpansionSetup setup: getSettings()) {
             if (setup.isTurnOn()){
@@ -74,6 +98,16 @@ public class Game {
     public void setup() {
         setupPlayers();
         setupInitialHands();
+        setRound();
+        setTurn(sheriffPlayer);
+    }
+
+    private void setTurn(GamePlayer sheriffPlayer) {
+        historyTracker.createTurn(sheriffPlayer);
+    }
+
+    private void setRound() {
+        historyTracker.createRound();
     }
 
     private void setupInitialHands() {
@@ -90,12 +124,19 @@ public class Game {
         List<DeckAble> characters = engine.randomSelected(playersCount, allCharacters);
 
         for (int i = 0; i < playersCount; i++) {
+               Roles role = roles.get(i);
                GamePlayer player = generatePlayerForPosition(i, roles.get(i));
                player.assignStartingCharacter((GameCharacter) characters.get(i));
+               gamePlayersWheel.addPlayerAndSetStartingOne(player, role);
+
+               if (role == SHERIFF) {
+                   sheriffPlayer = player;
+               }
         }
 
-        activePlayer = players.get(0);
+        gamePlayersWheel.makeInitialStructure(sheriffPlayer);
 
+        activePlayer = sheriffPlayer;
     }
 
     private GamePlayer generatePlayerForPosition(int i, Roles role) {
@@ -127,7 +168,12 @@ public class Game {
             case PLAYING_CARDS:
                 allPlayingCards.addAll(listOfCards);
                 break;
-
+            case GOLD_REWARDS:
+                allGoldRewards.addAll(listOfCards);
+                break;
+            case HIGH_NOON:
+                allHighNoonCards.addAll(listOfCards);
+                break;
             default:
                 System.out.println("Insertion of cards failed. " + deck + " was  not recognised.");
         }
@@ -181,12 +227,11 @@ public class Game {
         System.out.println("iteration1");
 
         showOption();
-
-        OptionScanner.scanInt("Write option", 0, 3, 2);
     }
 
     private void showOption() {
         if (activePlayer != null) {
+           //DEBUG
             activePlayer.showHandAndFront();
 
             generator.generateOptionAndChooseOne(this, activePlayer);
@@ -197,19 +242,19 @@ public class Game {
     private int countPlayersWithRoleAndAliveStatus(Roles role, boolean isAlive) {
         int total = 0;
         for (GamePlayer player:players) {
-            total += player.matchRoleAndAliveStat(role, isAlive) ;
+            total += player.matchRoleAndAliveStat(role, isAlive, this) ;
         }
         return total;
     }
 
-    public List<DeckAble> getDecks() {
+    public List<DeckAble> getAllPlayingCards() {
         return allPlayingCards;
     }
 
     public DeckAble drawCard() {
         DeckAble card = playingCardDeck.draw();
 
-        System.out.println("Card" + card + " was drawn");
+        System.out.println("\tCard" + card + " was drawn");
 
         return card;
     }
@@ -220,6 +265,101 @@ public class Game {
     }
 
     public void resolveOption(OptionOption option) {
+        option.resolveInThisGame(this);
+    }
 
+    public boolean wasPlayedLessThan(GameCard cardBang, int i) {
+        return getGameHistory().getCurrentTurn().getQuantity(cardBang) < i;
+    }
+
+    private HistoryTracker getGameHistory() {
+        return historyTracker;
+    }
+
+    public void notifyAllOther(String cardName, GamePlayer sourcePlayer) {
+        for (GamePlayer player: players) {
+            if (player == sourcePlayer) {
+                continue;
+            }
+            player.notifyYouAboutPlayerCardBy(cardName, sourcePlayer);
+        }
+    }
+
+    public DeckOfCards getPile(DeckName deckName) {
+        switch (deckName) {
+            case DISCARD_PILE:
+                return discardCardDeck;
+            case PLAYING_CARDS:
+                return playingCardDeck;
+            case CHARACTERS:
+                //TODO
+                return null;
+        }
+        return null;
+    }
+
+    public int getActivePlayersCount() {
+        int totalActivePlayer = 0;
+
+        for (GamePlayer player: players) {
+            if (player.isAlive(this)) {
+                totalActivePlayer++;
+            }
+        }
+
+        return totalActivePlayer;
+    }
+
+    public boolean isThereCardInGameAtAnyDistanceToBeStolen(GamePlayer ownerPlayer, ZONE hand) {
+        int totalCards = getTotalCardsOtherOfCause(ownerPlayer, CAUSE_FOR_STEAL, hand);
+
+        return totalCards > 0;
+    }
+
+    private int getTotalCardsOtherOfCause(GamePlayer ownerPlayer, CARD_ATTRIBUTE cardAttribute, ZONE zone) {
+        int total = 0;
+        for (GamePlayer player: players) {
+            total += player.getAllCards(cardAttribute, zone);
+        }
+
+        return total;
+    }
+
+    public List<GamePlayer> getPlayersWithHandOtherThan(GamePlayer ownerPlayer) {
+        ArrayList<GamePlayer> a = new ArrayList<>();
+
+        for (GamePlayer player: getActivePlayers(ownerPlayer)) {
+            if (player.getAllCards(CAUSE_FOR_ANY, HAND)> 0) {
+                a.add(player);
+            }
+        }
+
+        return a;
+    }
+
+    public List<GamePlayer> getActivePlayers(GamePlayer ownerPlayer) {
+        List<GamePlayer> allActivePlayers = new ArrayList<>();
+
+        for (GamePlayer testPlayer: players) {
+            if (ownerPlayer != testPlayer && testPlayer.isAlive(this)) {
+                allActivePlayers.add(testPlayer);
+            }
+        }
+
+        return allActivePlayers;
+    }
+
+    public GameTurn geActtiveTurn() {
+        return historyTracker.getCurrentTurn();
+    }
+
+    public GamePlayer getSheriffPlayer() {
+        return sheriffPlayer;
+    }
+
+    public List<GamePlayer> getPlayersFromACurrentToOthersInOrderSkippedEliminated(GamePlayer currentPlayer, boolean b) {
+        List<GamePlayer> a = gamePlayersWheel.getPlayersInOrderFromNowSkippingEliminated(currentPlayer, b);
+
+        return a;
     }
 }

@@ -8,7 +8,7 @@ public class CardScope extends BlueBorderCard {
 
     public CardScope(Suit s, PokerValue p) {
         super(s, p);
-        this.cardName = "Scope";
+        this.cardName = "SCOPE";
     }
 
 }
