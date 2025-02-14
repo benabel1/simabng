@@ -15,6 +15,7 @@ public class GamePlayersWheel {
     private boolean clockwiseTurning;
 
     PositionPlayerStruct structPointingOnSheriff;
+    PositionPlayerStruct moving;
 
     public GamePlayersWheel(Game game) {
         this.gameWheel = game;
@@ -67,6 +68,7 @@ public class GamePlayersWheel {
                     first = curr;
                     //reassigned latter to proper position
                     structPointingOnSheriff = first;
+                    moving = structPointingOnSheriff;
                 }
 
                 if (previousOrLastOne != null) {
@@ -87,5 +89,24 @@ public class GamePlayersWheel {
                 first.rightSide = previousOrLastOne;
             }
         }
+    }
+
+    public GamePlayer whoGoesNext(boolean mustBeAlive) {
+        return structPointingOnSheriff.leftSide.chair;
+    }
+
+    public void moveToNext() {
+        if (clockwiseTurning) {
+            moving = moving.leftSide;
+        } else {
+            moving = moving.rightSide;
+
+        }
+
+        currPlayer = moving.chair;
+    }
+
+    public GamePlayer getActive() {
+        return currPlayer;
     }
 }

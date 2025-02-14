@@ -26,6 +26,8 @@ public class BANGBasicGameSetup extends GameExpansionSetup {
 
         insertCardsForDeck(game, DeckName.CHARACTERS);
         insertCardsForDeck(game, DeckName.PLAYING_CARDS);
+
+        game.log(0,"BASIC SETUP: ON");
     }
 
     @Override

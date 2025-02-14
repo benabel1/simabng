@@ -11,5 +11,6 @@ public class CardDuel extends BrownBorderCard {
         this.cardName = "DUEL";
 
         this.allowedTarget = DistanceAllowedTarget.OTHER;
+        this.canPlayedOnSideOfTurn = true;
     }
 }

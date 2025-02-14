@@ -21,6 +21,7 @@ public class HistoryTracker {
 
     public void createRound() {
         rounds.add(new GameRound());
+        game.log(0, "Round["+ rounds.size() +"]");
     }
 
     public void createTurn(GamePlayer player) {

@@ -51,4 +51,9 @@ public class OrangeBorderCard extends GameCard {
     public boolean canBePlayedFromHand(Game game) {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "[" + suit + poker +"]" + cardName + "-[" + loadCount + "/4]";
+    }
 }

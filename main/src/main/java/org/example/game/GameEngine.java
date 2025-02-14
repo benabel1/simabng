@@ -18,7 +18,7 @@ public class GameEngine {
         while (game.isNotEnded()) {
             game.executeOneInteration();
         }
-
+        game.doCleaning();
     }
 
     private void setupEngine(Game game) {

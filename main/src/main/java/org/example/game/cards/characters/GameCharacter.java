@@ -7,6 +7,7 @@ import org.example.game.cards.GameCard;
 import org.example.game.cards.GameRecordAble;
 import org.example.game.options.OptionOption;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameCharacter extends DeckAble implements GameRecordAble {
@@ -96,5 +97,20 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
 
     public void notifyP(String cardName, GamePlayer sourcePlayer) {
 
+    }
+
+    public List<DeckAble> resolveDrawingPhase(Game game) {
+        List<DeckAble> drwanCards = new ArrayList<>();
+        if (isAbilityPhase01) {
+
+        } else {
+            DeckAble card1 = game.drawCard();
+            DeckAble card2 = game.drawCard();
+
+            drwanCards.add(card1);
+            drwanCards.add(card2);
+        }
+
+        return  drwanCards;
     }
 }

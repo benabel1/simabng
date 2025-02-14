@@ -9,7 +9,7 @@ import org.example.game.cards.brown.BrownBorderCard;
 public class CardCatBalou extends BrownBorderCard {
     public CardCatBalou(Suit suit, PokerValue pokerValue) {
         super(suit, pokerValue);
-        this.cardName = "CAT BALO";
+        this.cardName = "CAT BALOU";
     }
 
     @Override

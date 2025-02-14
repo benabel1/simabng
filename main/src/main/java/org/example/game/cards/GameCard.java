@@ -24,6 +24,8 @@ public abstract class GameCard extends DeckAble {
     public GameCard(Suit s, PokerValue p) {
         this.suit = s;
         this.poker = p;
+
+        this.cardName = this.getClass().getName();
     }
 
     @Override
@@ -51,6 +53,7 @@ public abstract class GameCard extends DeckAble {
         if (sourcePlayer != null) {
             sourcePlayer.removeFromHand(this);
             addRecordOfPlay();
+            game.log(2, "[" + sourcePlayer + "]"+ this + "was played");
         }
     }
 
