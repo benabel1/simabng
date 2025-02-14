@@ -136,10 +136,11 @@ public class Game {
         List<Roles> roles = getEngine().randomSelected(playersCount);
 
         List<DeckAble> characters = engine.randomSelected(playersCount, allCharacters);
+        List<String> names = engine.generateRandomListOfNames(playersCount);
 
         for (int i = 0; i < playersCount; i++) {
                Roles role = roles.get(i);
-               GamePlayer player = generatePlayerForPosition(i, roles.get(i));
+               GamePlayer player = generatePlayerForPosition(i, roles.get(i), names.get(i));
                player.assignStartingCharacter((GameCharacter) characters.get(i));
                gamePlayersWheel.addPlayerAndSetStartingOne(player, role);
 
@@ -155,9 +156,11 @@ public class Game {
         activePlayer = sheriffPlayer;
     }
 
-    private GamePlayer generatePlayerForPosition(int i, Roles role) {
-        OptionScanner.scanText("Start");
-        String name = OptionScanner.scanText("Write name of player");
+    private GamePlayer generatePlayerForPosition(int i, Roles role, String name) {
+        if (name == null) {
+            OptionScanner.scanText("Start");
+            name = OptionScanner.scanText("Write name of player");
+        }
 
         GamePlayer newPlayer = new GamePlayer(name, i, role);
         players.add(newPlayer);

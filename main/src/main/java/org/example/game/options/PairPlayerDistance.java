@@ -10,4 +10,12 @@ public class PairPlayerDistance {
         this.playerFromMe = playerFromMe;
         this.playerAtDistance = playerAtDistance;
     }
+
+    public GamePlayer getPlayer() {
+        return playerFromMe;
+    }
+
+    public int getPlayerAtDistance() {
+        return playerAtDistance;
+    }
 }

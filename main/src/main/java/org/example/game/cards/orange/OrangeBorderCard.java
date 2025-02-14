@@ -56,4 +56,8 @@ public class OrangeBorderCard extends GameCard {
     public String toString() {
         return "[" + suit + poker +"]" + cardName + "-[" + loadCount + "/4]";
     }
+
+    public int getLoadCount() {
+        return loadCount;
+    }
 }

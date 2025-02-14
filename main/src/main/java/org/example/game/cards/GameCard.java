@@ -57,6 +57,14 @@ public abstract class GameCard extends DeckAble {
         }
     }
 
+    public void playCardFromHand(Game game, GamePlayer sourcePlayer, GamePlayer targetPlayer) {
+        if (sourcePlayer != null && targetPlayer != null) {
+            sourcePlayer.removeFromHand(this);
+            addRecordOfPlay();
+            game.log(2, "[" + sourcePlayer + "]"+ this + "was played on " + targetPlayer);
+        }
+    }
+
     public void useCardInGame(Game game, GamePlayer ownerPlayer) {}
 
     public void applyPartOfEffectOnOtherPlayer(Game game, GamePlayer sourcePlayer, GamePlayer other) {}
