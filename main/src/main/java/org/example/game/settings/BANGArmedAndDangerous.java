@@ -5,10 +5,7 @@ import org.example.game.cards.DeckAble;
 import org.example.game.cards.blue.basic.*;
 import org.example.game.cards.brown.basic.*;
 import org.example.game.cards.brown.dangerous.*;
-import org.example.game.cards.characters.dangerous.CharRedRingo;
-import org.example.game.cards.characters.dangerous.CharBloodyMary;
-import org.example.game.cards.characters.dangerous.CharJulyCutter;
-import org.example.game.cards.characters.dangerous.CharMsAbigail;
+import org.example.game.cards.characters.dangerous.*;
 import org.example.game.cards.green.dodge.*;
 import org.example.game.deck.DeckName;
 
@@ -61,9 +58,14 @@ public class BANGArmedAndDangerous extends GameExpansionSetup {
         List<DeckAble> result = new ArrayList<>();
 
         //8 BASIC characters
+        result.add(new CharAlPreacher());
+        result.add(new CharBassGreeves());
         result.add(new CharBloodyMary());
+        result.add(new CharFrankieCanton());
+
         result.add(new CharJulyCutter());
         result.add(new CharMsAbigail());
+        result.add(new CharMexicaliKid());
         result.add(new CharRedRingo());
 
         return result;
