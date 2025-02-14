@@ -20,8 +20,10 @@ import org.example.game.settings.BANGDodgeCityGameSetup;
 import org.example.game.settings.GameExpansionSetup;
 import org.example.game.wheel.GamePlayersWheel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.DateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.*;
 
 import static org.example.game.cards.CARD_ATTRIBUTE.CAUSE_FOR_ANY;
 import static org.example.game.cards.CARD_ATTRIBUTE.CAUSE_FOR_STEAL;
@@ -29,6 +31,7 @@ import static org.example.game.cards.Roles.*;
 import static org.example.game.cards.ZONE.HAND;
 
 public class Game {
+    private String uuid;
     private final OptionGenerator generator;
     GameEngine engine;
     GameStep step;
@@ -49,6 +52,7 @@ public class Game {
     private GamePlayersWheel gamePlayersWheel;
 
     public Game() {
+        assignUuid();
         this.gamePlayersWheel = new GamePlayersWheel(this);
         historyTracker = new HistoryTracker(this);
 
@@ -64,6 +68,13 @@ public class Game {
         setupDecks();
 
         generator = new OptionGenerator();
+    }
+
+    private void assignUuid() {
+        LocalDate localDate = LocalDate.now();
+        String ssss = localDate.toString();
+        uuid = ssss + "--" + UUID.randomUUID().toString();
+        System.out.println(uuid);
     }
 
     private void setupDecks() {
