@@ -9,6 +9,7 @@ import org.example.game.deck.DeckOfCards;
 import org.example.game.history.HistoryTracker;
 import org.example.game.options.OptionOption;
 import org.example.game.options.OptionScanner;
+import org.example.game.settings.BANGArmedAndDangerous;
 import org.example.game.settings.BANGBasicGameSetup;
 import org.example.game.settings.BANGDodgeCityGameSetup;
 import org.example.game.settings.GameExpansionSetup;
@@ -44,9 +45,10 @@ public class Game {
 
         players = new ArrayList<GamePlayer>();
 
-        settings = new GameExpansionSetup[2];
+        settings = new GameExpansionSetup[3];
         settings[0] = new BANGBasicGameSetup();
         settings[1] = new BANGDodgeCityGameSetup();
+        settings[2] = new BANGArmedAndDangerous();
 
         setupDecks();
 
@@ -216,7 +218,7 @@ public class Game {
     private void showOption() {
         if (activePlayer != null) {
            //DEBUG
-            // activePlayer.showHandAndFront();
+            activePlayer.showHandAndFront();
 
             generator.generateOptionAndChooseOne(this, activePlayer);
 
@@ -226,7 +228,7 @@ public class Game {
     private int countPlayersWithRoleAndAliveStatus(Roles role, boolean isAlive) {
         int total = 0;
         for (GamePlayer player:players) {
-            total += player.matchRoleAndAliveStat(role, isAlive) ;
+            total += player.matchRoleAndAliveStat(role, isAlive, this) ;
         }
         return total;
     }
@@ -280,5 +282,17 @@ public class Game {
                 return null;
         }
         return null;
+    }
+
+    public int getActivePlayers() {
+        int totalActivePlayer = 0;
+
+        for (GamePlayer player: players) {
+            if (player.isAlive(this)) {
+                totalActivePlayer++;
+            }
+        }
+
+        return totalActivePlayer;
     }
 }

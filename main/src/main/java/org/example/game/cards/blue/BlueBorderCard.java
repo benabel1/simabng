@@ -1,5 +1,7 @@
 package org.example.game.cards.blue;
 
+import org.example.game.Game;
+import org.example.game.GamePlayer;
 import org.example.game.cards.GameCard;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
@@ -13,5 +15,11 @@ public class BlueBorderCard extends GameCard {
         this.color = BLUE;
         this.canPlayedOnSideOfTurn = true;
         this.canPlayedOutSideOfTurn = false;
+    }
+
+    @Override
+    public void playCard(Game game, GamePlayer sourcePlayer) {
+        sourcePlayer.removeFromHand(this);
+        sourcePlayer.placeInFrontCard(this);
     }
 }

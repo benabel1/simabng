@@ -2,6 +2,8 @@ package org.example.game;
 
 import org.example.game.cards.DeckAble;
 import org.example.game.cards.GameCard;
+import org.example.game.cards.blue.BlueBorderCard;
+import org.example.game.cards.brown.BrownBorderCard;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.options.OptionOption;
 
@@ -69,15 +71,15 @@ public class GamePlayer {
         return this.name;
     }
 
-    public int matchRoleAndAliveStat(Roles role, boolean isAlive) {
+    public int matchRoleAndAliveStat(Roles role, boolean isAlive, Game game) {
         if (role == null) {
             return 0;
         } else {
-            return (currentRole == role && isAlive() == isAlive)? 1 : 0;
+            return (currentRole == role && isAlive(game) == isAlive)? 1 : 0;
         }
     }
 
-    private boolean isAlive() {
+    public boolean isAlive(Game game) {
         return currentHp > 0;
     }
 
@@ -124,13 +126,24 @@ public class GamePlayer {
             }
         }
 
-        for (DeckAble card: playerFront) {
-            if (card.canBePlay(game)) {
-                result.add(card.generateOption(card, this));
-            }
-        }
+//        for (DeckAble card: playerFront) {
+//            if (card.canBePlay(game)) {
+//                result.add(card.generateOption(card, this));
+//            }
+//        }
+
+        generateCharacterOption(result);
 
         return result;
+    }
+
+    private void generateCharacterOption(List<OptionOption> result) {
+        if (currentChar != null) {
+            OptionOption charOption  = currentChar.generateOption(currentChar, this);
+            if (charOption != null) {
+                result.add(charOption);
+            }
+        }
     }
 
     @Override
@@ -150,5 +163,15 @@ public class GamePlayer {
 
     public void notifyYouAboutPlayerCardBy(String cardName, GamePlayer sourcePlayer) {
         currentChar.notifyP(cardName, sourcePlayer);
+    }
+
+    public void removeFromHand(DeckAble handCard) {
+        if (handCard != null) {
+            playerHand.remove(handCard);
+        }
+    }
+
+    public void placeInFrontCard(DeckAble frontCard) {
+        playerFront.add(frontCard);
     }
 }

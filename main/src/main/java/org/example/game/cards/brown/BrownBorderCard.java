@@ -20,6 +20,8 @@ public class BrownBorderCard extends GameCard {
 
     @Override
     public void playCard(Game game, GamePlayer sourcePlayer) {
+        sourcePlayer.removeFromHand(this);
         game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
+
     }
 }

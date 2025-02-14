@@ -3,18 +3,17 @@ package org.example.game.settings;
 import org.example.game.Game;
 import org.example.game.cards.DeckAble;
 import org.example.game.cards.blue.basic.*;
-import org.example.game.cards.blue.dodge.CardBinocular;
-import org.example.game.cards.blue.dodge.CardHideout;
 import org.example.game.cards.brown.basic.*;
 import org.example.game.cards.brown.dangerous.*;
-import org.example.game.cards.brown.dodge.*;
-import org.example.game.cards.characters.dodge.CharVeraCuster;
+import org.example.game.cards.characters.dangerous.CharRedRingo;
+import org.example.game.cards.characters.dangerous.CharBloodyMary;
+import org.example.game.cards.characters.dangerous.CharJulyCutter;
+import org.example.game.cards.characters.dangerous.CharMsAbigail;
 import org.example.game.cards.green.dodge.*;
 import org.example.game.deck.DeckName;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Spliterator;
 
 import static org.example.game.cards.PokerValue.*;
 import static org.example.game.cards.Suit.*;
@@ -61,8 +60,11 @@ public class BANGArmedAndDangerous extends GameExpansionSetup {
     protected List<DeckAble> createListCardsCharacterDeck() {
         List<DeckAble> result = new ArrayList<>();
 
-        //15 BASIC characters
-        result.add(new CharVeraCuster());
+        //8 BASIC characters
+        result.add(new CharBloodyMary());
+        result.add(new CharJulyCutter());
+        result.add(new CharMsAbigail());
+        result.add(new CharRedRingo());
 
         return result;
     }
@@ -122,43 +124,6 @@ public class BANGArmedAndDangerous extends GameExpansionSetup {
         //GREEN
         //01 BIBLE ♥: 10
         result.add(new CardBible(HEARTHS, _10));
-
-        //01 CANTEEN ♥: 7
-        result.add(new CardCanteen(HEARTHS, _07));
-
-        //01 CAN CAN ♣: J
-        result.add(new CardCanCan(CLUBS, __J));
-
-        //01 TEN GALLON HAT ♦: J
-        result.add(new CardTenGallonHat(DIAMONDS, __J));
-
-        //01 CONESTOGA ♦: 9
-        result.add(new CardConestoga(DIAMONDS, _09));
-
-        //01 DERRINGER ♣: J
-        result.add(new CardDerringer(CLUBS, __J));
-
-        //01 BUFFALO RIFLE ♣: Q
-        result.add(new CardBuffaloRifle(CLUBS, __Q));
-
-        //01 HOWITZER ♠: 9
-        result.add(new CardHowitzer(SPADE, _09));
-
-        //01 PEPPERBOX ♥: A
-        result.add(new CardPepperbox(HEARTHS, __A));
-
-        //02 IRON PLATE ♦: A ♠: Q
-        result.add(new CardIronPlate(DIAMONDS, __A));
-        result.add(new CardIronPlate(SPADE, __Q));
-
-        //01 PONY EXPRESS ♦: Q
-        result.add(new CardPonyExpress(DIAMONDS, __Q));
-
-        //01 KNIVE ♥: 8
-        result.add(new CardKnive(HEARTHS, _08));
-
-        //01 SOMBRERO ♦: A ♠: Q
-        result.add(new CardSombraro(CLUBS, _07));
     }
 
 }

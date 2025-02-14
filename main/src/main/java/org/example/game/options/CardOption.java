@@ -21,6 +21,10 @@ public class CardOption extends OptionOption {
       }
     }
 
+    @Override
+    public boolean canBeResolved(Game game) {
+        return true;
+    }
 
     @Override
     public String toString() {
