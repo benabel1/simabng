@@ -2,17 +2,20 @@ package org.example.game.options;
 
 import org.example.game.GamePlayer;
 import org.example.game.cards.characters.GameCharacter;
-import org.example.game.cards.characters.dodge.CharChuckWengam;
+import org.example.game.options.OptionOption;
 
 public class CharacterOption extends OptionOption {
-
-
+    private final GameCharacter characterSource;
     private final GamePlayer sourcePlayer;
-    private final GameCharacter charrrr;
 
-    public CharacterOption(GamePlayer gamePlayer, GameCharacter sourceCharacter) {
+    public CharacterOption(GameCharacter gameCharacter, GamePlayer gamePlayer) {
         super();
+        this.characterSource = gameCharacter;
         this.sourcePlayer = gamePlayer;
-        this.charrrr = sourceCharacter;
+    }
+
+    @Override
+    public String toString() {
+        return characterSource.getCardName() + " - " + sourcePlayer;
     }
 }

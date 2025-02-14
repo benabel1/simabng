@@ -17,7 +17,7 @@ public class CardOption extends OptionOption {
     @Override
     public void resolveInThisGame(Game game) {
       if (canBeResolved(game)) {
-          cardSource.playCard(game, sourcePlayer);
+          cardSource.playCardFromHand(game, sourcePlayer);
       }
     }
 

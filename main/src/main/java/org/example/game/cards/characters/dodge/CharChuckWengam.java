@@ -1,8 +1,8 @@
 package org.example.game.cards.characters.dodge;
 
 import org.example.game.GamePlayer;
-import org.example.game.cards.DeckAble;
 import org.example.game.cards.characters.GameCharacter;
+import org.example.game.deck.DeckAble;
 import org.example.game.options.CharacterOption;
 import org.example.game.options.OptionOption;
 
@@ -16,7 +16,7 @@ public class CharChuckWengam extends GameCharacter {
     public OptionOption generateOption(DeckAble card, GamePlayer gamePlayer) {
 
         if (gamePlayer.getCurrentHp() > 1) {
-            return new CharacterOption(gamePlayer, this);
+            return new CharacterOption(this, gamePlayer);
         } else {
             return null;
         }

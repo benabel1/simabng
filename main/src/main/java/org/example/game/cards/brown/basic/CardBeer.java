@@ -13,8 +13,8 @@ public class CardBeer extends BrownBorderCard {
     }
 
     @Override
-    public void playCard(Game game, GamePlayer sourcePlayer) {
-        super.playCard(game, sourcePlayer);
+    public void playCardFromHand(Game game, GamePlayer sourcePlayer) {
+        super.playCardFromHand(game, sourcePlayer);
         sourcePlayer.restoreLife(1);
         game.notifyAllOther(cardName, sourcePlayer);
 

@@ -6,6 +6,10 @@ public class CharAlPreacher extends GameCharacter {
 
     public CharAlPreacher() {
         this.cardName = "AlPreacher";
+
         this.isAbilityOutTurnOfYour = true;
+        this.hasAbilityOfItsCost = true;
     }
+
+
 }

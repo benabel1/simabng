@@ -1,7 +1,8 @@
 package org.example.game.cards.characters;
 
 import org.example.game.*;
-import org.example.game.cards.DeckAble;
+import org.example.game.options.CharacterOption;
+import org.example.game.deck.DeckAble;
 import org.example.game.cards.GameCard;
 import org.example.game.cards.GameRecordAble;
 import org.example.game.options.OptionOption;
@@ -24,6 +25,7 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
 
     protected boolean isPassiveAbility;
     protected boolean isaActiveAbility;
+    protected boolean hasAbilityOfItsCost;
 
     public GameCharacter() {
         //default values
@@ -73,11 +75,21 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
 
     @Override
     public OptionOption generateOption(DeckAble card, GamePlayer gamePlayer) {
-        return new CharacterOption(this, gamePlayer);
+        if (isAbilityPhase02) {
+            return new CharacterOption(this, gamePlayer);
+        } else {
+//            return null;
+            return new CharacterOption(this, gamePlayer);
+        }
     }
 
     @Override
-    public boolean canBePlay(Game game) {
+    public boolean canBePlayedFromHand(Game game) {
+        return false;
+    }
+
+    @Override
+    public boolean canBeUsedInGame(Game game) {
         return false;
     }
 

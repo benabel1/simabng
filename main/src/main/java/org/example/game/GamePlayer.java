@@ -1,9 +1,8 @@
 package org.example.game;
 
-import org.example.game.cards.DeckAble;
+import org.example.game.cards.ZONE;
+import org.example.game.deck.DeckAble;
 import org.example.game.cards.GameCard;
-import org.example.game.cards.blue.BlueBorderCard;
-import org.example.game.cards.brown.BrownBorderCard;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.options.OptionOption;
 
@@ -45,7 +44,7 @@ public class GamePlayer {
     }
 
     public void assignStartingCharacter(GameCharacter character) {
-        if (this.startChar == null &&  character != null) {
+        if (this.startChar == null && character != null) {
             this.startChar = this.currentChar = character;
 
             maxHp = this.startChar.getMaxHp();
@@ -75,7 +74,7 @@ public class GamePlayer {
         if (role == null) {
             return 0;
         } else {
-            return (currentRole == role && isAlive(game) == isAlive)? 1 : 0;
+            return (currentRole == role && isAlive(game) == isAlive) ? 1 : 0;
         }
     }
 
@@ -83,8 +82,8 @@ public class GamePlayer {
         return currentHp > 0;
     }
 
-    public String getCurrentRole() {
-        return (currentRole != null)? currentRole.toString() : "NONE ROLE";
+    public Roles getCurrentRole() {
+        return currentRole;
     }
 
     public int getCurrentMaxHp() {
@@ -97,12 +96,12 @@ public class GamePlayer {
 
     public void showHandAndFront() {
         System.out.println("HAND");
-        for (DeckAble hand: playerHand) {
+        for (DeckAble hand : playerHand) {
             System.out.println("\t" + hand);
         }
 
         System.out.println("FRONT");
-        for (DeckAble front: playerFront) {
+        for (DeckAble front : playerFront) {
             System.out.println("\t" + front);
         }
     }
@@ -120,17 +119,17 @@ public class GamePlayer {
     public List<OptionOption> generateALlOption(Game game) {
         List<OptionOption> result = new ArrayList<>();
 
-        for (DeckAble card: playerHand) {
-            if (card.canBePlay(game)) {
+        for (DeckAble card : playerHand) {
+            if (card.canBePlayedFromHand(game)) {
                 result.add(card.generateOption(card, this));
             }
         }
 
-//        for (DeckAble card: playerFront) {
-//            if (card.canBePlay(game)) {
-//                result.add(card.generateOption(card, this));
-//            }
-//        }
+        for (DeckAble card: playerFront) {
+            if (card.canBeUsedInGame(game)) {
+                result.add(card.generateOption(card, this));
+            }
+        }
 
         generateCharacterOption(result);
 
@@ -139,7 +138,7 @@ public class GamePlayer {
 
     private void generateCharacterOption(List<OptionOption> result) {
         if (currentChar != null) {
-            OptionOption charOption  = currentChar.generateOption(currentChar, this);
+            OptionOption charOption = currentChar.generateOption(currentChar, this);
             if (charOption != null) {
                 result.add(charOption);
             }
@@ -153,11 +152,11 @@ public class GamePlayer {
 
     public void restoreLife(int restoredAmountHp) {
         if (currentHp < maxHp) {
-          if (currentHp + restoredAmountHp <= maxHp) {
-              currentHp = currentHp + restoredAmountHp;
-          } else {
-              currentHp = maxHp;
-          }
+            if (currentHp + restoredAmountHp <= maxHp) {
+                currentHp = currentHp + restoredAmountHp;
+            } else {
+                currentHp = maxHp;
+            }
         }
     }
 
@@ -174,4 +173,47 @@ public class GamePlayer {
     public void placeInFrontCard(DeckAble frontCard) {
         playerFront.add(frontCard);
     }
+
+    public void drawCard(DeckAble drawnCard, boolean wasShown) {
+        playerHand.add(drawnCard);
+        drawnCard.startNewRecordForHand(wasShown);
+    }
+
+    private void stealCard(DeckAble card, boolean see, GamePlayer previousOwner) {
+        playerHand.add(card);
+        card.startNewRecordForHand(see);
+        card.setPreviousOwnerKnown(previousOwner);
+        card.addRecordOfSteal();
+
+    }
+
+    public int getAllCards(CARD_ATTRIBUTE cardAttribute, ZONE zone) {
+        switch (zone) {
+            case HAND_FRONT:
+                return playerHand.size() + playerFront.size();
+            case HAND:
+                return playerHand.size();
+            case FRONT:
+                return playerFront.size();
+
+            default:
+                return 0;
+        }
+    }
+
+    public DeckAble getRandomCard(ZONE zone) {
+        switch (zone) {
+            case HAND:
+                return playerHand.get((int) (playerHand.size() * Math.random()));
+        }
+
+        return null;
+    }
+
+    public void stealCardFromPlayer(DeckAble card, GamePlayer player) {
+        if (card != null && player != null) {
+            this.stealCard(card, false, player);
+        }
+    }
 }
+
