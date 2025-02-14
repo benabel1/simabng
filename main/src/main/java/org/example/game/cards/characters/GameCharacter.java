@@ -14,6 +14,7 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
     protected int startHand;
     protected int drawInTurnCards;
     protected String charAbility;
+    protected String activationAbility;
 
     protected boolean isAbilityPhase01;
     protected boolean isAbilityPhase02;

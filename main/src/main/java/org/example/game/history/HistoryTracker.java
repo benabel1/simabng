@@ -7,17 +7,16 @@ import java.util.ArrayList;
 
 public class HistoryTracker {
     private final Game game;
-    private final ArrayList<GameTurn> turns;
     private final ArrayList<GameRound> rounds;
+    private GameTurn turn;
 
     public HistoryTracker(Game game) {
         this.game = game;
-        turns = new ArrayList<>();
         rounds = new ArrayList<>();
     }
 
     public GameTurn getCurrentTurn() {
-        return turns.get(0);
+        return turn;
     }
 
     public void createRound() {
@@ -25,7 +24,13 @@ public class HistoryTracker {
     }
 
     public void createTurn(GamePlayer player) {
-        turns.add(new GameTurn(player));
+        GameTurn turn = new GameTurn(player);
+        if (!rounds.isEmpty()) {
+            this.rounds.get(this.rounds.size() - 1).getTurns().add(turn);
+            this.turn = turn;
+        } else {
+            System.err.println("None Rounds Was Created");
+        }
     }
 
 }

@@ -1,9 +1,12 @@
 package org.example.game;
 
+import org.example.game.cards.CARD_ATTRIBUTE;
+import org.example.game.cards.Roles;
 import org.example.game.cards.ZONE;
 import org.example.game.deck.DeckAble;
 import org.example.game.cards.GameCard;
-import org.example.game.cards.OptionGenerator;
+import org.example.game.history.GameStep;
+import org.example.game.options.OptionGenerator;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.deck.DeckName;
 import org.example.game.deck.DeckOfCards;
@@ -20,9 +23,9 @@ import org.example.game.wheel.GamePlayersWheel;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.example.game.CARD_ATTRIBUTE.CAUSE_FOR_ANY;
-import static org.example.game.CARD_ATTRIBUTE.CAUSE_FOR_STEAL;
-import static org.example.game.Roles.*;
+import static org.example.game.cards.CARD_ATTRIBUTE.CAUSE_FOR_ANY;
+import static org.example.game.cards.CARD_ATTRIBUTE.CAUSE_FOR_STEAL;
+import static org.example.game.cards.Roles.*;
 import static org.example.game.cards.ZONE.HAND;
 
 public class Game {

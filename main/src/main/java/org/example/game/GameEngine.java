@@ -1,12 +1,13 @@
 package org.example.game;
 
+import org.example.game.cards.Roles;
 import org.example.game.deck.DeckAble;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.example.game.Roles.*;
-import static org.example.game.Roles.RENEGADE;
+import static org.example.game.cards.Roles.*;
+import static org.example.game.cards.Roles.RENEGADE;
 
 public class GameEngine {
 

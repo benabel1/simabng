@@ -1,4 +1,4 @@
-package org.example.game.cards;
+package org.example.game.options;
 
 import org.example.game.*;
 import org.example.game.options.OptionOption;

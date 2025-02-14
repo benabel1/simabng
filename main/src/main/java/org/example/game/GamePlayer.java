@@ -1,15 +1,17 @@
 package org.example.game;
 
-import org.example.game.cards.ZONE;
+import org.example.game.cards.*;
 import org.example.game.deck.DeckAble;
-import org.example.game.cards.GameCard;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.options.OptionOption;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.example.game.Roles.SHERIFF;
+import static java.util.stream.Nodes.collect;
+import static org.example.game.cards.Roles.SHERIFF;
 
 public class GamePlayer {
     private final String name;
@@ -214,6 +216,14 @@ public class GamePlayer {
         if (card != null && player != null) {
             this.stealCard(card, false, player);
         }
+    }
+
+    public List<DeckAble> getAllTesting() {
+        List<DeckAble> re = new ArrayList<>();
+
+        Comparator<RevealAble> comparator = (x,y) -> (x.getPriority() > y.getPriority()) ? 1: -1;
+
+        return re;
     }
 }
 
