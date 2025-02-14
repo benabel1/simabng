@@ -1,8 +1,10 @@
 package org.example.game.wheel;
 
+
 import org.example.game.Game;
 import org.example.game.GamePlayer;
 import org.example.game.cards.Roles;
+import org.example.game.options.PairPlayerDistance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +94,24 @@ public class GamePlayersWheel {
     }
 
     public GamePlayer whoGoesNext(boolean mustBeAlive) {
-        return structPointingOnSheriff.leftSide.chair;
+        PositionPlayerStruct ff = moving;
+        int maxTurn = 10;
+
+        if (mustBeAlive) {
+            do{
+                if(clockwiseTurning) {
+                    ff = ff.leftSide;
+                } else {
+                    ff = ff.rightSide;
+                }
+                maxTurn--;
+            } while (!ff.chair.isAlive(gameWheel) && maxTurn > 0);
+
+            return ff.chair;
+
+        } else {
+            return moving.leftSide.chair;
+        }
     }
 
     public void moveToNext() {
@@ -108,5 +127,87 @@ public class GamePlayersWheel {
 
     public GamePlayer getActive() {
         return currPlayer;
+    }
+
+    public List<PairPlayerDistance> calculateDistancesFromDeadCount(GamePlayer sourcePlayer, boolean deadCounts) {
+        List<PairPlayerDistance> distanceResult = new ArrayList<>();
+
+        for (GamePlayer playerAtDistance : playersInWheel) {
+            if (sourcePlayer == playerAtDistance) {
+                distanceResult.add(new PairPlayerDistance(sourcePlayer, 0));
+            } else {
+                int distanceLeft = calDistToLeft(sourcePlayer, playerAtDistance, false);
+                int distanceRight = calDistToRight(sourcePlayer, playerAtDistance, false);
+
+                int mixDistance = Math.min(distanceLeft, distanceRight);
+                distanceResult.add(new PairPlayerDistance(playerAtDistance, mixDistance));
+            }
+        }
+
+        return distanceResult;
+    }
+
+    private int calDistToLeft(GamePlayer from, GamePlayer to, boolean deathCounts) {
+        PositionPlayerStruct counting =  moving;
+        int distance = 0;
+
+        if (from == null || to == null) {
+            return -1;
+        }
+
+        if (from == to) {
+            return 0;
+        }
+
+
+        while(counting.chair != from) {
+            counting = counting.leftSide;
+        }
+
+        while(counting.chair != to) {
+            if (deathCounts) {
+                counting = counting.leftSide;
+                distance++;
+            } else {
+                counting = counting.leftSide;
+                if (counting.chair.isAlive(gameWheel)) {
+                    distance++;
+                }
+            }
+        };
+
+
+        return distance;
+    }
+
+    private int calDistToRight(GamePlayer from, GamePlayer to, boolean deathCounts) {
+        PositionPlayerStruct counting =  moving;
+        int distance = 0;
+
+        if (from == null || to == null) {
+            return -1;
+        }
+
+        if (from == to) {
+            return 0;
+        }
+
+        while(counting.chair != from) {
+            counting = counting.rightSide;
+        }
+
+        while(counting.chair != to) {
+            if (deathCounts) {
+                counting = counting.rightSide;
+                distance++;
+            } else {
+                counting = counting.rightSide;
+                if (counting.chair.isAlive(gameWheel)) {
+                    distance++;
+                }
+            }
+        }
+
+        return distance;
     }
 }

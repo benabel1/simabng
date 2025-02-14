@@ -4,6 +4,7 @@ import org.example.game.cards.Roles;
 import org.example.game.deck.DeckAble;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.example.game.cards.Roles.*;
@@ -83,5 +84,30 @@ public class GameEngine {
         }
 
         return result;
+    }
+
+    public List<String> generateRandomListOfNames(int playersCount) {
+       List<String> names = Arrays.asList(new String[]{
+               "A", "B", "C", "D", "E", "F", "G", "H", "I", "J","K"
+       });
+
+        List<String> pool = new ArrayList<>();
+        List<String> result = new ArrayList<>();
+
+        for (int i = 0; i <playersCount ; i++) {
+            pool.add(names.get(i));
+        }
+
+        for (int i = 0; i <playersCount ; i++) {
+            int index = (int) (Math.random() * pool.size());
+            String addedRoleAtRandom = pool.get(index);
+            pool.remove(index);
+
+            result.add(addedRoleAtRandom);
+            System.out.println("Role " + addedRoleAtRandom);
+        }
+
+
+       return result;
     }
 }

@@ -1,9 +1,12 @@
 package org.example.game;
 
 import org.example.game.cards.*;
+import org.example.game.cards.brown.basic.CardBang;
 import org.example.game.cards.characters.GameCharacter;
+import org.example.game.cards.orange.OrangeBorderCard;
 import org.example.game.deck.DeckAble;
 import org.example.game.options.OptionOption;
+import org.example.game.options.OptionScanner;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -27,6 +30,12 @@ public class GamePlayer {
     private List<DeckAble> playerHand;
     private List<DeckAble> playerFront;
     private Roles currentRole, startingRole;
+
+    /**
+     * Extra parameters
+     */
+    private int loadCount;
+    private int goldCount;
 
     public GamePlayer(String name, int orderNumber, Roles role) {
         this.name = name;
@@ -79,7 +88,7 @@ public class GamePlayer {
     }
 
     public boolean isAlive(Game game) {
-        return currentHp > 0;
+        return currentHp > 0 || hasCardOfInFrontItSelf((ArrayList<Class>) Consta.survive);
     }
 
     public Roles getCurrentRole() {
@@ -251,6 +260,75 @@ public class GamePlayer {
         Comparator<RevealAble> comparator = (x, y) -> (x.getPriority() > y.getPriority()) ? 1 : -1;
 
         return re;
+    }
+
+    public boolean hasCardOfInFrontItSelf(ArrayList<Class> classes) {
+        for (DeckAble frontCard: playerFront) {
+            if (classes.contains(frontCard.getClass())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getWeaponRange() {
+        for (DeckAble frontCard: playerFront) {
+            if (frontCard instanceof IsWeapon) {
+                return ((IsWeapon) frontCard).getMaxWeaponRange();
+            }
+        }
+
+        return 1;
+    }
+
+    public void responseToShotFromWithCard(Game game, GamePlayer sourcePlayer, CardBang cardBang) {
+        List<DeckAble> missOptions = getAllCardsWithMissed(game);
+
+        DeckAble miss = OptionScanner.scanForObjectSpecificList("Choice missed option", missOptions, 0, missOptions.size(), -1);
+
+        if (miss != null) {
+            boolean wasSuccess = ((IAvoidable) miss).processAvoidAction(game, this);
+        }
+    }
+
+    public List<DeckAble> getAllCardsWithMissed(Game game) {
+        List<DeckAble> missOtionCard = new ArrayList<>();
+
+        for (DeckAble handCard: playerHand) {
+            if (handCard instanceof IAvoidable) {
+                IAvoidable miss = ((IAvoidable) handCard);
+                if (miss.canBeUsed(game)) {
+                    missOtionCard.add(handCard);
+                }
+            }
+        }
+
+        for (DeckAble frontCard: playerFront) {
+            if (frontCard instanceof IAvoidable) {
+                IAvoidable miss = ((IAvoidable) frontCard);
+                if (miss.canBeUsed(game)) {
+                    missOtionCard.add(frontCard);
+                }
+            }
+        }
+
+        return missOtionCard;
+    }
+
+    public int getLoadCount() {
+        return loadCount + getLoadCountAmongDangerous();
+    }
+
+    private int getLoadCountAmongDangerous() {
+        int totalLoadCounters = 0;
+
+        for (DeckAble front: playerFront) {
+            if (front instanceof OrangeBorderCard) {
+                OrangeBorderCard orange = (OrangeBorderCard) front;
+                totalLoadCounters += orange.getLoadCount();
+            }
+        }
+        return 0;
     }
 }
 

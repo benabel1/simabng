@@ -6,8 +6,8 @@ import org.example.game.GamePlayer;
 
 public class CardOption extends OptionOption {
 
-    private final GameCard cardSource;
-    private final GamePlayer sourcePlayer;
+    protected final GameCard cardSource;
+    protected final GamePlayer sourcePlayer;
 
     public CardOption(GameCard card, GamePlayer player) {
         this.cardSource = card;

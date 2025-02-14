@@ -32,7 +32,7 @@ public class OptionScanner {
         return scanner.nextLine();
     }
 
-    public static PairPlayerCard scanForPlayerOtherThanDistane(Game game, GamePlayer ownerPlayer, int distance) {
+    public static PairPlayerCard scanForPlayerOtherThanDistance(Game game, GamePlayer ownerPlayer, int distance) {
         List<GamePlayer> playerWithHands = game.getPlayersWithHandOtherThan(ownerPlayer);
 
         int choice = scanInt("Choose Player", 0, playerWithHands.size(), -1);
