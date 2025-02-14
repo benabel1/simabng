@@ -29,29 +29,42 @@ public class BrownBorderCard extends GameCard {
         //card without target
         if (allowedTarget == DistanceAllowedTarget.NONE) {
             sourcePlayer.removeFromHand(this);
+            addRecordOfPlay();
             game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
+            game.log(2, "[" + sourcePlayer + "]"+ this + " was played");
         }
 
         if (allowedTarget == DistanceAllowedTarget.ALL) {
             sourcePlayer.removeFromHand(this);
+            addRecordOfPlay();
             game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
+            game.log(2, "[" + sourcePlayer + "]"+ this + " was played");
         }
 
-        if (allowedTarget == DistanceAllowedTarget.OTHER) {
+        if (allowedTarget == DistanceAllowedTarget.OTHERS) {
             sourcePlayer.removeFromHand(this);
+            addRecordOfPlay();
             game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
+            game.log(2, "[" + sourcePlayer + "]"+ this + " was played");
 
             for (GamePlayer other: game.getActivePlayers(sourcePlayer)) {
                 applyPartOfEffectOnOtherPlayer(game, sourcePlayer, other);
             }
         }
 
-        if (allowedTarget == DistanceAllowedTarget.WEAPON_RANGE) {
-
-
-
+        if (allowedTarget == DistanceAllowedTarget.OTHER) {
             sourcePlayer.removeFromHand(this);
+            addRecordOfPlay();
             game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
+            game.log(2, "[" + sourcePlayer + "]"+ this + " was played");
+
+        }
+
+        if (allowedTarget == DistanceAllowedTarget.WEAPON_RANGE) {
+            sourcePlayer.removeFromHand(this);
+            addRecordOfPlay();
+            game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
+            game.log(2, "[" + sourcePlayer + "]"+ this + " was played");
         }
     }
     @Override

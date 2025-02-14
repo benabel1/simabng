@@ -1,15 +1,15 @@
 package org.example.game.settings;
 
-import org.example.game.deck.DeckName;
 import org.example.game.Game;
-import org.example.game.deck.DeckAble;
 import org.example.game.cards.blue.basic.*;
 import org.example.game.cards.blue.dodge.CardBinocular;
 import org.example.game.cards.blue.dodge.CardHideout;
-import org.example.game.cards.brown.dodge.*;
 import org.example.game.cards.brown.basic.*;
+import org.example.game.cards.brown.dodge.*;
 import org.example.game.cards.characters.dodge.CharVeraCuster;
 import org.example.game.cards.green.dodge.*;
+import org.example.game.deck.DeckAble;
+import org.example.game.deck.DeckName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +18,9 @@ import static org.example.game.cards.PokerValue.*;
 import static org.example.game.cards.Suit.*;
 
 
-public class BANGDodgeCityGameSetup extends GameExpansionSetup {
+public class BANGValleyOfShadowsGameSetup extends GameExpansionSetup {
 
-    public BANGDodgeCityGameSetup() {
+    public BANGValleyOfShadowsGameSetup() {
         super();
         isTurnOn = true;
     }
@@ -31,7 +31,7 @@ public class BANGDodgeCityGameSetup extends GameExpansionSetup {
         insertCardsForDeck(game, DeckName.CHARACTERS);
         insertCardsForDeck(game, DeckName.PLAYING_CARDS);
 
-        game.log(0,"DODGECITY: ON");
+        game.log(0,"VALLEY OF SHADOW: ON");
     }
 
     @Override

@@ -28,6 +28,8 @@ public class BANGArmedAndDangerous extends GameExpansionSetup {
     public void applySetup(Game game) {
         insertCardsForDeck(game, DeckName.CHARACTERS);
         insertCardsForDeck(game, DeckName.PLAYING_CARDS);
+
+        game.log(0,"DANGEROUS: ON");
     }
 
     @Override

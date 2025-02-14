@@ -1,17 +1,15 @@
 package org.example.game;
 
 import org.example.game.cards.CARD_ATTRIBUTE;
+import org.example.game.cards.GameCard;
 import org.example.game.cards.Roles;
 import org.example.game.cards.ZONE;
-import org.example.game.deck.DeckAble;
-import org.example.game.cards.GameCard;
-import org.example.game.history.GameStep;
-import org.example.game.options.OptionGenerator;
 import org.example.game.cards.characters.GameCharacter;
+import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
 import org.example.game.deck.DeckOfCards;
-import org.example.game.history.GameTurn;
-import org.example.game.history.HistoryTracker;
+import org.example.game.history.*;
+import org.example.game.options.OptionGenerator;
 import org.example.game.options.OptionOption;
 import org.example.game.options.OptionScanner;
 import org.example.game.settings.BANGArmedAndDangerous;
@@ -20,8 +18,11 @@ import org.example.game.settings.BANGDodgeCityGameSetup;
 import org.example.game.settings.GameExpansionSetup;
 import org.example.game.wheel.GamePlayersWheel;
 
+import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.example.game.cards.CARD_ATTRIBUTE.CAUSE_FOR_ANY;
 import static org.example.game.cards.CARD_ATTRIBUTE.CAUSE_FOR_STEAL;
@@ -29,6 +30,8 @@ import static org.example.game.cards.Roles.*;
 import static org.example.game.cards.ZONE.HAND;
 
 public class Game {
+    private String uuid;
+    private BufferedWriter logger;
     private final OptionGenerator generator;
     GameEngine engine;
     GameStep step;
@@ -49,6 +52,7 @@ public class Game {
     private GamePlayersWheel gamePlayersWheel;
 
     public Game() {
+        assignUuid();
         this.gamePlayersWheel = new GamePlayersWheel(this);
         historyTracker = new HistoryTracker(this);
 
@@ -64,6 +68,14 @@ public class Game {
         setupDecks();
 
         generator = new OptionGenerator();
+    }
+
+
+    private void assignUuid() {
+        LocalDate localDate = LocalDate.now();
+        String ssss = localDate.toString();
+        uuid = ssss + "--" + UUID.randomUUID().toString();
+        System.out.println(uuid);
     }
 
     private void setupDecks() {
@@ -98,7 +110,7 @@ public class Game {
     public void setup() {
         setupPlayers();
         setupInitialHands();
-        setRound();
+        setRoundAndTurns();
         setTurn(sheriffPlayer);
     }
 
@@ -106,8 +118,9 @@ public class Game {
         historyTracker.createTurn(sheriffPlayer);
     }
 
-    private void setRound() {
+    private void setRoundAndTurns() {
         historyTracker.createRound();
+        historyTracker.createTurn(sheriffPlayer);
     }
 
     private void setupInitialHands() {
@@ -132,6 +145,8 @@ public class Game {
                if (role == SHERIFF) {
                    sheriffPlayer = player;
                }
+
+               log(1, "[" + player.getName() + "]" + "Role[" + player.getCurrentRole() + "]" + "Char[" + player.getCurrentCharacter() + "]");
         }
 
         gamePlayersWheel.makeInitialStructure(sheriffPlayer);
@@ -140,6 +155,7 @@ public class Game {
     }
 
     private GamePlayer generatePlayerForPosition(int i, Roles role) {
+        OptionScanner.scanText("Start");
         String name = OptionScanner.scanText("Write name of player");
 
         GamePlayer newPlayer = new GamePlayer(name, i, role);
@@ -226,7 +242,28 @@ public class Game {
         System.out.println("+-------+----+-----+----+-----+");
         System.out.println("iteration1");
 
-        showOption();
+        if (historyTracker.getCurrentTurn().getCurrPhase() instanceof GamePhaseDraw) {
+
+            List<DeckAble> drawn = activePlayer.getCurrentCharacter().resolveDrawingPhase(this);
+            log(1, "Drawn cards: " + drawn);
+            activePlayer.drawCards(drawn, false);
+
+            historyTracker.getCurrentTurn().addPlayPhase(activePlayer);
+
+            return;
+        }
+
+        if (historyTracker.getCurrentTurn().getCurrPhase() instanceof GamePhasePlay) {
+            showOption();
+            return;
+        }
+
+        if (historyTracker.getCurrentTurn().getCurrPhase() instanceof GamePhaseDiscard) {
+            historyTracker.getCurrentTurn().getCurrPhase().reDiscard(this, activePlayer);
+            nextPlayerOrTurn(activePlayer);
+            return;
+        }
+
     }
 
     private void showOption() {
@@ -319,7 +356,7 @@ public class Game {
     private int getTotalCardsOtherOfCause(GamePlayer ownerPlayer, CARD_ATTRIBUTE cardAttribute, ZONE zone) {
         int total = 0;
         for (GamePlayer player: players) {
-            total += player.getAllCards(cardAttribute, zone);
+            total += player.getAllCardsCount(cardAttribute, zone);
         }
 
         return total;
@@ -329,7 +366,7 @@ public class Game {
         ArrayList<GamePlayer> a = new ArrayList<>();
 
         for (GamePlayer player: getActivePlayers(ownerPlayer)) {
-            if (player.getAllCards(CAUSE_FOR_ANY, HAND)> 0) {
+            if (player.getAllCardsCount(CAUSE_FOR_ANY, HAND)> 0) {
                 a.add(player);
             }
         }
@@ -361,5 +398,55 @@ public class Game {
         List<GamePlayer> a = gamePlayersWheel.getPlayersInOrderFromNowSkippingEliminated(currentPlayer, b);
 
         return a;
+    }
+
+    public void doCleaning()  {
+        try {
+            if (logger != null) logger.close();
+        } catch (Exception e) {
+            System.err.println("Exception by closing logger");
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void log(int tabsLevel, String string) {
+       try {
+           logger = new BufferedWriter(new FileWriter(uuid + ".txt", true));
+
+           for (int i = 0; i < tabsLevel; i++) {
+               logger.append("\t");
+           }
+           logger.append(string);
+           logger.newLine();
+       } catch (Exception e) {
+           System.err.println(e);
+       }
+       finally {
+           try {
+               logger.close();
+           } catch (IOException e) {
+               throw new RuntimeException(e);
+           }
+       }
+    }
+
+    public void passPhasePlay() {
+        getGameHistory().getCurrentTurn().goToDiscard(this, activePlayer);
+    }
+
+    public void nextPlayerOrTurn(GamePlayer player) {
+        GamePlayer next = gamePlayersWheel.whoGoesNext(true);
+
+        if (next.getCurrentRole() == SHERIFF) {
+            gamePlayersWheel.moveToNext();
+            activePlayer = gamePlayersWheel.getActive();
+
+            historyTracker.createRound();
+            historyTracker.createTurn(activePlayer);
+        } else {
+            gamePlayersWheel.moveToNext();
+            activePlayer = gamePlayersWheel.getActive();
+            historyTracker.createTurn(activePlayer);
+        }
     }
 }

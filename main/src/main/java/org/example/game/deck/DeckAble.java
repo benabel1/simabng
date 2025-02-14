@@ -68,4 +68,7 @@ public abstract class DeckAble {
         this.previousOwner = previousOwner;
     }
 
+    public boolean wasShown() {
+        return cardWasShown;
+    }
 }

@@ -49,7 +49,7 @@ public class OptionScanner {
         if (selectionObjectList == null || selectionObjectList.isEmpty()) {
             return null;
         } else {
-            int choice = scanInt("Choose Player", 0, selectionObjectList.size(), -1);
+            int choice = scanInt(instruction + ": " + selectionObjectList, 0, selectionObjectList.size(), -1);
 
             if (choice == -1) {
                 return null;

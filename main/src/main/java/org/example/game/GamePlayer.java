@@ -1,16 +1,14 @@
 package org.example.game;
 
 import org.example.game.cards.*;
-import org.example.game.deck.DeckAble;
 import org.example.game.cards.characters.GameCharacter;
+import org.example.game.deck.DeckAble;
 import org.example.game.options.OptionOption;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Nodes.collect;
 import static org.example.game.cards.Roles.SHERIFF;
 
 public class GamePlayer {
@@ -111,6 +109,7 @@ public class GamePlayer {
     public void drawInitialHand(Game game) {
         if (game != null && game.getEngine() != null) {
             playerHand.addAll(game.getEngine().drawCards(currentHp, game));
+            game.log(1, "[" + getName() + "]InitialHand: " + playerHand);
         }
     }
 
@@ -127,7 +126,7 @@ public class GamePlayer {
             }
         }
 
-        for (DeckAble card: playerFront) {
+        for (DeckAble card : playerFront) {
             if (card.canBeUsedInGame(game)) {
                 result.add(card.generateOption(card, this));
             }
@@ -181,6 +180,14 @@ public class GamePlayer {
         drawnCard.startNewRecordForHand(wasShown);
     }
 
+    public void drawCards(List<DeckAble> drawnCard, boolean wasShown) {
+        for (DeckAble card: drawnCard) {
+            playerHand.add(card);
+            card.startNewRecordForHand(card.wasShown());
+        }
+        System.out.println("Drawn cards: " + drawnCard);
+    }
+
     private void stealCard(DeckAble card, boolean see, GamePlayer previousOwner) {
         playerHand.add(card);
         card.startNewRecordForHand(see);
@@ -189,7 +196,7 @@ public class GamePlayer {
 
     }
 
-    public int getAllCards(CARD_ATTRIBUTE cardAttribute, ZONE zone) {
+    public int getAllCardsCount(CARD_ATTRIBUTE cardAttribute, ZONE zone) {
         switch (zone) {
             case HAND_FRONT:
                 return playerHand.size() + playerFront.size();
@@ -201,6 +208,26 @@ public class GamePlayer {
             default:
                 return 0;
         }
+    }
+
+    public List<DeckAble> getAllCards(CARD_ATTRIBUTE cardAttribute, ZONE zone) {
+        List<DeckAble> handSnapShot = new ArrayList<>();
+        switch (zone) {
+            case HAND_FRONT:
+                handSnapShot.addAll(playerHand);
+                handSnapShot.addAll(playerFront);
+                break;
+            case HAND:
+                handSnapShot.addAll(playerHand);
+                break;
+            case FRONT:
+                handSnapShot.addAll(playerFront);
+                break;
+            case GOLD_REWARD:
+                break;
+        }
+
+        return handSnapShot;
     }
 
     public DeckAble getRandomCard(ZONE zone) {
@@ -221,7 +248,7 @@ public class GamePlayer {
     public List<DeckAble> getAllTesting() {
         List<DeckAble> re = new ArrayList<>();
 
-        Comparator<RevealAble> comparator = (x,y) -> (x.getPriority() > y.getPriority()) ? 1: -1;
+        Comparator<RevealAble> comparator = (x, y) -> (x.getPriority() > y.getPriority()) ? 1 : -1;
 
         return re;
     }
