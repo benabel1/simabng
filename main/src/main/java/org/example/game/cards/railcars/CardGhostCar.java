@@ -1,7 +1,7 @@
 package org.example.game.cards.railcars;
 
 import org.example.game.Game;
-import org.example.game.cards.GameCard;
+import org.example.game.GamePlayer;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 
@@ -15,7 +15,7 @@ public class CardGhostCar extends CardRailCard {
     }
 
     @Override
-    public boolean canBePlayedFromHand(Game game) {
+    public boolean canBePlayedFromHand(Game game, GamePlayer player) {
         return false;
     }
 

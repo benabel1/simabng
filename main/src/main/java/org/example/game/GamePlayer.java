@@ -130,7 +130,7 @@ public class GamePlayer {
         List<OptionOption> result = new ArrayList<>();
 
         for (DeckAble card : playerHand) {
-            if (card.canBePlayedFromHand(game)) {
+            if (card.canBePlayedFromHand(game, null)) {
                 result.add(card.generateOption(card, this));
             }
         }

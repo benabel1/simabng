@@ -25,7 +25,7 @@ public class CardBang extends BrownBorderCard {
     }
 
     @Override
-    public boolean canBePlayedFromHand(Game game) {
+    public boolean canBePlayedFromHand(Game game, GamePlayer player) {
         return game.wasPlayedLessThan(this, 1);
     }
 

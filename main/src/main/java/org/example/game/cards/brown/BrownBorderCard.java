@@ -20,7 +20,7 @@ public class BrownBorderCard extends GameCard {
     }
 
     @Override
-    public boolean canBePlayedFromHand(Game game) {
+    public boolean canBePlayedFromHand(Game game, GamePlayer player) {
         return canPlayedOnSideOfTurn;
     }
 

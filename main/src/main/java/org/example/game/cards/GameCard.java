@@ -34,7 +34,7 @@ public abstract class GameCard extends DeckAble {
     }
 
     @Override
-    public boolean canBePlayedFromHand(Game game) {
+    public boolean canBePlayedFromHand(Game game, GamePlayer player) {
         System.out.println("Not implemented for card: " + this);
         return false;
     }

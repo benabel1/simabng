@@ -6,8 +6,6 @@ import org.example.game.cards.DistanceAllowedTarget;
 import org.example.game.cards.GameCard;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
-import org.example.game.deck.DeckName;
-import org.example.game.history.GameTurn;
 
 import static org.example.game.cards.CardBorderColor.GREEN;
 
@@ -24,7 +22,7 @@ public class GreenBorderCard extends GameCard {
     }
 
     @Override
-    public boolean canBePlayedFromHand(Game game) {
+    public boolean canBePlayedFromHand(Game game, GamePlayer player) {
         return true;
     }
 

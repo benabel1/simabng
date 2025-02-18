@@ -86,7 +86,7 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
     }
 
     @Override
-    public boolean canBePlayedFromHand(Game game) {
+    public boolean canBePlayedFromHand(Game game, GamePlayer player) {
         return false;
     }
 

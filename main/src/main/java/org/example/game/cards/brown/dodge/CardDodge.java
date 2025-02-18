@@ -29,6 +29,7 @@ public class CardDodge extends BrownBorderCard implements IAvoidable {
         game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
         game.log(2, "[" + defendingPlayer + "]"+ this + " was played");
 
+        //second effect
         defendingPlayer.drawCard(game.drawCard(), false);
 
         return true;

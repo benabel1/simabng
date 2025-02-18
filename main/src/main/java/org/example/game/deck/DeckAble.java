@@ -27,7 +27,7 @@ public abstract class DeckAble {
         return cardName;
     }
 
-    public boolean canBePlayedFromHand(Game game) {
+    public boolean canBePlayedFromHand(Game game, GamePlayer player) {
         return true;
     }
 

@@ -2,19 +2,15 @@ package org.example.game.cards.blue;
 
 import org.example.game.Game;
 import org.example.game.GamePlayer;
-import org.example.game.cards.DistanceAllowedTarget;
-import org.example.game.cards.GameCard;
-import org.example.game.cards.PokerValue;
-import org.example.game.cards.Suit;
+import org.example.game.cards.*;
 import org.example.game.options.OptionScanner;
 
-import static org.example.game.cards.CardBorderColor.BLUE;
 
 public class BlueBorderCard extends GameCard {
     public BlueBorderCard(Suit s, PokerValue p) {
         super(s, p);
         //default setup values
-        this.color = BLUE;
+        this.color = CardBorderColor.BLUE;
         this.allowedTarget = DistanceAllowedTarget.MYSELF;
 
         this.canPlayedOnSideOfTurn = true;
@@ -44,7 +40,7 @@ public class BlueBorderCard extends GameCard {
     }
 
     @Override
-    public boolean canBePlayedFromHand(Game game) {
+    public boolean canBePlayedFromHand(Game game, GamePlayer player) {
         return true;
     }
 
