@@ -6,7 +6,6 @@ import org.example.game.cards.IAvoidable;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 import org.example.game.cards.blue.BlueBorderCard;
-import org.example.game.deck.DeckName;
 
 public class CardBarrel extends BlueBorderCard implements IAvoidable {
 

@@ -27,7 +27,7 @@ public class CardLockPick extends OrangeBorderCard {
 
             if (game.isThereCardInGameAtAnyDistanceToBeStolen(ownerPlayer, HAND)) {
 
-                PairPlayerCard lockPickedPair = OptionScanner.scanForPlayerOtherThanDistane(game, ownerPlayer, 100);
+                PairPlayerCard lockPickedPair = OptionScanner.scanForPlayerOtherThanDistance(game, ownerPlayer, 100);
 
                 if (lockPickedPair != null) {
                     ownerPlayer.stealCardFromPlayer(lockPickedPair.getCard(), lockPickedPair.getPlayer());

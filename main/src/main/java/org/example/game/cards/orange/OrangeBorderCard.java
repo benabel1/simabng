@@ -48,7 +48,7 @@ public class OrangeBorderCard extends GameCard {
     }
 
     @Override
-    public boolean canBePlayedFromHand(Game game) {
+    public boolean canBePlayedFromHand(Game game, GamePlayer player) {
         return true;
     }
 

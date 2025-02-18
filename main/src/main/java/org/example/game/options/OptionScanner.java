@@ -49,6 +49,13 @@ public class OptionScanner {
         if (selectionObjectList == null || selectionObjectList.isEmpty()) {
             return null;
         } else {
+            System.out.println(instruction);
+
+            for (T t: selectionObjectList) {
+                int index = selectionObjectList.indexOf(t);
+                System.out.println("\t" + t + " :" + t);
+            }
+
             int choice = scanInt(instruction + ": " + selectionObjectList, 0, selectionObjectList.size(), -1);
 
             if (choice == -1) {
