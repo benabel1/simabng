@@ -69,5 +69,6 @@ public class BrownBorderCard extends GameCard {
     }
     @Override
     public void applyPartOfEffectOnOtherPlayer(Game game, GamePlayer sourcePlayer, GamePlayer other) {
+
     }
 }

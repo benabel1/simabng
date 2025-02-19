@@ -11,5 +11,6 @@ public class CardPanic extends BrownBorderCard {
         this.cardName = "PANIC";
 
         this.allowedTarget = DistanceAllowedTarget.SPECIFIC_RANGE;
+        this.distanceMax = 1;
     }
 }

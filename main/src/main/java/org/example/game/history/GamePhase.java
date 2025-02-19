@@ -6,7 +6,7 @@ import org.example.game.cards.CARD_ATTRIBUTE;
 import org.example.game.cards.ZONE;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
-import org.example.game.options.OptionScanner;
+import org.example.game.options.scaner.OptionScanner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class GamePhase {
                 DeckAble discardChoice = OptionScanner
                         .scanForObjectSpecificList("Which card to discard at end of phase",
                         hand,
-                        0, hand.size(), -1);
+                        0, hand.size(), null);
 
                 if (discardChoice != null) {
                     willBeDiscarded.add(discardChoice);

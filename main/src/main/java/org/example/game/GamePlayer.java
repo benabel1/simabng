@@ -5,8 +5,9 @@ import org.example.game.cards.brown.basic.CardBang;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.cards.orange.OrangeBorderCard;
 import org.example.game.deck.DeckAble;
+import org.example.game.deck.DeckName;
 import org.example.game.options.OptionOption;
-import org.example.game.options.OptionScanner;
+import org.example.game.options.scaner.OptionScanner;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -284,7 +285,7 @@ public class GamePlayer {
     public void responseToShotFromWithCard(Game game, GamePlayer sourcePlayer, CardBang cardBang) {
         List<DeckAble> missOptions = getAllCardsWithMissed(game);
 
-        DeckAble miss = OptionScanner.scanForObjectSpecificList("Choice missed option", missOptions, 0, missOptions.size(), -1);
+        DeckAble miss = OptionScanner.scanForObjectSpecificList("Choice missed option", missOptions, 0, missOptions.size(), null);
 
         if (miss != null) {
             boolean wasSuccess = ((IAvoidable) miss).processAvoidAction(game, this);
@@ -329,6 +330,22 @@ public class GamePlayer {
             }
         }
         return 0;
+    }
+
+    public DeckAble discardCardByChoice(Game game) {
+
+        DeckAble discarded = OptionScanner.scanForObjectSpecificList("Which card should" + this + " to discard",
+                playerHand,
+                0, playerHand.size(),
+                null);
+
+        if (discarded != null) {
+            game.getPile(DeckName.DISCARD_PILE).putOnTop(discarded);
+            playerHand.remove(discarded);
+            discarded.addRecordOfDiscard();
+        }
+
+        return  discarded;
     }
 }
 

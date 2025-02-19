@@ -1,9 +1,7 @@
 package org.example.game.options;
 
 import org.example.game.*;
-import org.example.game.options.OptionOption;
-import org.example.game.options.OptionScanner;
-import org.example.game.options.SkipOption;
+import org.example.game.options.scaner.OptionScanner;
 
 import java.util.ArrayList;
 import java.util.List;

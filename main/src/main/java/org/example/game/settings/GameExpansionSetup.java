@@ -20,7 +20,7 @@ public abstract class GameExpansionSetup {
 
     protected abstract List<DeckAble> createListCardsPlayingDeck();
 
-    protected abstract List<DeckAble> createListCardsCharacterDeck();
+    protected abstract List<DeckAble> createListCardsCharacterDeck(Game game);
 
     protected abstract List<DeckAble> createListCardsSpecialDeck();
 

@@ -1,4 +1,4 @@
-package org.example.game.options;
+package org.example.game.options.scaner;
 
 import org.example.game.Game;
 import org.example.game.GamePlayer;
@@ -45,7 +45,7 @@ public class OptionScanner {
 
     }
 
-    public static <T>  T scanForObjectSpecificList(String instruction, List<T> selectionObjectList, int min, int max, int notValid){
+    public static <T>  T scanForObjectSpecificList(String instruction, List<T> selectionObjectList, int min, int max, T notValid){
         if (selectionObjectList == null || selectionObjectList.isEmpty()) {
             return null;
         } else {

@@ -15,7 +15,7 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
     protected int startHand;
     protected int drawInTurnCards;
     protected String charAbility;
-    protected String activationAbility;
+    protected String activationAbilityText;
 
     protected boolean isAbilityPhase01;
     protected boolean isAbilityPhase02;
@@ -53,6 +53,10 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
 
     public int getStartHp() {
         return startHp;
+    }
+
+    public int getHandLimitSize(GamePlayer player) {
+        return player.getCurrentHp();
     }
 
     //TODO Need implementation

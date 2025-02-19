@@ -1,5 +1,7 @@
 package org.example.game.settings;
 
+import org.example.game.cards.characters.dodge.*;
+import org.example.game.cards.railcars.CharacterCardCreator;
 import org.example.game.deck.DeckName;
 import org.example.game.Game;
 import org.example.game.deck.DeckAble;
@@ -8,7 +10,6 @@ import org.example.game.cards.blue.dodge.CardBinocular;
 import org.example.game.cards.blue.dodge.CardHideout;
 import org.example.game.cards.brown.dodge.*;
 import org.example.game.cards.brown.basic.*;
-import org.example.game.cards.characters.dodge.CharVeraCuster;
 import org.example.game.cards.green.dodge.*;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class BANGDodgeCityGameSetup extends GameExpansionSetup {
     public void insertCardsForDeck(Game game, DeckName characters) {
         switch (characters) {
             case CHARACTERS:
-                game.insert(characters, createListCardsCharacterDeck());
+                game.insert(characters, createListCardsCharacterDeck(game));
                 break;
             case PLAYING_CARDS:
                 game.insert(characters, createListCardsPlayingDeck());
@@ -60,10 +61,33 @@ public class BANGDodgeCityGameSetup extends GameExpansionSetup {
     }
 
     @Override
-    protected List<DeckAble> createListCardsCharacterDeck() {
+    protected List<DeckAble> createListCardsCharacterDeck(Game game) {
         List<DeckAble> result = new ArrayList<>();
 
         //15 BASIC characters
+        result.add(new CharApacheKid());
+        result.add(new CharBelleStar());
+        result.add(new CharBillNoface());
+        result.add(new CharDocHoliday());
+
+        result.add(new CharChuckWengam());
+
+        //GREG DIGGER
+        CharacterCardCreator.createOneForListFromAllPotion(result,
+                new CharGregDigger(),
+                new CharGregDigger5());
+        //HERB HUNTER
+        CharacterCardCreator.createOneForListFromAllPotion(result,
+                new CharHerbHunter(),
+                new CharHerbHunter5());
+        //JOSE DELGADO
+        CharacterCardCreator.createOneForListFromAllPotion(result,
+                new CharJoseDelgado(),
+                new CharJoseDelgado1());
+
+        result.add(new CharMollyStar());;
+        result.add(new CharPixiePete());
+        result.add(new CharSeanMallory());
         result.add(new CharVeraCuster());
 
         return result;

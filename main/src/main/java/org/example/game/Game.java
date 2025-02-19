@@ -11,7 +11,7 @@ import org.example.game.deck.DeckOfCards;
 import org.example.game.history.*;
 import org.example.game.options.OptionGenerator;
 import org.example.game.options.OptionOption;
-import org.example.game.options.OptionScanner;
+import org.example.game.options.scaner.OptionScanner;
 import org.example.game.options.PairPlayerDistance;
 import org.example.game.settings.BANGArmedAndDangerous;
 import org.example.game.settings.BANGBasicGameSetup;
@@ -51,9 +51,11 @@ public class Game {
     private HistoryTracker historyTracker;
     private GamePlayer sheriffPlayer;
     private GamePlayersWheel gamePlayersWheel;
+    private String winnerSide;
 
     public Game() {
         assignUuid();
+        this.winnerSide = "None";
         this.gamePlayersWheel = new GamePlayersWheel(this);
         historyTracker = new HistoryTracker(this);
 
@@ -465,5 +467,13 @@ public class Game {
         playesBelowDistance.addAll(gamePlayersWheel.calculateDistancesFromDeadCount(sourcePlayer, false));
 
         return playesBelowDistance;
+    }
+
+    public String getUniqueId() {
+        return uuid;
+    }
+
+    public String whoIsWinnerAsString() {
+        return winnerSide;
     }
 }

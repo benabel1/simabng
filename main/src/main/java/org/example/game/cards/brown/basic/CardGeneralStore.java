@@ -6,7 +6,7 @@ import org.example.game.deck.DeckAble;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 import org.example.game.cards.brown.BrownBorderCard;
-import org.example.game.options.OptionScanner;
+import org.example.game.options.scaner.OptionScanner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class CardGeneralStore extends BrownBorderCard {
         for (int i = 0; i < generalStoreCards.size(); i++) {
             DeckAble pickedCard = null;
 
-            OptionScanner.scanForObjectSpecificList("Select one card from " + this , generalStoreCards, 0, generalStoreCards.size(), -1);
+            OptionScanner.scanForObjectSpecificList("Select one card from " + this , generalStoreCards, 0, generalStoreCards.size(), null);
         }
 
     }
