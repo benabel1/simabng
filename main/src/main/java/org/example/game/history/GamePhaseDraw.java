@@ -10,7 +10,7 @@ public class GamePhaseDraw extends GamePhase {
     protected List<DeckAble> testedCards;
     protected List<DeckAble> drawnCards;
     public GamePhaseDraw(GameTurn gameTurn, GamePlayer player) {
-        super(gameTurn, player);
+        super(gameTurn.getRound(), gameTurn, player);
         drawnCards = new ArrayList<>();
         testedCards = new ArrayList<>();
     }
@@ -22,5 +22,22 @@ public class GamePhaseDraw extends GamePhase {
 
     private void fillAllTests() {
         List<DeckAble> tested = player.getAllTesting();
+    }
+
+    @Override
+    public String toString() {
+        return "GamePhaseDraw{" +
+                "testedCards=" + testedCards +
+                ", drawnCards=" + drawnCards +
+                ", player=" + player +
+                '}';
+    }
+
+    public void addDrawnCards(List<DeckAble> drawn) {
+        for (DeckAble card: drawn) {
+            if (card != null) {
+                drawnCards.add(card);
+            }
+        }
     }
 }

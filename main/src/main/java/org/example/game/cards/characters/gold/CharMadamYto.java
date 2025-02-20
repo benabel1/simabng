@@ -6,9 +6,9 @@ import org.example.game.cards.GameCard;
 import org.example.game.cards.brown.basic.CardBeer;
 import org.example.game.cards.characters.GameCharacter;
 
-public class CharMdamYto extends GameCharacter {
+public class CharMadamYto extends GameCharacter {
 
-    public CharMdamYto() {
+    public CharMadamYto() {
         this.cardName = "MadamYto";
     }
 

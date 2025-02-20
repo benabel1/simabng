@@ -4,8 +4,7 @@ import org.example.game.Game;
 import org.example.game.cards.blue.basic.*;
 import org.example.game.cards.blue.dodge.CardBinocular;
 import org.example.game.cards.blue.dodge.CardHideout;
-import org.example.game.cards.brown.basic.*;
-import org.example.game.cards.brown.dodge.*;
+import org.example.game.cards.brown.valley.CardLastBeer;
 import org.example.game.cards.characters.valley.*;
 import org.example.game.cards.green.dodge.*;
 import org.example.game.deck.DeckAble;
@@ -110,51 +109,10 @@ public class BANGValleyOfShadowsGameSetup extends GameExpansionSetup {
     protected void createBrownBorderCards(List<DeckAble> result) {
         //BROWN
         //04 BANG ♣: 5,6,K ♠: 8
-        result.add(new CardBang(CLUBS, _05));
-        result.add(new CardBang(CLUBS, _06));
-        result.add(new CardBang(CLUBS, __K));
-        result.add(new CardBang(SPADE, _08));
+        //TODO
+        result.add(new CardLastBeer(CLUBS, _05));
+        result.add(new CardLastBeer(CLUBS, _05));
 
-        //02 BEER ♥: 6 ♠: 6
-        result.add(new CardBeer(HEARTHS, _06));
-        result.add(new CardBeer(SPADE, _06));
-
-        //01 CAT BALOU
-        result.add(new CardCatBalou(CLUBS, _08));
-
-        //01 GENERAL STORE ♠: A
-        result.add(new CardGeneralStore(SPADE, __A));
-
-        //01 INDIANS ♦: 5
-        result.add(new CardIndians(DIAMONDS, _05));
-
-        //01 MISSED ♦: 8
-        result.add(new CardMissed(DIAMONDS, _08));
-
-        //01 PANIC ♥: J
-        result.add(new CardPanic(HEARTHS, __J));
-
-        //01 PUNCH ♠: 10
-        result.add(new CardPunch(SPADE, _10));
-
-        //01 RAGTIME ♥: 9
-        result.add(new CardRagTime(HEARTHS, _09));
-
-        //01 BRAWL ♠: J
-        result.add(new CardBrawl(SPADE, __J));
-
-        //02 DODGE ♥: K ♦: 7
-        result.add(new CardDodge(HEARTHS, __K));
-        result.add(new CardDodge(DIAMONDS, _07));
-
-        //01 SPRINGFILED ♠: K
-        result.add(new CardSpringfield(SPADE, __K));
-
-        //01 TEQUILA ♣: 9
-        result.add(new CardTequila(SPADE, __J));
-
-        //01 WHISKY ♥: Q
-        result.add(new CardWhisky(HEARTHS, __Q));
     }
 
     @Override

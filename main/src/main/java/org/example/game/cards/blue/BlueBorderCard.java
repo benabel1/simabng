@@ -32,6 +32,10 @@ public class BlueBorderCard extends GameCard {
                 bluePlacementTarget.placeInFrontCard(this);
             }
         }
+
+        if (this instanceof IsWeapon) {
+            sourcePlayer.replaceOldWeapon(game, this);
+        }
     }
 
     @Override

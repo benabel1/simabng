@@ -11,7 +11,7 @@ import java.util.List;
 
 public class BrownBorderCardWithAdditionalDiscard extends BrownBorderCard{
     private static final int CARD_TO_BE_PLAYABLE = 2;
-    private List<DeckAble> cardsAsPayments;
+    private final List<DeckAble> cardsAsPayments;
 
     public BrownBorderCardWithAdditionalDiscard(Suit s, PokerValue p) {
         super(s, p);

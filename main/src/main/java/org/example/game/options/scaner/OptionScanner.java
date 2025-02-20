@@ -2,7 +2,7 @@ package org.example.game.options.scaner;
 
 import org.example.game.Game;
 import org.example.game.GamePlayer;
-import org.example.game.PairPlayerCard;
+import org.example.game.wheel.PairPlayerCard;
 
 import java.util.List;
 import java.util.Scanner;

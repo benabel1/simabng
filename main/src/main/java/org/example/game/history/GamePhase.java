@@ -13,11 +13,14 @@ import java.util.List;
 
 public class GamePhase {
     protected GamePlayer player;
+    protected GameRound round;
     protected GameTurn turn;
     protected List<GameStep> steps;
 
-    public GamePhase(GameTurn gameTurn, GamePlayer player) {
+    public GamePhase(GameRound round, GameTurn gameTurn, GamePlayer player) {
         this.player = player;
+
+        this.round = round;
         this.turn = gameTurn;
 
         steps = new ArrayList<>();

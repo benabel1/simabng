@@ -6,6 +6,7 @@ import org.example.game.cards.characters.GameCharacter;
 import org.example.game.cards.orange.OrangeBorderCard;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
+import org.example.game.history.GameTurn;
 import org.example.game.options.OptionOption;
 import org.example.game.options.scaner.OptionScanner;
 
@@ -89,7 +90,7 @@ public class GamePlayer {
     }
 
     public boolean isAlive(Game game) {
-        return currentHp > 0 || hasCardOfInFrontItSelf((ArrayList<Class>) Consta.survive);
+        return currentHp > 0 || hasCardOfInFrontItSelf((ArrayList<Class>) GameConstatns.keepingAliveCards);
     }
 
     public Roles getCurrentRole() {
@@ -104,7 +105,10 @@ public class GamePlayer {
         return currentChar;
     }
 
-    public void showHandAndFront() {
+    public void showHandAndFront(Game game) {
+        GameTurn turn = game.geActtiveTurn();
+        System.out.println("Turn " + turn + " BANGs: " + turn.getBangsCount());
+
         System.out.println("HAND");
         for (DeckAble hand : playerHand) {
             System.out.println("\t" + hand);
@@ -118,8 +122,9 @@ public class GamePlayer {
 
     public void drawInitialHand(Game game) {
         if (game != null && game.getEngine() != null) {
+            //TODO: setup up to character, not starting HP, e.x. Big Spencer
             playerHand.addAll(game.getEngine().drawCards(currentHp, game));
-            game.log(1, "[" + getName() + "]InitialHand: " + playerHand);
+            game.log(1, "[" + getName() + "]<<InitialHand>>: " + playerHand);
         }
     }
 
@@ -149,9 +154,12 @@ public class GamePlayer {
 
     private void generateCharacterOption(List<OptionOption> result) {
         if (currentChar != null) {
-            OptionOption charOption = currentChar.generateOption(currentChar, this);
-            if (charOption != null) {
-                result.add(charOption);
+
+            if (currentChar.isIsaActiveAbility() && currentChar.isAbilityPhase02()) {
+                OptionOption charOption = currentChar.generateOption(currentChar, this);
+                if (charOption != null) {
+                    result.add(charOption);
+                }
             }
         }
     }
@@ -203,7 +211,6 @@ public class GamePlayer {
         card.startNewRecordForHand(see);
         card.setPreviousOwnerKnown(previousOwner);
         card.addRecordOfSteal();
-
     }
 
     public int getAllCardsCount(CARD_ATTRIBUTE cardAttribute, ZONE zone) {
@@ -346,6 +353,24 @@ public class GamePlayer {
         }
 
         return  discarded;
+    }
+
+    public void replaceOldWeapon(Game game, DeckAble newGun) {
+        List<DeckAble> oldWeapons = new ArrayList<>();
+
+        for (DeckAble frontCard: playerFront) {
+            if (frontCard == newGun) {
+                continue;
+            }
+            if (frontCard instanceof IsWeapon) {
+                oldWeapons.add(frontCard);
+            }
+        }
+
+        for (DeckAble oldGun : oldWeapons) {
+            game.getPile(DeckName.DISCARD_PILE).putOnTop(oldGun);
+            playerFront.remove(oldGun);
+        }
     }
 }
 
