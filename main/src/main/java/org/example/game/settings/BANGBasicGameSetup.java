@@ -34,7 +34,7 @@ public class BANGBasicGameSetup extends GameExpansionSetup {
     public void insertCardsForDeck(Game game, DeckName characters) {
         switch (characters) {
             case CHARACTERS:
-                game.insert(characters, createListCardsCharacterDeck());
+                game.insert(characters, createListCardsCharacterDeck(game));
                 break;
             case PLAYING_CARDS:
                 game.insert(characters, createListCardsPlayingDeck());
@@ -55,7 +55,7 @@ public class BANGBasicGameSetup extends GameExpansionSetup {
     }
 
     @Override
-    protected List<DeckAble> createListCardsCharacterDeck() {
+    protected List<DeckAble> createListCardsCharacterDeck(Game game) {
         List<DeckAble> result = new ArrayList<>();
 
         //16 BASIC characters

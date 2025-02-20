@@ -4,6 +4,8 @@ import org.example.game.cards.CARD_ATTRIBUTE;
 import org.example.game.cards.GameCard;
 import org.example.game.cards.Roles;
 import org.example.game.cards.ZONE;
+import org.example.game.cards.brown.basic.CardBang;
+import org.example.game.cards.brown.basic.CardBeer;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
@@ -11,7 +13,7 @@ import org.example.game.deck.DeckOfCards;
 import org.example.game.history.*;
 import org.example.game.options.OptionGenerator;
 import org.example.game.options.OptionOption;
-import org.example.game.options.OptionScanner;
+import org.example.game.options.scaner.OptionScanner;
 import org.example.game.options.PairPlayerDistance;
 import org.example.game.settings.BANGArmedAndDangerous;
 import org.example.game.settings.BANGBasicGameSetup;
@@ -51,9 +53,12 @@ public class Game {
     private HistoryTracker historyTracker;
     private GamePlayer sheriffPlayer;
     private GamePlayersWheel gamePlayersWheel;
+    private String winnerSide;
+    private String directoryFileName;
 
     public Game() {
         assignUuid();
+        this.winnerSide = "None";
         this.gamePlayersWheel = new GamePlayersWheel(this);
         historyTracker = new HistoryTracker(this);
 
@@ -76,6 +81,9 @@ public class Game {
         LocalDate localDate = LocalDate.now();
         String ssss = localDate.toString();
         uuid = ssss + "--" + UUID.randomUUID().toString();
+
+        directoryFileName = "test_play_logs\\";
+
         System.out.println(uuid);
     }
 
@@ -322,12 +330,12 @@ public class Game {
         return historyTracker;
     }
 
-    public void notifyAllOther(String cardName, GamePlayer sourcePlayer) {
+    public void notifyAllOther(GameCard cardName, GamePlayer sourcePlayer) {
         for (GamePlayer player: players) {
             if (player == sourcePlayer) {
                 continue;
             }
-            player.notifyYouAboutPlayerCardBy(cardName, sourcePlayer);
+            player.notifyYouAboutPlayerCardBy(this, cardName, sourcePlayer);
         }
     }
 
@@ -420,7 +428,7 @@ public class Game {
 
     public void log(int tabsLevel, String string) {
        try {
-           logger = new BufferedWriter(new FileWriter(uuid + ".txt", true));
+           logger = new BufferedWriter(new FileWriter(directoryFileName + uuid + ".txt", true));
 
            for (int i = 0; i < tabsLevel; i++) {
                logger.append("\t");
@@ -465,5 +473,25 @@ public class Game {
         playesBelowDistance.addAll(gamePlayersWheel.calculateDistancesFromDeadCount(sourcePlayer, false));
 
         return playesBelowDistance;
+    }
+
+    public String getUniqueId() {
+        return uuid;
+    }
+
+    public String whoIsWinnerAsString() {
+        return winnerSide;
+    }
+
+    public void increaseLimitTurnCount(Class<? extends CardBang> aClass) {
+        historyTracker.getCurrentTurn().increaseLimit(aClass);
+    }
+
+    public boolean canBeLifeRestoreBy(CardBeer cardBeer) {
+        if (getActivePlayersCount() > 2) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

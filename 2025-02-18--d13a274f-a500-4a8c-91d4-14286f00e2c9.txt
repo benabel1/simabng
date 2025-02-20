@@ -1,0 +1,13 @@
+BASIC SETUP: ON
+DODGECITY: ON
+DANGEROUS: ON
+	[A]Role[OUTLAW]Char[VeraCuster]
+	[D]Role[SHERIFF]Char[SidKetchum]
+	[C]Role[RENEGADE]Char[WillyTheKid]
+	[B]Role[OUTLAW]Char[ElGringo]
+	[A]InitialHand: [[♣_10]DYNAMITE, [♣_08]CAT BALOU, [♦__A]BANG!]
+	[D]InitialHand: [[♥_02]BEER, [♥_02]DUEL, [♦_07]LOCK BOMB-[0/4], [♣_03]THUNDERER-[0/4], [♥__A]PEPPERBOX]
+	[C]InitialHand: [[♥_02]MISSED!, [♥_02]BANDOLIER-[0/4], [♥__A]BANG!, [♠__K]BARREL]
+	[B]InitialHand: [[♥_03]CAT BALOU, [♦__J]BANG!, [♠_10]VOLCANIC]
+Round[1]
+	Drawn cards: [[♦_04]BANG!, [♣_02]BANG!]

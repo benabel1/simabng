@@ -15,8 +15,10 @@ public class CardBeer extends BrownBorderCard {
     @Override
     public void playCardFromHand(Game game, GamePlayer sourcePlayer) {
         super.playCardFromHand(game, sourcePlayer);
-        sourcePlayer.restoreLife(1);
-        game.notifyAllOther(cardName, sourcePlayer);
 
+        if (game.canBeLifeRestoreBy(this)) {
+            sourcePlayer.restoreLife(1);
+        }
+        game.notifyAllOther(this, sourcePlayer);
     }
 }

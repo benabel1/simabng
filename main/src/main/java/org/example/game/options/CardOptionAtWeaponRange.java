@@ -3,6 +3,8 @@ package org.example.game.options;
 import org.example.game.Game;
 import org.example.game.GamePlayer;
 import org.example.game.cards.GameCard;
+import org.example.game.options.scaner.OptionScanner;
+
 import java.util.List;
 
 public class CardOptionAtWeaponRange extends CardOption {
@@ -24,7 +26,7 @@ public class CardOptionAtWeaponRange extends CardOption {
           }
 
           PairPlayerDistance pairPlayer = OptionScanner
-                  .scanForObjectSpecificList("Choose target at range", potencialTargets, 0, potencialTargets.size(), -1);
+                  .scanForObjectSpecificList("Choose target at range", potencialTargets, 0, potencialTargets.size(), null);
 
 
           if (pairPlayer != null && pairPlayer.getPlayer() != null) {

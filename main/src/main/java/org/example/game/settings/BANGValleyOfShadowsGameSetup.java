@@ -6,7 +6,7 @@ import org.example.game.cards.blue.dodge.CardBinocular;
 import org.example.game.cards.blue.dodge.CardHideout;
 import org.example.game.cards.brown.basic.*;
 import org.example.game.cards.brown.dodge.*;
-import org.example.game.cards.characters.dodge.CharVeraCuster;
+import org.example.game.cards.characters.valley.*;
 import org.example.game.cards.green.dodge.*;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
@@ -38,7 +38,7 @@ public class BANGValleyOfShadowsGameSetup extends GameExpansionSetup {
     public void insertCardsForDeck(Game game, DeckName characters) {
         switch (characters) {
             case CHARACTERS:
-                game.insert(characters, createListCardsCharacterDeck());
+                game.insert(characters, createListCardsCharacterDeck(game));
                 break;
             case PLAYING_CARDS:
                 game.insert(characters, createListCardsPlayingDeck());
@@ -60,11 +60,17 @@ public class BANGValleyOfShadowsGameSetup extends GameExpansionSetup {
     }
 
     @Override
-    protected List<DeckAble> createListCardsCharacterDeck() {
+    protected List<DeckAble> createListCardsCharacterDeck(Game game) {
         List<DeckAble> result = new ArrayList<>();
 
-        //15 BASIC characters
-        result.add(new CharVeraCuster());
+        //08 BASIC characters
+        result.add(new CharEvelynSheBang());
+        result.add(new CharHenryBlock());
+        result.add(new CharMickDefender());
+        result.add(new CharLemonadeJim());
+
+        result.add(new CharBlackFlower());
+        result.add(new CharColoradoBill());
 
         return result;
     }

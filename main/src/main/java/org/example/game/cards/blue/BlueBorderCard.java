@@ -3,7 +3,7 @@ package org.example.game.cards.blue;
 import org.example.game.Game;
 import org.example.game.GamePlayer;
 import org.example.game.cards.*;
-import org.example.game.options.OptionScanner;
+import org.example.game.options.scaner.OptionScanner;
 
 
 public class BlueBorderCard extends GameCard {
@@ -25,7 +25,7 @@ public class BlueBorderCard extends GameCard {
         }
 
         if (allowedTarget == DistanceAllowedTarget.OTHER_THAN_SHERIFF) {
-            GamePlayer bluePlacementTarget = OptionScanner.scanForObjectSpecificList("Choose placement of " + this, game.getActivePlayers(null), 0, game.getActivePlayersCount(),  -1);
+            GamePlayer bluePlacementTarget = OptionScanner.scanForObjectSpecificList("Choose placement of " + this, game.getActivePlayers(null), 0, game.getActivePlayersCount(),  null);
 
             if (bluePlacementTarget != null && bluePlacementTarget != game.getSheriffPlayer()) {
                 super.playCardFromHand(game, sourcePlayer);

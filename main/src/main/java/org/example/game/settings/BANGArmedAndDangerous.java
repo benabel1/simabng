@@ -10,7 +10,6 @@ import org.example.game.cards.green.dodge.*;
 import org.example.game.deck.DeckName;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
 
 import static org.example.game.cards.PokerValue.*;
@@ -36,7 +35,7 @@ public class BANGArmedAndDangerous extends GameExpansionSetup {
     public void insertCardsForDeck(Game game, DeckName characters) {
         switch (characters) {
             case CHARACTERS:
-                game.insert(characters, createListCardsCharacterDeck());
+                game.insert(characters, createListCardsCharacterDeck(game));
                 break;
             case PLAYING_CARDS:
                 game.insert(characters, createListCardsPlayingDeck());
@@ -57,7 +56,7 @@ public class BANGArmedAndDangerous extends GameExpansionSetup {
     }
 
     @Override
-    protected List<DeckAble> createListCardsCharacterDeck() {
+    protected List<DeckAble> createListCardsCharacterDeck(Game game) {
         List<DeckAble> result = new ArrayList<>();
         //8 DANGEROUS characters
         result.add(new CharAlPreacher());
