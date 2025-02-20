@@ -14,6 +14,8 @@ public class OptionGenerator {
         allOptions.addAll(game.generateGlobalOption());
         allOptions.addAll(player.generateALlOption(game));
 
+        game.printAllSteps();
+
         showAllOptions(allOptions);
 
         int choice = OptionScanner.scanInt("Which option", 0,  allOptions.size(), 0);

@@ -7,6 +7,8 @@ import org.example.game.cards.GameCard;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 import org.example.game.deck.DeckName;
+import org.example.game.history.steps.GameStep;
+import org.example.game.history.steps.GameStepYourself;
 
 import static org.example.game.cards.CardBorderColor.BROWN;
 
@@ -32,6 +34,7 @@ public class BrownBorderCard extends GameCard {
             addRecordOfPlay();
             game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
             game.log(2, "[" + sourcePlayer + "]"+ this + " was played");
+            game.markStepAndCard(this, new GameStepYourself(game, this, sourcePlayer));
         }
 
         if (allowedTarget == DistanceAllowedTarget.ALL) {
@@ -61,6 +64,13 @@ public class BrownBorderCard extends GameCard {
         }
 
         if (allowedTarget == DistanceAllowedTarget.WEAPON_RANGE) {
+            sourcePlayer.removeFromHand(this);
+            addRecordOfPlay();
+            game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
+            game.log(2, "[" + sourcePlayer + "]"+ this + " was played");
+        }
+
+        if (allowedTarget == DistanceAllowedTarget.SPECIFIC_RANGE) {
             sourcePlayer.removeFromHand(this);
             addRecordOfPlay();
             game.getPile(DeckName.DISCARD_PILE).putOnTop(this);

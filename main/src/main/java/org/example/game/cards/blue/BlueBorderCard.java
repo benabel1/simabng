@@ -3,6 +3,7 @@ package org.example.game.cards.blue;
 import org.example.game.Game;
 import org.example.game.GamePlayer;
 import org.example.game.cards.*;
+import org.example.game.history.steps.GameStepPlayCardOnTargetPlayer;
 import org.example.game.options.scaner.OptionScanner;
 
 
@@ -22,6 +23,7 @@ public class BlueBorderCard extends GameCard {
         if (allowedTarget == DistanceAllowedTarget.MYSELF) {
             super.playCardFromHand(game, sourcePlayer);
             sourcePlayer.placeInFrontCard(this);
+            game.markStepAndCard(this, new GameStepPlayCardOnTargetPlayer(game, this, sourcePlayer, sourcePlayer));
         }
 
         if (allowedTarget == DistanceAllowedTarget.OTHER_THAN_SHERIFF) {
@@ -30,6 +32,7 @@ public class BlueBorderCard extends GameCard {
             if (bluePlacementTarget != null && bluePlacementTarget != game.getSheriffPlayer()) {
                 super.playCardFromHand(game, sourcePlayer);
                 bluePlacementTarget.placeInFrontCard(this);
+                game.markStepAndCard(this, new GameStepPlayCardOnTargetPlayer(game, this, sourcePlayer, bluePlacementTarget));
             }
         }
 

@@ -16,7 +16,7 @@ public class CardSombraro extends GreenBorderCard implements IAvoidable {
 
     @Override
     public boolean canBeUsed(Game game) {
-        return turnOfPlay != game.geActtiveTurn();
+        return turnOfPlay != game.geActiveTurn();
     }
 
     @Override

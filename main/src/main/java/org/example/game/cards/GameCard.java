@@ -3,6 +3,7 @@ package org.example.game.cards;
 import org.example.game.Game;
 import org.example.game.GamePlayer;
 import org.example.game.deck.DeckAble;
+import org.example.game.history.steps.GameStepPlayCardOnTargetPlayer;
 import org.example.game.options.CardOption;
 import org.example.game.options.OptionOption;
 
@@ -20,6 +21,7 @@ public abstract class GameCard extends DeckAble {
 
     protected int distanceMax;
     protected DistanceAllowedTarget allowedTarget;
+    protected DistanceAllowedTarget usageAllowedTarget;
 
     public GameCard(Suit s, PokerValue p) {
         this.suit = s;
@@ -54,6 +56,7 @@ public abstract class GameCard extends DeckAble {
             sourcePlayer.removeFromHand(this);
             addRecordOfPlay();
             game.log(2, "[" + sourcePlayer + "]"+ this + "was played");
+            //game.markStepAndCard(this);
         }
     }
 
@@ -62,6 +65,7 @@ public abstract class GameCard extends DeckAble {
             sourcePlayer.removeFromHand(this);
             addRecordOfPlay();
             game.log(2, "[" + sourcePlayer + "]"+ this + "was played on " + targetPlayer);
+            //game.markStepAndCard(this, new GameStepPlayCardOnTargetPlayer(game, this, sourcePlayer, targetPlayer));
         }
     }
 

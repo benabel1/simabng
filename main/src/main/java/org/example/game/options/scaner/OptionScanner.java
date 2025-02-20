@@ -21,6 +21,8 @@ public class OptionScanner {
 
         try {
             int scannedInt = scanner.nextInt();
+            String enter = scanner.nextLine();
+
             return (scannedInt >= min && scannedInt <= max)? scannedInt : defaultValue;
         }
         catch (Exception e) {
@@ -49,14 +51,15 @@ public class OptionScanner {
         if (selectionObjectList == null || selectionObjectList.isEmpty()) {
             return null;
         } else {
-            System.out.println(instruction);
+            System.out.println(instruction + "<" + min+ ", " +  max + ">(" + notValid + ")");
 
-            for (T t: selectionObjectList) {
-                int index = selectionObjectList.indexOf(t);
-                System.out.println("\t" + t + " :" + t);
+            for (int i = 0; i < selectionObjectList.size(); i++) {
+
+                int itemAtI = selectionObjectList.indexOf(i);
+                System.out.println("\t" + i + " :" + itemAtI);
             }
 
-            int choice = scanInt(instruction + ": " + selectionObjectList, 0, selectionObjectList.size(), -1);
+            int choice = scanInt( 0, selectionObjectList.size(), -1);
 
             if (choice == -1) {
                 return null;
@@ -65,6 +68,15 @@ public class OptionScanner {
             }
         }
 
+    }
+
+    private static int scanInt(int min, int max, int defVal) {
+        int option = scanner.nextInt();
+
+        if (option >= max || option < min) {
+            option = defVal;
+        }
+        return option;
     }
 
 }

@@ -5,11 +5,17 @@ import org.example.game.cards.GameCard;
 import org.example.game.cards.Roles;
 import org.example.game.cards.ZONE;
 import org.example.game.cards.brown.basic.CardBang;
+import org.example.game.cards.brown.basic.CardBeer;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
 import org.example.game.deck.DeckOfCards;
 import org.example.game.history.*;
+import org.example.game.history.sequence.GamePhaseDiscard;
+import org.example.game.history.sequence.GamePhaseDraw;
+import org.example.game.history.sequence.GamePhasePlay;
+import org.example.game.history.sequence.GameTurn;
+import org.example.game.history.steps.GameStep;
 import org.example.game.options.OptionGenerator;
 import org.example.game.options.OptionOption;
 import org.example.game.options.scaner.OptionScanner;
@@ -281,12 +287,7 @@ public class Game {
             return;
         }
 
-        for (GamePlayer p: players) {
-            System.out.println("+-------+----+-----+----+-----+");
-            System.out.println(p.getName() + " " + p.getCurrentRole() + " " + p.getCurrentCharacter().getCardName() + "[" + p. getCurrentHp()+"/"+ p.getCurrentMaxHp()+"]");
-        }
-        System.out.println("+-------+----+-----+----+-----+");
-        System.out.println("iteration1");
+        engine.printGame(this);
 
         if (historyTracker.getCurrentTurn().getCurrPhase() instanceof GamePhaseDraw) {
             log(1, "Turn[" + historyTracker.getCurrentTurn().getTurnCount() + "]");
@@ -435,7 +436,7 @@ public class Game {
         return allActivePlayers;
     }
 
-    public GameTurn geActtiveTurn() {
+    public GameTurn geActiveTurn() {
         return historyTracker.getCurrentTurn();
     }
 
@@ -500,11 +501,11 @@ public class Game {
     }
 
     public List<PairPlayerDistance> getPlayersFromPlayerAtMaxDistance(GamePlayer sourcePlayer, int maxRange) {
-        List<PairPlayerDistance> playesBelowDistance = new ArrayList();
+        List<PairPlayerDistance> playersBelowDistance = new ArrayList();
 
-        playesBelowDistance.addAll(gamePlayersWheel.calculateDistancesFromDeadCount(sourcePlayer, false));
+        playersBelowDistance.addAll(gamePlayersWheel.calculateDistancesFromDeadCount(sourcePlayer, false));
 
-        return playesBelowDistance;
+        return playersBelowDistance;
     }
 
     public String getUniqueId() {
@@ -520,10 +521,27 @@ public class Game {
     }
 
     public boolean canBeLifeRestoreBy(GameCard alcoholCard) {
-        if (getActivePlayersCount() > 2) {
+        if (alcoholCard instanceof CardBeer && getActivePlayersCount() > 2) {
             return true;
         } else {
-            return false;
+            return true;
         }
+    }
+    public void markStepAndCard(GameCard gameCard) {
+        GameStep step = new GameStep(this);
+
+        historyTracker.getCurrentTurn().addStepAndCard(step, gameCard);
+    }
+
+    public void markStepAndCard(GameCard gameCard, GameStep step) {
+        historyTracker.getCurrentTurn().addStepAndCard(step, gameCard);
+    }
+
+    public void printAllSteps() {
+        historyTracker.getCurrentTurn().getCurrPhase().printSteps();
+    }
+
+    public GamePlayer getCurrentPlayer() {
+        return activePlayer;
     }
 }

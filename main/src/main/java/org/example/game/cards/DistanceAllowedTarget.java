@@ -8,5 +8,5 @@ public enum DistanceAllowedTarget {
     ALL,
     WEAPON_RANGE,
     SPECIFIC_RANGE,
-    OTHER_THAN_SHERIFF;
+    OTHER_THAN_SHERIFF, ANY;
 }

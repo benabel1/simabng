@@ -6,7 +6,7 @@ import org.example.game.cards.characters.GameCharacter;
 import org.example.game.cards.orange.OrangeBorderCard;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
-import org.example.game.history.GameTurn;
+import org.example.game.history.sequence.GameTurn;
 import org.example.game.options.OptionOption;
 import org.example.game.options.scaner.OptionScanner;
 
@@ -106,7 +106,7 @@ public class GamePlayer {
     }
 
     public void showHandAndFront(Game game) {
-        GameTurn turn = game.geActtiveTurn();
+        GameTurn turn = game.geActiveTurn();
         System.out.println("Turn " + turn + " BANGs: " + turn.getBangsCount());
 
         System.out.println("HAND");
@@ -289,14 +289,25 @@ public class GamePlayer {
         return 1;
     }
 
-    public void responseToShotFromWithCard(Game game, GamePlayer sourcePlayer, CardBang cardBang) {
+    public void responseToShotFromWithCard(Game game, GamePlayer sourcePlayer, CardBang cardBang, int missedNeeded) {
         List<DeckAble> missOptions = getAllCardsWithMissed(game);
+
+        if (missOptions.isEmpty()) {
+            takeDamage(1);
+            return;
+        }
 
         DeckAble miss = OptionScanner.scanForObjectSpecificList("Choice missed option", missOptions, 0, missOptions.size(), null);
 
         if (miss != null) {
             boolean wasSuccess = ((IAvoidable) miss).processAvoidAction(game, this);
+        } else {
+            takeDamage(1);
         }
+    }
+
+    private void takeDamage(int i) {
+        currentHp--;
     }
 
     public List<DeckAble> getAllCardsWithMissed(Game game) {
@@ -370,6 +381,67 @@ public class GamePlayer {
         for (DeckAble oldGun : oldWeapons) {
             game.getPile(DeckName.DISCARD_PILE).putOnTop(oldGun);
             playerFront.remove(oldGun);
+        }
+    }
+
+    public int getMissedNeed(GameCard shootCard) {
+        return currentChar.howManyMissedNeededVs(shootCard);
+    }
+
+    public void print(GameEngine gameEngine, Game game, GamePlayer active, GamePlayer previous, GamePlayer next) {
+        printSeparation(previous, this, active, "-", "=");
+
+        System.out.println(getName() + " " + getCurrentRole() + " " + getCurrentCharacter().getCardName() + "[" + getCurrentHp()+"/"+ getCurrentMaxHp()+"]Hand:["+ getAllCardsCount(CARD_ATTRIBUTE.CAUSE_FOR_ANY, ZONE.HAND)+"/" + getCurrentHp() +"]");
+
+        System.out.println("Front[" + playerFront.size() + "]");
+
+        for (DeckAble front: playerFront) {
+            System.out.println("\t" + front);
+        }
+
+        printSeparation(this, next, active, "-", "=");
+        
+    }
+
+    private void printSeparation(GamePlayer previous, GamePlayer next, GamePlayer active, String signNormal, String signActive) {
+        String paint = signNormal;
+
+        if (this== active) {
+            paint = signActive;
+        }
+
+        if (previous == null && next != null) {
+
+            for (int i = 0; i < 7; i++) {
+                System.out.print("+");
+                for (int j = 0; j < 5; j++) {
+                    System.out.print(paint);
+                }
+            }
+            System.out.print("+");
+            System.out.println();
+        }
+
+        if (previous == this && next != null) {
+            for (int i = 0; i < 7; i++) {
+                System.out.print("+");
+                for (int j = 0; j < 5; j++) {
+                    System.out.print(paint);
+                }
+            }
+            System.out.print("+");
+            System.out.println();
+        }
+
+        if (previous != null && next == null) {
+            for (int i = 0; i < 7; i++) {
+                System.out.print("+");
+                for (int j = 0; j < 5; j++) {
+                    System.out.print(paint);
+                }
+            }
+            System.out.print("+");
+            System.out.println();
         }
     }
 }

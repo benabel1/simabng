@@ -28,7 +28,7 @@ public class GreenBorderCard extends GameCard {
 
     @Override
     public boolean canBeUsedInGame(Game game) {
-        return turnOfPlay != game.geActtiveTurn();
+        return turnOfPlay != game.geActiveTurn();
     }
 
     @Override
@@ -36,7 +36,7 @@ public class GreenBorderCard extends GameCard {
         if (allowedTarget == DistanceAllowedTarget.MYSELF) {
             super.playCardFromHand(game, sourcePlayer);
             sourcePlayer.placeInFrontCard(this);
-            turnOfPlay = game.geActtiveTurn();
+            turnOfPlay = game.geActiveTurn();
         }
     }
 }

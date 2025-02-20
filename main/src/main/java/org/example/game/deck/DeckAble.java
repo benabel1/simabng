@@ -2,7 +2,7 @@ package org.example.game.deck;
 
 import org.example.game.Game;
 import org.example.game.GamePlayer;
-import org.example.game.history.GameTurn;
+import org.example.game.history.sequence.GameTurn;
 import org.example.game.options.OptionOption;
 
 public abstract class DeckAble {

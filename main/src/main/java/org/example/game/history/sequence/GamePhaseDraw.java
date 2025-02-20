@@ -1,4 +1,4 @@
-package org.example.game.history;
+package org.example.game.history.sequence;
 
 import org.example.game.GamePlayer;
 import org.example.game.deck.DeckAble;

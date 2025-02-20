@@ -1,5 +1,6 @@
 package org.example.game;
 
+import org.example.game.cards.GameCard;
 import org.example.game.cards.blue.basic.CardDynamit;
 import org.example.game.cards.blue.basic.CardJail;
 import org.example.game.cards.blue.valley.CardGhost;

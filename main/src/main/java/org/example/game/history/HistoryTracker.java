@@ -2,6 +2,8 @@ package org.example.game.history;
 
 import org.example.game.Game;
 import org.example.game.GamePlayer;
+import org.example.game.history.sequence.GameRound;
+import org.example.game.history.sequence.GameTurn;
 
 import java.util.ArrayList;
 

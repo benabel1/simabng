@@ -124,4 +124,8 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
 
         return  drawnCardsPhaseOne;
     }
+
+    public int howManyMissedNeededVs(GameCard shootingCard) {
+        return 1;
+    }
 }

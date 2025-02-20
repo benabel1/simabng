@@ -33,7 +33,7 @@ public class CardBang extends BrownBorderCard {
     public void playCardFromHand(Game game, GamePlayer sourcePlayer, GamePlayer targetPlayer) {
         super.playCardFromHand(game, sourcePlayer, targetPlayer);
         if (sourcePlayer != null && targetPlayer != null) {
-            targetPlayer.responseToShotFromWithCard(game, sourcePlayer, this);
+            targetPlayer.responseToShotFromWithCard(game, sourcePlayer, this, sourcePlayer.getMissedNeed(this));
             game.increaseLimitTurnCount(this.getClass());
         }
     }

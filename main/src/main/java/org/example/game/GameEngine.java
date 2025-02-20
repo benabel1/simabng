@@ -107,4 +107,16 @@ public class GameEngine {
 
        return result;
     }
+
+    public void printGame(Game game) {
+        GamePlayer sheriffPlayer = game.getSheriffPlayer();
+        List<GamePlayer> players = game.getPlayersFromACurrentToOthersInOrderSkippedEliminated(sheriffPlayer, false);
+
+        for (int i = 0; i < players.size(); i++) {
+            GamePlayer p = players.get(i);
+            p.print(this, game, game.getCurrentPlayer(), (i == 0) ? null : players.get(i - 1), (i + 1 >= players.size()) ? null : players.get(i + 1));
+        }
+        System.out.println("iteration1");
+
+    }
 }
