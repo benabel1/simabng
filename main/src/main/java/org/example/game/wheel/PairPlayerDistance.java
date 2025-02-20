@@ -1,4 +1,4 @@
-package org.example.game.options;
+package org.example.game.wheel;
 
 import org.example.game.GamePlayer;
 
@@ -17,5 +17,10 @@ public class PairPlayerDistance {
 
     public int getPlayerAtDistance() {
         return playerAtDistance;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + playerFromMe + "][" + playerAtDistance + "]";
     }
 }

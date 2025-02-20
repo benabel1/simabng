@@ -4,6 +4,7 @@ import org.example.game.Game;
 import org.example.game.GamePlayer;
 import org.example.game.cards.GameCard;
 import org.example.game.options.scaner.OptionScanner;
+import org.example.game.wheel.PairPlayerDistance;
 
 import java.util.List;
 

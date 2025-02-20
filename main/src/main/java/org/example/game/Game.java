@@ -13,7 +13,7 @@ import org.example.game.history.*;
 import org.example.game.options.OptionGenerator;
 import org.example.game.options.OptionOption;
 import org.example.game.options.scaner.OptionScanner;
-import org.example.game.options.PairPlayerDistance;
+import org.example.game.wheel.PairPlayerDistance;
 import org.example.game.settings.BANGArmedAndDangerous;
 import org.example.game.settings.BANGBasicGameSetup;
 import org.example.game.settings.BANGDodgeCityGameSetup;
@@ -275,7 +275,7 @@ public class Game {
         return winWithoutOutlaw || winWithOutlaw;
     }
 
-    public void executeOneInteration() {
+    public void executeOneInteraction() {
         if (!activePlayer.isAlive(this)) {
             nextPlayerOrTurn(activePlayer);
             return;
@@ -289,7 +289,7 @@ public class Game {
         System.out.println("iteration1");
 
         if (historyTracker.getCurrentTurn().getCurrPhase() instanceof GamePhaseDraw) {
-
+            log(1, "Turn[" + historyTracker.getCurrentTurn().getTurnCount() + "]");
             List<DeckAble> drawn = activePlayer.getCurrentCharacter().resolveDrawingPhase(this);
             log(1, "Drawn cards: " + drawn);
             activePlayer.drawCards(drawn, false);

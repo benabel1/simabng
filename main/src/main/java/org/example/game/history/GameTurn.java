@@ -87,4 +87,8 @@ public class GameTurn {
     public String toString() {
         return "Turn["+ turnHistory.get(turnCount).turnCount + "]:[" + player + "]"+ currentPhase;
     }
+
+    public int getTurnCount() {
+        return turnCount;
+    }
 }

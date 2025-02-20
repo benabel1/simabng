@@ -17,7 +17,7 @@ public class GameEngine {
         setupGame(game);
 
         while (game.isNotEnded()) {
-            game.executeOneInteration();
+            game.executeOneInteraction();
         }
         game.doCleaning();
     }
@@ -34,7 +34,6 @@ public class GameEngine {
 
     public List<DeckAble> drawCards(int startHand, Game game) {
         List<DeckAble> drawn = new ArrayList<>();
-
 
         for (int i = 0; i < startHand; i++) {
             DeckAble card = game.drawCard();

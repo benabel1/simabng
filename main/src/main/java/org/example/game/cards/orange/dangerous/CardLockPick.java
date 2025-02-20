@@ -2,7 +2,7 @@ package org.example.game.cards.orange.dangerous;
 
 import org.example.game.Game;
 import org.example.game.GamePlayer;
-import org.example.game.PairPlayerCard;
+import org.example.game.wheel.PairPlayerCard;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 import org.example.game.cards.orange.OrangeBorderCard;

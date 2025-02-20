@@ -4,7 +4,6 @@ package org.example.game.wheel;
 import org.example.game.Game;
 import org.example.game.GamePlayer;
 import org.example.game.cards.Roles;
-import org.example.game.options.PairPlayerDistance;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,6 @@
-package org.example.game;
+package org.example.game.wheel;
 
+import org.example.game.GamePlayer;
 import org.example.game.deck.DeckAble;
 
 public class PairPlayerCard {
@@ -16,5 +17,10 @@ public class PairPlayerCard {
 
     public DeckAble getCard() {
         return card;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + player + "][" + card + "]";
     }
 }

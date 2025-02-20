@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class GameRound {
     private final int roundNumber;
     private final ArrayList<GameTurn> turns;
-    private static HashMap<Integer, GameRound> roundsTable = new HashMap<>();
+    public static HashMap<Integer, GameRound> roundsTable = new HashMap<>();
 
     public GameRound() {
         turns = new ArrayList<>();
