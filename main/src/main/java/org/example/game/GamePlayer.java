@@ -171,8 +171,8 @@ public class GamePlayer {
         }
     }
 
-    public void notifyYouAboutPlayerCardBy(String cardName, GamePlayer sourcePlayer) {
-        currentChar.notifyP(cardName, sourcePlayer);
+    public void notifyYouAboutPlayerCardBy(Game game, GameCard card, GamePlayer sourcePlayer) {
+        currentChar.notifyP(card, sourcePlayer, game);
     }
 
     public void removeFromHand(DeckAble handCard) {

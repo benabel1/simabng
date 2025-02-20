@@ -99,7 +99,7 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
         return false;
     }
 
-    public void notifyP(String cardName, GamePlayer sourcePlayer) {
+    public void notifyP(GameCard card, GamePlayer sourcePlayer, Game game) {
 
     }
 

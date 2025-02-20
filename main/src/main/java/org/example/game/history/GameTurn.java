@@ -3,6 +3,7 @@ package org.example.game.history;
 import org.example.game.Game;
 import org.example.game.cards.GameCard;
 import org.example.game.GamePlayer;
+import org.example.game.cards.brown.basic.CardBang;
 
 public class GameTurn {
 
@@ -43,6 +44,12 @@ public class GameTurn {
         if (playPhase == null) {
             playPhase = new GamePhasePlay(this, player);
             currentPhase = playPhase;
+        }
+    }
+
+    public void increaseLimit(Class<? extends CardBang> aClass) {
+        if (aClass == CardBang.class) {
+            bangCount++;
         }
     }
 }
