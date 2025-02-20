@@ -5,7 +5,6 @@ import org.example.game.cards.GameCard;
 import org.example.game.cards.Roles;
 import org.example.game.cards.ZONE;
 import org.example.game.cards.brown.basic.CardBang;
-import org.example.game.cards.brown.basic.CardBeer;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
@@ -80,8 +79,8 @@ public class Game {
     private void assignUuid() {
         LocalDate localDate = LocalDate.now();
         String ssss = localDate.toString();
-        uuid = ssss + "--" + UUID.randomUUID().toString();
 
+        uuid = ssss + "--" + UUID.randomUUID().toString();
         directoryFileName = "test_play_logs\\";
 
         System.out.println(uuid);
@@ -165,6 +164,7 @@ public class Game {
     }
 
     private GamePlayer generatePlayerForPosition(int i, Roles role, String name) {
+        //TODO better reading names there is same issue
         if (name == null) {
             OptionScanner.scanText("Start");
             name = OptionScanner.scanText("Write name of player");
@@ -213,7 +213,36 @@ public class Game {
         boolean winLaw = calculateLawWin();
         boolean mathEnd = Math.random() < 0.95;
 
+        markWonSideIfPresent(winOutlaws, winLaw, winRenegade);
+
         return !(winLaw || winOutlaws || winRenegade) || mathEnd;
+    }
+
+    private void markWonSideIfPresent(boolean winOutlaws, boolean winLaw, boolean winRenegade) {
+        if (winLaw) {
+            if (winnerSide.equals("None")) {
+                winnerSide = "Law";
+            } else {
+                System.err.println("Winning side cannot change: " + "Law" + " set as " + winnerSide);
+            }
+        }
+
+        if (winOutlaws) {
+            if (winnerSide.equals("None")) {
+                winnerSide = "Outlaw";
+            } else {
+                System.err.println("Winning side cannot change: " + "Outlaw" + " set as " + winnerSide);
+            }
+        }
+
+
+        if (winRenegade) {
+            if (winnerSide.equals("None")) {
+                winnerSide = "Renegade";
+            } else
+                System.err.println("Winning side cannot change: " + "Renegade" + " set as " + winnerSide);
+        }
+
     }
 
     private boolean calculateLawWin() {
@@ -265,6 +294,9 @@ public class Game {
             log(1, "Drawn cards: " + drawn);
             activePlayer.drawCards(drawn, false);
 
+            GamePhaseDraw drawPhase = (GamePhaseDraw) historyTracker.getCurrentTurn().getCurrPhase();
+            drawPhase.addDrawnCards(drawn);
+
             historyTracker.getCurrentTurn().addPlayPhase(activePlayer);
 
             return;
@@ -286,7 +318,7 @@ public class Game {
     private void showOption() {
         if (activePlayer != null) {
            //DEBUG
-            activePlayer.showHandAndFront();
+            activePlayer.showHandAndFront(this);
 
             generator.generateOptionAndChooseOne(this, activePlayer);
 
@@ -411,10 +443,10 @@ public class Game {
         return sheriffPlayer;
     }
 
-    public List<GamePlayer> getPlayersFromACurrentToOthersInOrderSkippedEliminated(GamePlayer currentPlayer, boolean b) {
-        List<GamePlayer> a = gamePlayersWheel.getPlayersInOrderFromNowSkippingEliminated(currentPlayer, b);
+    public List<GamePlayer> getPlayersFromACurrentToOthersInOrderSkippedEliminated(GamePlayer currentPlayer, boolean skipEliminated) {
+        List<GamePlayer> players = gamePlayersWheel.getPlayersInOrderFromNowSkippingEliminated(currentPlayer, skipEliminated);
 
-        return a;
+        return players;
     }
 
     public void doCleaning()  {
@@ -487,7 +519,7 @@ public class Game {
         historyTracker.getCurrentTurn().increaseLimit(aClass);
     }
 
-    public boolean canBeLifeRestoreBy(CardBeer cardBeer) {
+    public boolean canBeLifeRestoreBy(GameCard alcoholCard) {
         if (getActivePlayersCount() > 2) {
             return true;
         } else {

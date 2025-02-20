@@ -27,9 +27,7 @@ public class GameEngine {
     }
 
     private void setupGame(Game game) {
-        if(game.isSetupAndReadyTOStart()){
-
-        } else {
+        if (!game.isSetupAndReadyTOStart()){
             game.setup();
         }
     }

@@ -14,10 +14,12 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
     protected int maxHp, startHp;
     protected int startHand;
     protected int drawInTurnCards;
-    protected String charAbility;
-    protected String activationAbilityText;
+    protected String textForCharAbility;
+    protected String textForActivationAbilityText;
 
     protected boolean isAbilityPhase01;
+
+
     protected boolean isAbilityPhase02;
     protected boolean isAbilityPhase03;
 
@@ -32,17 +34,22 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
     public GameCharacter() {
         //default values
         this.cardName ="set name for " + this.getClass().getCanonicalName();
-        this.charAbility = "None Name Set";
+        this.textForCharAbility = "None Name Set";
 
         this.maxHp = 4;
         this.startHp = 4;
-        this.startHand = 4;
+        this.startHand = startHp;
 
         this.drawInTurnCards = 2;
-
-
     }
 
+    public boolean isAbilityPhase02() {
+        return isAbilityPhase02;
+    }
+
+    public boolean isIsaActiveAbility() {
+        return isaActiveAbility;
+    }
     public void playedCard(Game game, GameCard card) {
 
     }
@@ -104,17 +111,17 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
     }
 
     public List<DeckAble> resolveDrawingPhase(Game game) {
-        List<DeckAble> drwanCards = new ArrayList<>();
+        List<DeckAble> drawnCardsPhaseOne = new ArrayList<>();
         if (isAbilityPhase01) {
 
         } else {
             DeckAble card1 = game.drawCard();
             DeckAble card2 = game.drawCard();
 
-            drwanCards.add(card1);
-            drwanCards.add(card2);
+            drawnCardsPhaseOne.add(card1);
+            drawnCardsPhaseOne.add(card2);
         }
 
-        return  drwanCards;
+        return  drawnCardsPhaseOne;
     }
 }
