@@ -1,5 +1,6 @@
 package org.example.game.cards.blue.valley;
 
+import org.example.game.cards.GameCard;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.IsRevealAble;
 import org.example.game.cards.Suit;
@@ -20,5 +21,10 @@ public class CardRattlesnake extends BlueBorderCard implements IsRevealAble {
     @Override
     public String getPriorityType() {
         return getCardName();
+    }
+
+    @Override
+    public boolean matchSuitAndPoker(GameCard deckAble) {
+        return false;
     }
 }
