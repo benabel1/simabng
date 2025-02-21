@@ -63,4 +63,9 @@ public class OrangeBorderCard extends GameCard {
     public int getLoadCount() {
         return loadCount;
     }
+
+    public void takeLoad(int loadTaken) {
+        loadCount = loadCount - loadTaken;
+        loadCount = Math.max(loadCount, 0);
+    }
 }

@@ -90,4 +90,8 @@ public class CardOptionTargetOtherPlayerAndCardInFrontOrHand extends CardOption 
     public ZONE getZone() {
         return zone;
     }
+
+    public GamePlayer getTargetPlayer() {
+        return target;
+    }
 }

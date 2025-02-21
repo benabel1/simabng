@@ -39,13 +39,14 @@ public class GreenBorderCard extends GameCard {
     @Override
     public void playCardFromHand(Game game, CardOption option, GamePlayer sourcePlayer) {
         if (allowedTarget == DistanceAllowedTarget.MYSELF) {
-            super.playCardFromHand(game, option, sourcePlayer);
+            sourcePlayer.removeFromHand(this);
             sourcePlayer.placeInFrontCard(this);
             turnOfPlay = game.geActiveTurn();
             if (!option.isOptionRecordedInStep()) {
                 game.markStepAndCard(option, this, new GameStepPlayCardOnTargetPlayer(game, this, sourcePlayer, sourcePlayer));
             }
         }
+        super.playCardFromHand(game, option, sourcePlayer);
     }
 
     @Override

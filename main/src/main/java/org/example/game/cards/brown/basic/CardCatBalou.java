@@ -2,11 +2,12 @@ package org.example.game.cards.brown.basic;
 
 import org.example.game.Game;
 import org.example.game.GamePlayer;
-import org.example.game.cards.DistanceAllowedTarget;
-import org.example.game.cards.PokerValue;
-import org.example.game.cards.Suit;
+import org.example.game.cards.*;
 import org.example.game.cards.brown.BrownBorderCard;
+import org.example.game.history.steps.GameStepPlayCardOnTargetPlayer;
+import org.example.game.history.steps.GameStepPlayCardOnTargetPlayerHanfFrontCArd;
 import org.example.game.options.CardOption;
+import org.example.game.options.CardOptionTargetOtherPlayerAndCardInFrontOrHand;
 
 public class CardCatBalou extends BrownBorderCard {
     public CardCatBalou(Suit suit, PokerValue pokerValue) {
@@ -18,7 +19,27 @@ public class CardCatBalou extends BrownBorderCard {
 
     @Override
     public void playCardFromHand(Game game, CardOption option, GamePlayer sourcePlayer) {
-        super.playCardFromHand(game, option, sourcePlayer);
+        if (option != null && option instanceof CardOptionTargetOtherPlayerAndCardInFrontOrHand) {
+            CardOptionTargetOtherPlayerAndCardInFrontOrHand act = (CardOptionTargetOtherPlayerAndCardInFrontOrHand) option;
+
+            GameCard discardCard = act.getStolenCards();
+            GamePlayer target = act.getTargetPlayer();
+            sourcePlayer.discardCardFromPlayer(discardCard, target, act.getZone() == ZONE.FRONT);
+
+            if (!option.isOptionRecordedInStep()){
+                game.markStepAndCard(option, this, new GameStepPlayCardOnTargetPlayerHanfFrontCArd(
+                        game,
+                        this,
+                        sourcePlayer,
+                        target,
+                        act.getZone(),
+                        discardCard
+                ));
+            }
+
+            super.playCardFromHand(game, option, sourcePlayer);
+        }
+
 
     }
 }

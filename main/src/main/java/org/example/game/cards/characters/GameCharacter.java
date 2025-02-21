@@ -30,6 +30,7 @@ public class GameCharacter extends DeckAble implements IsGameRecordAble {
     protected boolean isPassiveAbility;
     protected boolean isaActiveAbility;
     protected boolean hasAbilityOfItsCost;
+    protected int loadCounters;
 
     public GameCharacter() {
         //default values
@@ -127,5 +128,14 @@ public class GameCharacter extends DeckAble implements IsGameRecordAble {
 
     public int howManyMissedNeededVs(GameCard shootingCard) {
         return 1;
+    }
+
+    public int getloadCount() {
+        return loadCounters;
+    }
+
+    public void takeLoad(int i) {
+        loadCounters -= i;
+        loadCounters = Math.max(loadCounters, 0);
     }
 }

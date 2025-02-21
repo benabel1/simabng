@@ -6,9 +6,9 @@ import org.example.game.cards.GameCard;
 
 public class GameStepPlayCardOnTargetPlayer extends  GameStep {
 
-    private final GameCard card;
-    private final GamePlayer player;
-    private final GamePlayer target;
+    protected final GameCard card;
+    protected final GamePlayer player;
+    protected final GamePlayer target;
 
     public GameStepPlayCardOnTargetPlayer(Game game, GameCard card, GamePlayer played, GamePlayer target) {
         super(game);

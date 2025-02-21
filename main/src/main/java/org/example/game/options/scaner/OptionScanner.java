@@ -79,4 +79,13 @@ public class OptionScanner {
         return option;
     }
 
+    public static boolean scanForYesOrNoDefaultIsNo(String s) {
+        System.out.println(s);
+        System.out.println("\t0: YES");
+        System.out.println("\t1: NO(default)");
+
+        int answer = scanner.nextInt();
+
+        return answer == 1;
+    }
 }

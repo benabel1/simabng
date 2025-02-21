@@ -1,7 +1,6 @@
 package org.example.game;
 
 import org.example.game.cards.*;
-import org.example.game.cards.brown.basic.CardBang;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.cards.orange.OrangeBorderCard;
 import org.example.game.deck.DeckAble;
@@ -170,7 +169,7 @@ public class GamePlayer {
 
     @Override
     public String toString() {
-        return name;
+        return name + "(" + getCurrentRole() +")";
     }
 
     public void restoreLife(int restoredAmountHp) {
@@ -283,10 +282,10 @@ public class GamePlayer {
         }
     }
 
-    public void discardCardFromPlayer(DeckAble card, GamePlayer player, boolean wasInFront) {
-        if (card != null && player != null) {
-            removeFromFront(card);
-            removeFromHand(card);
+    public void discardCardFromPlayer(DeckAble card, GamePlayer playerWhoDiscard, boolean wasInFront) {
+        if (card != null && playerWhoDiscard != null) {
+            playerWhoDiscard.removeFromFront(card);
+            playerWhoDiscard.removeFromHand(card);
         }
     }
 
@@ -364,7 +363,7 @@ public class GamePlayer {
     }
 
     public int getLoadCount() {
-        return loadCount + getLoadCountAmongDangerous();
+        return currentChar.getloadCount() + getLoadCountAmongDangerous();
     }
 
     private int getLoadCountAmongDangerous() {
@@ -494,6 +493,47 @@ public class GamePlayer {
 
     public int getCountOfReveal() {
         return 1;
+    }
+
+    public boolean isEliminated() {
+        return  isEliminated;
+    }
+
+    public void setElimination(Game game) {
+        isEliminated = true;
+        game.deadPlayersCount++;
+        orderElimination = game.deadPlayersCount;
+
+        List<DeckAble> deadCards = getAllCards(CARD_ATTRIBUTE.CAUSE_FOR_ANY, ZONE.HAND_FRONT);
+        for (DeckAble deadCard: deadCards) {
+//            DeckAble orderdd = OptionScanner.scanForObjectSpecificList("Choose order: ",
+//                    deadCards,
+//                    0, deadCards.size(), null);
+//
+            removeCard(deadCard);
+            game.getPile(DeckName.DISCARD_PILE).putOnTop(deadCard);
+        }
+
+        game.log(1, "Elimination" + this + " cards:" + deadCards);
+    }
+
+    public List<DeckAble> getCardsWithLoad() {
+        List<DeckAble> loadCards = new ArrayList<>();
+
+        if (currentChar.getloadCount() > 0) {
+            loadCards.add(currentChar);
+        }
+
+        for (DeckAble front: playerFront) {
+            if (front instanceof OrangeBorderCard) {
+                OrangeBorderCard orange = (OrangeBorderCard) front;
+                if (orange.getLoadCount() > 0) {
+                    loadCards.add(front);
+                }
+            }
+        }
+
+        return loadCards;
     }
 }
 

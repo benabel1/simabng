@@ -45,6 +45,7 @@ public class Game {
     GameStep step;
     List<GameStep> steps;
     private List<GamePlayer> players;
+    public int deadPlayersCount;
 
     private List<DeckAble> allCharacters;
     private List<DeckAble> allPlayingCards;
@@ -282,6 +283,9 @@ public class Game {
     }
 
     public void executeOneInteraction() {
+        removeDead();
+
+
         if (!activePlayer.isAlive(this)) {
             nextPlayerOrTurn(activePlayer);
             return;
@@ -290,15 +294,7 @@ public class Game {
         engine.printGame(this);
 
         if (historyTracker.getCurrentTurn().getCurrPhase() instanceof GamePhaseDraw) {
-            log(1, "Turn[" + historyTracker.getCurrentTurn().getTurnCount() + "]");
-            List<DeckAble> drawn = activePlayer.getCurrentCharacter().resolveDrawingPhase(this);
-            log(1, "Drawn cards: " + drawn);
-            activePlayer.drawCards(drawn, false);
-
-            GamePhaseDraw drawPhase = (GamePhaseDraw) historyTracker.getCurrentTurn().getCurrPhase();
-            drawPhase.addDrawnCards(drawn);
-
-            historyTracker.getCurrentTurn().addPlayPhase(activePlayer);
+            resolveDrawingPhase();
 
             return;
         }
@@ -314,6 +310,30 @@ public class Game {
             return;
         }
 
+    }
+
+    private void resolveDrawingPhase() {
+        log(1, "Turn[" + historyTracker.getCurrentTurn().getTurnCount() + "]["+activePlayer.getName()+"]");
+        List<DeckAble> drawn = activePlayer.getCurrentCharacter().resolveDrawingPhase(this);
+        log(1, "Drawn cards: " + drawn);
+        activePlayer.drawCards(drawn, false);
+
+        GamePhaseDraw drawPhase = (GamePhaseDraw) historyTracker.getCurrentTurn().getCurrPhase();
+        drawPhase.addDrawnCards(drawn);
+
+        historyTracker.getCurrentTurn().addPlayPhase(activePlayer);
+    }
+
+    private void removeDead() {
+        for (GamePlayer alive: players) {
+            if (!alive.isAlive(this) && !alive.isEliminated()) {
+                eliminatePlayer(alive);
+            }
+        }
+    }
+
+    private void eliminatePlayer(GamePlayer alive) {
+        alive.setElimination(this);
     }
 
     private void showOption() {
