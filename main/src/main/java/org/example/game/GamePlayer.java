@@ -436,7 +436,7 @@ public class GamePlayer {
     private void printSeparation(GamePlayer previous, GamePlayer next, GamePlayer active, String signNormal, String signActive) {
         String paint = signNormal;
 
-        if (this== active || previous == active) {
+        if (this== active || previous == active || next == active) {
             paint = signActive;
         }
 
