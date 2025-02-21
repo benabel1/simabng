@@ -2,6 +2,7 @@ package org.example.game.cards.orange.dangerous;
 
 import org.example.game.Game;
 import org.example.game.GamePlayer;
+import org.example.game.options.OptionOption;
 import org.example.game.wheel.PairPlayerCard;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
@@ -19,19 +20,21 @@ public class CardLockPick extends OrangeBorderCard {
     }
 
     @Override
-    public void useCardInGame(Game game, GamePlayer ownerPlayer) {
-        super.useCardInGame(game, ownerPlayer);
+    public void useCardInGame(Game game, OptionOption option, GamePlayer ownerPlayer) {
+        if (!option.isWasUndo())
+        {
+            if (canBeUsedInGame(game)) {
 
-        if (canBeUsedInGame(game)) {
+                if (game.isThereCardInGameAtAnyDistanceToBeStolen(ownerPlayer, HAND)) {
 
-            if (game.isThereCardInGameAtAnyDistanceToBeStolen(ownerPlayer, HAND)) {
+                    PairPlayerCard lockPickedPair = OptionScanner.scanForPlayerOtherThanDistance(game, ownerPlayer, 100);
 
-                PairPlayerCard lockPickedPair = OptionScanner.scanForPlayerOtherThanDistance(game, ownerPlayer, 100);
-
-                if (lockPickedPair != null) {
-                    ownerPlayer.stealCardFromPlayer(lockPickedPair.getCard(), lockPickedPair.getPlayer());
+                    if (lockPickedPair != null) {
+                        ownerPlayer.stealCardFromPlayer(lockPickedPair.getCard(), lockPickedPair.getPlayer(), false);
+                    }
                 }
             }
+            super.useCardInGame(game, option, ownerPlayer);
         }
     }
 }

@@ -31,7 +31,7 @@ public class CardOptionAtWeaponRange extends CardOption {
 
 
           if (pairPlayer != null && pairPlayer.getPlayer() != null) {
-            cardSource.playCardFromHand(game, sourcePlayer, pairPlayer.getPlayer());
+            cardSource.playCardFromHand(game, , sourcePlayer, pairPlayer.getPlayer());
           }
       }
     }

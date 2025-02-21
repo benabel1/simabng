@@ -6,6 +6,8 @@ import org.example.game.cards.GameCard;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 import org.example.game.deck.DeckName;
+import org.example.game.options.CardOption;
+import org.example.game.options.OptionOption;
 
 import static org.example.game.cards.CardBorderColor.ORANGE;
 
@@ -23,16 +25,16 @@ public class OrangeBorderCard extends GameCard {
     }
 
     @Override
-    public void playCardFromHand(Game game, GamePlayer sourcePlayer) {
-        super.playCardFromHand(game, sourcePlayer);
+    public void playCardFromHand(Game game, CardOption option, GamePlayer sourcePlayer) {
+        super.playCardFromHand(game, option, sourcePlayer);
         this.loadCount = 3;
         addRecordOfPlay();
         sourcePlayer.placeInFrontCard(this);
     }
 
     @Override
-    public void useCardInGame(Game game, GamePlayer ownerPlayer) {
-        super.useCardInGame(game, ownerPlayer);
+    public void useCardInGame(Game game, OptionOption option, GamePlayer ownerPlayer) {
+        super.useCardInGame(game, option, ownerPlayer);
 
         if (canBeUsedInGame(game)) {
             loadCount -= costOfActivation;

@@ -7,6 +7,7 @@ import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 import org.example.game.cards.brown.BrownBorderCard;
 import org.example.game.deck.DeckAble;
+import org.example.game.options.CardOption;
 import org.example.game.options.CardOptionAtWeaponRange;
 import org.example.game.options.OptionOption;
 
@@ -30,8 +31,8 @@ public class CardBang extends BrownBorderCard {
     }
 
     @Override
-    public void playCardFromHand(Game game, GamePlayer sourcePlayer, GamePlayer targetPlayer) {
-        super.playCardFromHand(game, sourcePlayer, targetPlayer);
+    public void playCardFromHand(Game game, CardOption option, GamePlayer sourcePlayer, GamePlayer targetPlayer) {
+        super.playCardFromHand(game, option, sourcePlayer, targetPlayer);
         if (sourcePlayer != null && targetPlayer != null) {
             targetPlayer.responseToShotFromWithCard(game, sourcePlayer, this, sourcePlayer.getMissedNeed(this));
             game.increaseLimitTurnCount(this.getClass());

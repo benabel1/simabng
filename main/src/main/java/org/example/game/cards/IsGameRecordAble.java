@@ -1,6 +1,6 @@
 package org.example.game.cards;
 
-public interface GameRecordAble {
+public interface IsGameRecordAble {
 
     public abstract String getUniqueNameForRecording();
 }

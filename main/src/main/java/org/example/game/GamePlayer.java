@@ -7,6 +7,7 @@ import org.example.game.cards.orange.OrangeBorderCard;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
 import org.example.game.history.sequence.GameTurn;
+import org.example.game.history.steps.GameStepDiscardWeapon;
 import org.example.game.options.OptionOption;
 import org.example.game.options.scaner.OptionScanner;
 
@@ -38,6 +39,7 @@ public class GamePlayer {
      */
     private int loadCount;
     private int goldCount;
+    private int baseReach;
 
     public GamePlayer(String name, int orderNumber, Roles role) {
         this.name = name;
@@ -52,6 +54,8 @@ public class GamePlayer {
     private void initPlayerGameElements() {
         playerHand = new ArrayList<>();
         playerFront = new ArrayList<>();
+
+        baseReach = 1;
     }
 
     public void assignStartingCharacter(GameCharacter character) {
@@ -183,11 +187,23 @@ public class GamePlayer {
         currentChar.notifyP(card, sourcePlayer, game);
     }
 
+    public void removeCard(DeckAble card) {
+        removeFromHand(card);
+        removeFromFront(card);
+    }
+
     public void removeFromHand(DeckAble handCard) {
         if (handCard != null) {
             playerHand.remove(handCard);
         }
     }
+
+    public void removeFromFront(DeckAble frontCard) {
+        if(frontCard != null) {
+            playerFront.remove(frontCard);
+        }
+    }
+
 
     public void placeInFrontCard(DeckAble frontCard) {
         playerFront.add(frontCard);
@@ -206,13 +222,14 @@ public class GamePlayer {
         System.out.println("Drawn cards: " + drawnCard);
     }
 
-    private void stealCard(DeckAble card, boolean see, GamePlayer previousOwner) {
+    private void stealCard(DeckAble card, GamePlayer previousOwner, boolean see) {
         playerHand.add(card);
+        previousOwner.removeFromHand(card);
+        previousOwner.removeFromFront(card);
         card.startNewRecordForHand(see);
         card.setPreviousOwnerKnown(previousOwner);
         card.addRecordOfSteal();
     }
-
     public int getAllCardsCount(CARD_ATTRIBUTE cardAttribute, ZONE zone) {
         switch (zone) {
             case HAND_FRONT:
@@ -256,16 +273,23 @@ public class GamePlayer {
         return null;
     }
 
-    public void stealCardFromPlayer(DeckAble card, GamePlayer player) {
+    public void stealCardFromPlayer(DeckAble card, GamePlayer player, boolean wasInFront) {
         if (card != null && player != null) {
-            this.stealCard(card, false, player);
+            this.stealCard(card, player, wasInFront);
+        }
+    }
+
+    public void discardCardFromPlayer(DeckAble card, GamePlayer player, boolean wasInFront) {
+        if (card != null && player != null) {
+            removeFromFront(card);
+            removeFromHand(card);
         }
     }
 
     public List<DeckAble> getAllTesting() {
         List<DeckAble> re = new ArrayList<>();
 
-        Comparator<RevealAble> comparator = (x, y) -> (x.getPriority() > y.getPriority()) ? 1 : -1;
+        Comparator<IsRevealAble> comparator = (x, y) -> (x.getPriority() > y.getPriority()) ? 1 : -1;
 
         return re;
     }
@@ -381,6 +405,7 @@ public class GamePlayer {
         for (DeckAble oldGun : oldWeapons) {
             game.getPile(DeckName.DISCARD_PILE).putOnTop(oldGun);
             playerFront.remove(oldGun);
+            game.markStep(new GameStepDiscardWeapon(game, this, (GameCard) oldGun, (GameCard) newGun));
         }
     }
 
@@ -443,6 +468,23 @@ public class GamePlayer {
             System.out.print("+");
             System.out.println();
         }
+    }
+
+    public int getMaxReach() {
+        return calculateCurrentReach();
+    }
+
+    private int calculateCurrentReach() {
+        int reach = baseReach;
+
+        for (DeckAble front: playerFront) {
+            if (front instanceof IsReach) {
+                IsReach isReach = (IsReach) front;
+                baseReach += isReach.getReachInc();
+            }
+        }
+
+        return reach;
     }
 }
 

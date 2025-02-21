@@ -5,7 +5,6 @@ import org.example.game.cards.GameCard;
 import org.example.game.cards.Roles;
 import org.example.game.cards.ZONE;
 import org.example.game.cards.brown.basic.CardBang;
-import org.example.game.cards.brown.basic.CardBeer;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
@@ -16,6 +15,9 @@ import org.example.game.history.sequence.GamePhaseDraw;
 import org.example.game.history.sequence.GamePhasePlay;
 import org.example.game.history.sequence.GameTurn;
 import org.example.game.history.steps.GameStep;
+import org.example.game.history.steps.GameStepDiscardWeapon;
+import org.example.game.history.steps.GameStepPlayCardOnTargetPlayer;
+import org.example.game.options.CardOption;
 import org.example.game.options.OptionGenerator;
 import org.example.game.options.OptionOption;
 import org.example.game.options.scaner.OptionScanner;
@@ -352,7 +354,16 @@ public class Game {
     }
 
     public void resolveOption(OptionOption option) {
-        option.resolveInThisGame(this);
+
+
+
+        if (option != null && option.canBeResolved(this)) {
+
+            option.collectData(this);
+
+
+            option.resolveInThisGame(this);
+        }
     }
 
     public boolean wasPlayedLessThan(GameCard cardBang, int i) {
@@ -415,7 +426,7 @@ public class Game {
     public List<GamePlayer> getPlayersWithHandOtherThan(GamePlayer ownerPlayer) {
         ArrayList<GamePlayer> a = new ArrayList<>();
 
-        for (GamePlayer player: getActivePlayers(ownerPlayer)) {
+        for (GamePlayer player: getActivePlayersOtherThan(ownerPlayer)) {
             if (player.getAllCardsCount(CAUSE_FOR_ANY, HAND)> 0) {
                 a.add(player);
             }
@@ -424,7 +435,7 @@ public class Game {
         return a;
     }
 
-    public List<GamePlayer> getActivePlayers(GamePlayer ownerPlayer) {
+    public List<GamePlayer> getActivePlayersOtherThan(GamePlayer ownerPlayer) {
         List<GamePlayer> allActivePlayers = new ArrayList<>();
 
         for (GamePlayer testPlayer: players) {
@@ -521,22 +532,35 @@ public class Game {
     }
 
     public boolean canBeLifeRestoreBy(GameCard alcoholCard) {
-        if (alcoholCard instanceof CardBeer && getActivePlayersCount() > 2) {
+        if (getActivePlayersCount() > 2) {
             return true;
         } else {
             return true;
         }
     }
-    public void markStepAndCard(GameCard gameCard) {
+    public void markStepAndCard(CardOption option, GameCard gameCard, GameStepPlayCardOnTargetPlayer target) {
         GameStep step = new GameStep(this);
 
         historyTracker.getCurrentTurn().addStepAndCard(step, gameCard);
+        gameCard.addRecordOfPlay();
+        log(2, "[" + option.getSourcePlayer() + "]"+ this + "was played on " + target);
+        if (option != null) {
+            option.markAsRecorded();
+        }
     }
 
-    public void markStepAndCard(GameCard gameCard, GameStep step) {
+    public void markStepAndCard(CardOption option, GameCard gameCard, GameStep step) {
         historyTracker.getCurrentTurn().addStepAndCard(step, gameCard);
+        gameCard.addRecordOfPlay();
+        log(2, "[" + option.getSourcePlayer() + "]"+ this + "was played");
+        if (option != null) {
+            option.markAsRecorded();
+        }
     }
 
+    public void markStep(GameStepDiscardWeapon gameStepDiscardWeapon) {
+        historyTracker.getCurrentTurn().addStep(gameStepDiscardWeapon);
+    }
     public void printAllSteps() {
         historyTracker.getCurrentTurn().getCurrPhase().printSteps();
     }
@@ -544,4 +568,5 @@ public class Game {
     public GamePlayer getCurrentPlayer() {
         return activePlayer;
     }
+
 }

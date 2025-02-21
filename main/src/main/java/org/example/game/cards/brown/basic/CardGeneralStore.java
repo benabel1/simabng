@@ -6,6 +6,7 @@ import org.example.game.deck.DeckAble;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 import org.example.game.cards.brown.BrownBorderCard;
+import org.example.game.options.CardOption;
 import org.example.game.options.scaner.OptionScanner;
 
 import java.util.ArrayList;
@@ -23,8 +24,7 @@ public class CardGeneralStore extends BrownBorderCard {
     }
 
     @Override
-    public void playCardFromHand(Game game, GamePlayer sourcePlayer) {
-        super.playCardFromHand(game, sourcePlayer);
+    public void playCardFromHand(Game game, CardOption option, GamePlayer sourcePlayer) {
 
         List<DeckAble> generalStoreCards = new ArrayList<>();
         int  alivePlayersCount = game.getActivePlayersCount();
@@ -41,5 +41,6 @@ public class CardGeneralStore extends BrownBorderCard {
             OptionScanner.scanForObjectSpecificList("Select one card from " + this , generalStoreCards, 0, generalStoreCards.size(), null);
         }
 
+        super.playCardFromHand(game, option, sourcePlayer);
     }
 }

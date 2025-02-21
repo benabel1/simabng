@@ -4,13 +4,13 @@ import org.example.game.*;
 import org.example.game.options.CharacterOption;
 import org.example.game.deck.DeckAble;
 import org.example.game.cards.GameCard;
-import org.example.game.cards.GameRecordAble;
+import org.example.game.cards.IsGameRecordAble;
 import org.example.game.options.OptionOption;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameCharacter extends DeckAble implements GameRecordAble {
+public class GameCharacter extends DeckAble implements IsGameRecordAble {
     protected int maxHp, startHp;
     protected int startHand;
     protected int drawInTurnCards;

@@ -5,6 +5,7 @@ import org.example.game.GameConstatns;
 import org.example.game.GamePlayer;
 import org.example.game.cards.GameCard;
 import org.example.game.history.steps.GameStep;
+import org.example.game.history.steps.GameStepDiscardWeapon;
 
 import java.util.HashMap;
 
@@ -99,6 +100,10 @@ public class GameTurn {
 
     public void addStepAndCard(GameStep step, GameCard gameCard) {
         getCurrPhase().logPlayingCard(gameCard);
+        getCurrPhase().logStep(step);
+    }
+
+    public void addStep(GameStep step) {
         getCurrPhase().logStep(step);
     }
 }

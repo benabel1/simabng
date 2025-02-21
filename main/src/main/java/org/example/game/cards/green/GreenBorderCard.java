@@ -6,6 +6,7 @@ import org.example.game.cards.DistanceAllowedTarget;
 import org.example.game.cards.GameCard;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
+import org.example.game.options.CardOption;
 
 import static org.example.game.cards.CardBorderColor.GREEN;
 
@@ -32,9 +33,9 @@ public class GreenBorderCard extends GameCard {
     }
 
     @Override
-    public void playCardFromHand(Game game, GamePlayer sourcePlayer) {
+    public void playCardFromHand(Game game, CardOption option, GamePlayer sourcePlayer) {
         if (allowedTarget == DistanceAllowedTarget.MYSELF) {
-            super.playCardFromHand(game, sourcePlayer);
+            super.playCardFromHand(game, option, sourcePlayer);
             sourcePlayer.placeInFrontCard(this);
             turnOfPlay = game.geActiveTurn();
         }

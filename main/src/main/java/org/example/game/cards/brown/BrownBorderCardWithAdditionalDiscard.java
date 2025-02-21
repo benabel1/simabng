@@ -5,6 +5,7 @@ import org.example.game.GamePlayer;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 import org.example.game.deck.DeckAble;
+import org.example.game.options.CardOption;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +31,8 @@ public class BrownBorderCardWithAdditionalDiscard extends BrownBorderCard{
     }
 
     @Override
-    public void playCardFromHand(Game game, GamePlayer sourcePlayer, GamePlayer targetPlayer) {
-        super.playCardFromHand(game, sourcePlayer, targetPlayer);
+    public void playCardFromHand(Game game, CardOption option, GamePlayer sourcePlayer, GamePlayer targetPlayer) {
+        super.playCardFromHand(game, option, sourcePlayer, targetPlayer);
 
         DeckAble card = sourcePlayer.discardCardByChoice(game);
         this.cardsAsPayments.add(card);
