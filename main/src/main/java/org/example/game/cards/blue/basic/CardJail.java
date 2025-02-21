@@ -1,9 +1,6 @@
 package org.example.game.cards.blue.basic;
 
-import org.example.game.cards.DistanceAllowedTarget;
-import org.example.game.cards.PokerValue;
-import org.example.game.cards.IsRevealAble;
-import org.example.game.cards.Suit;
+import org.example.game.cards.*;
 import org.example.game.cards.blue.BlueBorderCard;
 
 public class CardJail extends BlueBorderCard implements IsRevealAble {
@@ -18,6 +15,11 @@ public class CardJail extends BlueBorderCard implements IsRevealAble {
     @Override
     public String getPriorityType() {
         return getCardName();
+    }
+
+    @Override
+    public boolean matchSuitAndPoker(GameCard deckAble) {
+        return false;
     }
 
 }
