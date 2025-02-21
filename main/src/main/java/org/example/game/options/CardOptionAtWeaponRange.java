@@ -23,7 +23,7 @@ public class CardOptionAtWeaponRange extends CardOption {
           List<PairPlayerDistance> potencialTargets = game.getPlayersFromPlayerAtMaxDistance(sourcePlayer, maxRange);
 
           for (PairPlayerDistance pair: potencialTargets) {
-              System.out.println("\t\t" + potencialTargets.indexOf(pair) + " - [" + pair.getPlayerAtDistance() + "]" + pair.getPlayer());
+              System.out.println("\t\t" + potencialTargets.indexOf(pair) + " - [" + pair.getPlayerAtDistance() + "][" + pair.getPlayer() +"]");
           }
 
           PairPlayerDistance pairPlayer = OptionScanner
@@ -31,7 +31,7 @@ public class CardOptionAtWeaponRange extends CardOption {
 
 
           if (pairPlayer != null && pairPlayer.getPlayer() != null) {
-            cardSource.playCardFromHand(game, , sourcePlayer, pairPlayer.getPlayer());
+            cardSource.playCardFromHand(game, this, sourcePlayer, pairPlayer.getPlayer());
           }
       }
     }

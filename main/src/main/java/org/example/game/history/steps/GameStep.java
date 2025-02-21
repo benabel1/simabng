@@ -8,4 +8,9 @@ public class GameStep {
     public GameStep(Game game) {
         this.game = game;
     }
+
+    @Override
+    public String toString() {
+        return "SomeStep";
+    }
 }

@@ -21,11 +21,6 @@ public class CardBang extends BrownBorderCard {
     }
 
     @Override
-    public OptionOption generateOption(DeckAble card, GamePlayer gamePlayer) {
-        return new CardOptionAtWeaponRange(this, gamePlayer, gamePlayer.getWeaponRange());
-    }
-
-    @Override
     public boolean canBePlayedFromHand(Game game, GamePlayer player) {
         return game.wasPlayedLessThan(this, 1);
     }

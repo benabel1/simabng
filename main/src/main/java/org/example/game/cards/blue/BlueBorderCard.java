@@ -25,6 +25,7 @@ public class BlueBorderCard extends GameCard {
         if (allowedTarget == DistanceAllowedTarget.MYSELF) {
             super.playCardFromHand(game, option, sourcePlayer);
             sourcePlayer.placeInFrontCard(this);
+            sourcePlayer.removeFromHand(this);
             if (!option.isOptionRecordedInStep()) {
                 game.markStepAndCard(option, this, new GameStepPlayCardOnTargetPlayer(game, this, sourcePlayer, sourcePlayer));
             }
@@ -36,6 +37,7 @@ public class BlueBorderCard extends GameCard {
             if (bluePlacementTarget != null && bluePlacementTarget != game.getSheriffPlayer()) {
                 super.playCardFromHand(game, option, sourcePlayer);
                 bluePlacementTarget.placeInFrontCard(this);
+                sourcePlayer.removeFromHand(this);
                 if (!option.isOptionRecordedInStep()) {
                     game.markStepAndCard(option, this, new GameStepPlayCardOnTargetPlayer(game, this, sourcePlayer, bluePlacementTarget));
                 }

@@ -22,6 +22,7 @@ public abstract class DeckAble {
     private long stolenCount;
     private long discardCount;
     private long excessDiscardCount;
+    private long successCount;
 
     public String getCardName() {
         return cardName;
@@ -59,6 +60,10 @@ public abstract class DeckAble {
 
     public void addRecordOfDiscard() {
         discardCount++;
+    }
+
+    public void addRecordOfSuccess() {
+        successCount++;
     }
 
     public void addRecordOfExcessDiscard() {

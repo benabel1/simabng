@@ -2,10 +2,7 @@ package org.example.game.cards.brown.basic;
 
 import org.example.game.Game;
 import org.example.game.GamePlayer;
-import org.example.game.cards.DistanceAllowedTarget;
-import org.example.game.cards.IAvoidable;
-import org.example.game.cards.PokerValue;
-import org.example.game.cards.Suit;
+import org.example.game.cards.*;
 import org.example.game.cards.brown.BrownBorderCard;
 import org.example.game.deck.DeckName;
 
@@ -25,7 +22,7 @@ public class CardMissed extends BrownBorderCard implements IAvoidable {
     }
 
     @Override
-    public boolean processAvoidAction(Game game, GamePlayer defendingPlayer) {
+    public boolean processAvoidAction(Game game, GamePlayer defendingPlayer, GameCard cardBang) {
         defendingPlayer.removeFromHand(this);
         addRecordOfPlay();
         game.getPile(DeckName.DISCARD_PILE).putOnTop(this);

@@ -6,7 +6,11 @@ import org.example.game.cards.DistanceAllowedTarget;
 import org.example.game.cards.GameCard;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
+import org.example.game.deck.DeckAble;
+import org.example.game.history.steps.GameStepPlayCardOnTargetPlayer;
 import org.example.game.options.CardOption;
+import org.example.game.options.CardOptionPlacementInFrontOfMe;
+import org.example.game.options.OptionOption;
 
 import static org.example.game.cards.CardBorderColor.GREEN;
 
@@ -38,7 +42,15 @@ public class GreenBorderCard extends GameCard {
             super.playCardFromHand(game, option, sourcePlayer);
             sourcePlayer.placeInFrontCard(this);
             turnOfPlay = game.geActiveTurn();
+            if (!option.isOptionRecordedInStep()) {
+                game.markStepAndCard(option, this, new GameStepPlayCardOnTargetPlayer(game, this, sourcePlayer, sourcePlayer));
+            }
         }
+    }
+
+    @Override
+    public OptionOption generateOption(DeckAble card, GamePlayer gamePlayer) {
+        return new CardOptionPlacementInFrontOfMe((GameCard) card, gamePlayer);
     }
 }
 

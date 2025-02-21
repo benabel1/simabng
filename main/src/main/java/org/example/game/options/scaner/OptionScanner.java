@@ -55,7 +55,7 @@ public class OptionScanner {
 
             for (int i = 0; i < selectionObjectList.size(); i++) {
 
-                int itemAtI = selectionObjectList.indexOf(i);
+                T itemAtI = selectionObjectList.get(i);
                 System.out.println("\t" + i + " :" + itemAtI);
             }
 

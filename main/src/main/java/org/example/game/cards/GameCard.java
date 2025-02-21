@@ -33,6 +33,10 @@ public abstract class GameCard extends DeckAble {
         canBePlayerOnDeadToo = false;
     }
 
+    public static boolean matchCard(GameCard deckAble, IsRevealAble cardBarrel) {
+        return cardBarrel.matchSuitAndPoker(deckAble);
+    }
+
     @Override
     public String toString() {
         return "[" + suit + poker+ "]" + cardName;
@@ -55,14 +59,14 @@ public abstract class GameCard extends DeckAble {
     }
 
     public void playCardFromHand(Game game, CardOption option, GamePlayer sourcePlayer) {
-        if (sourcePlayer != null) {
-            sourcePlayer.removeFromHand(this);
-            addRecordOfPlay();
-            game.log(2, "[" + sourcePlayer + "]"+ this + "was played");
-            if (option != null && !option.isOptionRecordedInStep()) {
-                game.markStepAndCard(option, this, new GameStep(game));
-            }
-        }
+//        if (sourcePlayer != null) {
+//            sourcePlayer.removeFromHand(this);
+//            addRecordOfPlay();
+//            game.log(2, "[" + sourcePlayer + "]"+ this + "was played");
+//            if (option != null && !option.isOptionRecordedInStep()) {
+//                game.markStepAndCard(option, this, new GameStep(game));
+//            }
+//        }
     }
 
     public void playCardFromHand(Game game, CardOption option, GamePlayer sourcePlayer, GamePlayer targetPlayer) {
@@ -80,5 +84,9 @@ public abstract class GameCard extends DeckAble {
 
     public boolean canTargetEliminated() {
         return canBePlayerOnDeadToo;
+    }
+
+    public Suit getSuit() {
+        return suit;
     }
 }

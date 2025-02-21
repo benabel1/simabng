@@ -23,6 +23,8 @@ public class BrownBorderCard extends GameCard {
         this.color = BROWN;
         this.canPlayedOnSideOfTurn = true;
         this.canPlayedOutSideOfTurn = false;
+
+        allowedTarget = DistanceAllowedTarget.NONE;
     }
 
     @Override
@@ -98,6 +100,7 @@ public class BrownBorderCard extends GameCard {
             case SPECIFIC_RANGE: return new CardOptionTargetOtherPlayer(card, gamePlayer, null, distanceMax);
             case WEAPON_RANGE: return new CardOptionAtWeaponRange(this, gamePlayer, gamePlayer.getWeaponRange() + gamePlayer.getMaxReach());
             case CARD_HAND_FRONT_ANY_DISTANCE: return new CardOptionTargetOtherPlayerAndCardInFrontOrHand(this, gamePlayer, null, null, null);
+            case CARD_HAND_FRONT_X_DISTANCE: return new CardOptionTargetOtherPlayerAndCardInFrontOrHandRange(this, gamePlayer, null, null, null);
         }
 
         return new CardOption((GameCard) card, gamePlayer);

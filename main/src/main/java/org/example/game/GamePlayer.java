@@ -206,7 +206,11 @@ public class GamePlayer {
 
 
     public void placeInFrontCard(DeckAble frontCard) {
-        playerFront.add(frontCard);
+        if (frontCard instanceof IsWeapon) {
+            playerFront.add(0, frontCard);
+        } else {
+            playerFront.add(frontCard);
+        }
     }
 
     public void drawCard(DeckAble drawnCard, boolean wasShown) {
@@ -313,7 +317,7 @@ public class GamePlayer {
         return 1;
     }
 
-    public void responseToShotFromWithCard(Game game, GamePlayer sourcePlayer, CardBang cardBang, int missedNeeded) {
+    public void responseToShotFromWithCard(Game game, GamePlayer sourcePlayer, GameCard cardBang, int missedNeeded) {
         List<DeckAble> missOptions = getAllCardsWithMissed(game);
 
         if (missOptions.isEmpty()) {
@@ -324,7 +328,7 @@ public class GamePlayer {
         DeckAble miss = OptionScanner.scanForObjectSpecificList("Choice missed option", missOptions, 0, missOptions.size(), null);
 
         if (miss != null) {
-            boolean wasSuccess = ((IAvoidable) miss).processAvoidAction(game, this);
+            boolean wasSuccess = ((IAvoidable) miss).processAvoidAction(game, this, cardBang);
         } else {
             takeDamage(1);
         }
@@ -332,16 +336,17 @@ public class GamePlayer {
 
     private void takeDamage(int i) {
         currentHp--;
+        System.out.println(this + " suffer " + i + " damage.[" + currentHp + "/" + maxHp + "]");
     }
 
     public List<DeckAble> getAllCardsWithMissed(Game game) {
-        List<DeckAble> missOtionCard = new ArrayList<>();
+        List<DeckAble> missOptions = new ArrayList<>();
 
         for (DeckAble handCard: playerHand) {
             if (handCard instanceof IAvoidable) {
                 IAvoidable miss = ((IAvoidable) handCard);
                 if (miss.canBeUsed(game)) {
-                    missOtionCard.add(handCard);
+                    missOptions.add(handCard);
                 }
             }
         }
@@ -350,12 +355,12 @@ public class GamePlayer {
             if (frontCard instanceof IAvoidable) {
                 IAvoidable miss = ((IAvoidable) frontCard);
                 if (miss.canBeUsed(game)) {
-                    missOtionCard.add(frontCard);
+                    missOptions.add(frontCard);
                 }
             }
         }
 
-        return missOtionCard;
+        return missOptions;
     }
 
     public int getLoadCount() {
@@ -431,7 +436,7 @@ public class GamePlayer {
     private void printSeparation(GamePlayer previous, GamePlayer next, GamePlayer active, String signNormal, String signActive) {
         String paint = signNormal;
 
-        if (this== active) {
+        if (this== active || previous == active) {
             paint = signActive;
         }
 
@@ -485,6 +490,10 @@ public class GamePlayer {
         }
 
         return reach;
+    }
+
+    public int getCountOfReveal() {
+        return 1;
     }
 }
 

@@ -1,4 +1,4 @@
-package org.example.game.cards.brown.dangerous;
+package org.example.game.cards.brown;
 
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;

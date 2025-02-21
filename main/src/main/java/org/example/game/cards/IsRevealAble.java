@@ -15,4 +15,6 @@ public interface IsRevealAble {
     }
 
     String getPriorityType();
+
+    boolean matchSuitAndPoker(GameCard deckAble);
 }

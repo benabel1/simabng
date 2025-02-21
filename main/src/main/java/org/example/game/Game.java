@@ -1,9 +1,7 @@
 package org.example.game;
 
-import org.example.game.cards.CARD_ATTRIBUTE;
-import org.example.game.cards.GameCard;
-import org.example.game.cards.Roles;
-import org.example.game.cards.ZONE;
+import org.example.game.cards.*;
+import org.example.game.cards.blue.basic.CardBarrel;
 import org.example.game.cards.brown.basic.CardBang;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.deck.DeckAble;
@@ -356,7 +354,6 @@ public class Game {
     public void resolveOption(OptionOption option) {
 
 
-
         if (option != null && option.canBeResolved(this)) {
 
             option.collectData(this);
@@ -543,7 +540,7 @@ public class Game {
 
         historyTracker.getCurrentTurn().addStepAndCard(step, gameCard);
         gameCard.addRecordOfPlay();
-        log(2, "[" + option.getSourcePlayer() + "]"+ this + "was played on " + target);
+        log(2, "[" + option.getSourcePlayer() + "]"+ this + " was played on " + target);
         if (option != null) {
             option.markAsRecorded();
         }
@@ -552,7 +549,7 @@ public class Game {
     public void markStepAndCard(CardOption option, GameCard gameCard, GameStep step) {
         historyTracker.getCurrentTurn().addStepAndCard(step, gameCard);
         gameCard.addRecordOfPlay();
-        log(2, "[" + option.getSourcePlayer() + "]"+ this + "was played");
+        log(2, "[" + option.getSourcePlayer() + "]"+ this + " was played");
         if (option != null) {
             option.markAsRecorded();
         }
@@ -569,4 +566,30 @@ public class Game {
         return activePlayer;
     }
 
+    public boolean revealCard(IsRevealAble cardBarrel, int countOfReveal) {
+        List<DeckAble> revealed = new ArrayList<>();
+        boolean sucess = false;
+
+        for (int i = 0; i < countOfReveal; i++) {
+            revealed.add(drawCard());
+        }
+
+        if (revealed.isEmpty() || revealed.get(0) == null) {
+            return false;
+        }
+        if (revealed.size() == 1) {
+            sucess = GameCard.matchCard((GameCard) revealed.get(0), cardBarrel);
+            return sucess;
+        }
+
+        DeckAble chosen = OptionScanner.scanForObjectSpecificList("Choose one as result of reveal: ", revealed, 0, revealed.size(), null);
+
+        if (chosen == null) {
+            return false;
+        } else {
+            sucess = GameCard.matchCard((GameCard) chosen, cardBarrel)
+            return sucess;
+        }
+
+    }
 }
