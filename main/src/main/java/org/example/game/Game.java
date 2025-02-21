@@ -587,7 +587,7 @@ public class Game {
         if (chosen == null) {
             return false;
         } else {
-            sucess = GameCard.matchCard((GameCard) chosen, cardBarrel)
+            sucess = GameCard.matchCard((GameCard) chosen, cardBarrel);
             return sucess;
         }
 
