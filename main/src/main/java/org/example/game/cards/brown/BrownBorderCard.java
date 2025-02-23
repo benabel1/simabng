@@ -6,7 +6,13 @@ import org.example.game.cards.DistanceAllowedTarget;
 import org.example.game.cards.GameCard;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
+import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
+import org.example.game.history.steps.GameStepAll;
+import org.example.game.history.steps.GameStepOther;
+import org.example.game.history.steps.GameStepOthers;
+import org.example.game.history.steps.GameStepYourself;
+import org.example.game.options.*;
 
 import static org.example.game.cards.CardBorderColor.BROWN;
 
@@ -17,6 +23,8 @@ public class BrownBorderCard extends GameCard {
         this.color = BROWN;
         this.canPlayedOnSideOfTurn = true;
         this.canPlayedOutSideOfTurn = false;
+
+        allowedTarget = DistanceAllowedTarget.NONE;
     }
 
     @Override
@@ -25,13 +33,14 @@ public class BrownBorderCard extends GameCard {
     }
 
     @Override
-    public void playCardFromHand(Game game, GamePlayer sourcePlayer) {
+    public void playCardFromHand(Game game, CardOption option, GamePlayer sourcePlayer) {
         //card without target
         if (allowedTarget == DistanceAllowedTarget.NONE) {
             sourcePlayer.removeFromHand(this);
             addRecordOfPlay();
             game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
             game.log(2, "[" + sourcePlayer + "]"+ this + " was played");
+            game.markStepAndCard(option, this, new GameStepYourself(game, this, sourcePlayer));
         }
 
         if (allowedTarget == DistanceAllowedTarget.ALL) {
@@ -39,6 +48,7 @@ public class BrownBorderCard extends GameCard {
             addRecordOfPlay();
             game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
             game.log(2, "[" + sourcePlayer + "]"+ this + " was played");
+            game.markStepAndCard(option, this, new GameStepAll(game, this, sourcePlayer));
         }
 
         if (allowedTarget == DistanceAllowedTarget.OTHERS) {
@@ -46,8 +56,9 @@ public class BrownBorderCard extends GameCard {
             addRecordOfPlay();
             game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
             game.log(2, "[" + sourcePlayer + "]"+ this + " was played");
+            game.markStepAndCard(option, this, new GameStepOthers(game, this, sourcePlayer));
 
-            for (GamePlayer other: game.getActivePlayers(sourcePlayer)) {
+            for (GamePlayer other: game.getActivePlayersOtherThan(sourcePlayer)) {
                 applyPartOfEffectOnOtherPlayer(game, sourcePlayer, other);
             }
         }
@@ -57,7 +68,7 @@ public class BrownBorderCard extends GameCard {
             addRecordOfPlay();
             game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
             game.log(2, "[" + sourcePlayer + "]"+ this + " was played");
-
+            game.markStepAndCard(option, this, new GameStepOther(game, this, sourcePlayer));
         }
 
         if (allowedTarget == DistanceAllowedTarget.WEAPON_RANGE) {
@@ -65,10 +76,33 @@ public class BrownBorderCard extends GameCard {
             addRecordOfPlay();
             game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
             game.log(2, "[" + sourcePlayer + "]"+ this + " was played");
+            game.markStepAndCard(option, this, new GameStepOther(game, this, sourcePlayer));
+        }
+
+        if (allowedTarget == DistanceAllowedTarget.SPECIFIC_RANGE) {
+            sourcePlayer.removeFromHand(this);
+            addRecordOfPlay();
+            game.getPile(DeckName.DISCARD_PILE).putOnTop(this);
+            game.log(2, "[" + sourcePlayer + "]"+ this + " was played");
+            game.markStepAndCard(option, this, new GameStepOther(game, this, sourcePlayer));
         }
     }
     @Override
     public void applyPartOfEffectOnOtherPlayer(Game game, GamePlayer sourcePlayer, GamePlayer other) {
 
+    }
+
+    @Override
+    public OptionOption generateOption(DeckAble card, GamePlayer gamePlayer) {
+        switch (allowedTarget) {
+            case OTHER: return new CardOptionTargetOtherPlayer(card, gamePlayer, null, distanceMax);
+            case MYSELF: return new CardOption((GameCard) card, gamePlayer);
+            case SPECIFIC_RANGE: return new CardOptionTargetOtherPlayer(card, gamePlayer, null, distanceMax);
+            case WEAPON_RANGE: return new CardOptionAtWeaponRange(this, gamePlayer, gamePlayer.getWeaponRange() + gamePlayer.getMaxReach());
+            case CARD_HAND_FRONT_ANY_DISTANCE: return new CardOptionTargetOtherPlayerAndCardInFrontOrHand(this, gamePlayer, null, null, null);
+            case CARD_HAND_FRONT_X_DISTANCE: return new CardOptionTargetOtherPlayerAndCardInFrontOrHandRange(this, gamePlayer, null, null, null);
+        }
+
+        return new CardOption((GameCard) card, gamePlayer);
     }
 }

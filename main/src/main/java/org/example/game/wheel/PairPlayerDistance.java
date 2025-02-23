@@ -3,8 +3,8 @@ package org.example.game.wheel;
 import org.example.game.GamePlayer;
 
 public class PairPlayerDistance {
-    private GamePlayer playerFromMe;
-    private int playerAtDistance;
+    private final GamePlayer playerFromMe;
+    private final int playerAtDistance;
 
     public PairPlayerDistance(GamePlayer playerFromMe, int playerAtDistance) {
         this.playerFromMe = playerFromMe;

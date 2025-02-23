@@ -8,5 +8,9 @@ public enum DistanceAllowedTarget {
     ALL,
     WEAPON_RANGE,
     SPECIFIC_RANGE,
-    OTHER_THAN_SHERIFF;
+    OTHER_THAN_SHERIFF,
+    ANY,
+    DEAD,
+    CARD_HAND_FRONT_ANY_DISTANCE, CARD_HAND_FRONT_X_DISTANCE;
+
 }

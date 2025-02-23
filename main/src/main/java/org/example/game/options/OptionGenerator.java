@@ -10,9 +10,11 @@ public class OptionGenerator {
 
     public void generateOptionAndChooseOne(Game game, GamePlayer player) {
         List<OptionOption> allOptions = new ArrayList<>();
-        allOptions.add(new SkipOption());
+        allOptions.add(new SkipOption(player));
         allOptions.addAll(game.generateGlobalOption());
         allOptions.addAll(player.generateALlOption(game));
+
+        game.printAllSteps();
 
         showAllOptions(allOptions);
 

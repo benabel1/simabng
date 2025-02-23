@@ -2,6 +2,7 @@ package org.example.game.cards.orange.dangerous;
 
 import org.example.game.Game;
 import org.example.game.GamePlayer;
+import org.example.game.cards.GameCard;
 import org.example.game.cards.IAvoidable;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
@@ -21,7 +22,7 @@ public class CardCreate extends OrangeBorderCard implements IAvoidable {
     }
 
     @Override
-    public boolean processAvoidAction(Game game, GamePlayer gamePlayer) {
+    public boolean processAvoidAction(Game game, GamePlayer gamePlayer, GameCard cardBang) {
         return false;
     }
 

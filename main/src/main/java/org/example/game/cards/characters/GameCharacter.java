@@ -4,13 +4,13 @@ import org.example.game.*;
 import org.example.game.options.CharacterOption;
 import org.example.game.deck.DeckAble;
 import org.example.game.cards.GameCard;
-import org.example.game.cards.GameRecordAble;
+import org.example.game.cards.IsGameRecordAble;
 import org.example.game.options.OptionOption;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameCharacter extends DeckAble implements GameRecordAble {
+public class GameCharacter extends DeckAble implements IsGameRecordAble {
     protected int maxHp, startHp;
     protected int startHand;
     protected int drawInTurnCards;
@@ -30,6 +30,7 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
     protected boolean isPassiveAbility;
     protected boolean isaActiveAbility;
     protected boolean hasAbilityOfItsCost;
+    protected int loadCounters;
 
     public GameCharacter() {
         //default values
@@ -123,5 +124,18 @@ public class GameCharacter extends DeckAble implements GameRecordAble {
         }
 
         return  drawnCardsPhaseOne;
+    }
+
+    public int howManyMissedNeededVs(GameCard shootingCard) {
+        return 1;
+    }
+
+    public int getloadCount() {
+        return loadCounters;
+    }
+
+    public void takeLoad(int i) {
+        loadCounters -= i;
+        loadCounters = Math.max(loadCounters, 0);
     }
 }

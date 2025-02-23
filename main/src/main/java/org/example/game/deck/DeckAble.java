@@ -2,7 +2,7 @@ package org.example.game.deck;
 
 import org.example.game.Game;
 import org.example.game.GamePlayer;
-import org.example.game.history.GameTurn;
+import org.example.game.history.sequence.GameTurn;
 import org.example.game.options.OptionOption;
 
 public abstract class DeckAble {
@@ -22,6 +22,7 @@ public abstract class DeckAble {
     private long stolenCount;
     private long discardCount;
     private long excessDiscardCount;
+    private long successCount;
 
     public String getCardName() {
         return cardName;
@@ -45,7 +46,7 @@ public abstract class DeckAble {
         this.handAppearence++;
     }
 
-    protected void addRecordOfPlay() {
+    public void addRecordOfPlay() {
         playedCount++;
     }
 
@@ -59,6 +60,10 @@ public abstract class DeckAble {
 
     public void addRecordOfDiscard() {
         discardCount++;
+    }
+
+    public void addRecordOfSuccess() {
+        successCount++;
     }
 
     public void addRecordOfExcessDiscard() {

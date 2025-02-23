@@ -5,6 +5,7 @@ import org.example.game.GamePlayer;
 import org.example.game.cards.*;
 import org.example.game.cards.brown.BrownBorderCard;
 import org.example.game.deck.DeckAble;
+import org.example.game.options.CardOption;
 import org.example.game.options.scaner.OptionScanner;
 
 import java.util.ArrayList;
@@ -21,8 +22,8 @@ public class CardTornado extends BrownBorderCard {
     }
 
     @Override
-    public void playCardFromHand(Game game, GamePlayer sourcePlayer) {
-        super.playCardFromHand(game, sourcePlayer);
+    public void playCardFromHand(Game game, CardOption option, GamePlayer sourcePlayer) {
+        super.playCardFromHand(game, option, sourcePlayer);
 
         List<DeckAble> tornadoCards = new ArrayList<>();
         List<GamePlayer> tornadoPlayers = game.getPlayersFromACurrentToOthersInOrderSkippedEliminated(

@@ -2,6 +2,7 @@ package org.example.game.cards.green.dodge;
 
 import org.example.game.Game;
 import org.example.game.GamePlayer;
+import org.example.game.cards.GameCard;
 import org.example.game.cards.IAvoidable;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
@@ -16,11 +17,11 @@ public class CardTenGallonHat extends GreenBorderCard implements IAvoidable {
 
     @Override
     public boolean canBeUsed(Game game) {
-        return turnOfPlay != game.geActtiveTurn();
+        return turnOfPlay != game.geActiveTurn();
     }
 
     @Override
-    public boolean processAvoidAction(Game game, GamePlayer defendingPlayer) {
+    public boolean processAvoidAction(Game game, GamePlayer defendingPlayer, GameCard cardBang) {
         defendingPlayer.removeFromHand(this);
         addRecordOfPlay();
         game.getPile(DeckName.DISCARD_PILE).putOnTop(this);

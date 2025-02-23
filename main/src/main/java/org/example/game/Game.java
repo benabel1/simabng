@@ -1,15 +1,21 @@
 package org.example.game;
 
-import org.example.game.cards.CARD_ATTRIBUTE;
-import org.example.game.cards.GameCard;
-import org.example.game.cards.Roles;
-import org.example.game.cards.ZONE;
+import org.example.game.cards.*;
+import org.example.game.cards.blue.basic.CardBarrel;
 import org.example.game.cards.brown.basic.CardBang;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
 import org.example.game.deck.DeckOfCards;
 import org.example.game.history.*;
+import org.example.game.history.sequence.GamePhaseDiscard;
+import org.example.game.history.sequence.GamePhaseDraw;
+import org.example.game.history.sequence.GamePhasePlay;
+import org.example.game.history.sequence.GameTurn;
+import org.example.game.history.steps.GameStep;
+import org.example.game.history.steps.GameStepDiscardWeapon;
+import org.example.game.history.steps.GameStepPlayCardOnTargetPlayer;
+import org.example.game.options.CardOption;
 import org.example.game.options.OptionGenerator;
 import org.example.game.options.OptionOption;
 import org.example.game.options.scaner.OptionScanner;
@@ -39,6 +45,7 @@ public class Game {
     GameStep step;
     List<GameStep> steps;
     private List<GamePlayer> players;
+    public int deadPlayersCount;
 
     private List<DeckAble> allCharacters;
     private List<DeckAble> allPlayingCards;
@@ -276,28 +283,18 @@ public class Game {
     }
 
     public void executeOneInteraction() {
+        removeDead();
+
+
         if (!activePlayer.isAlive(this)) {
             nextPlayerOrTurn(activePlayer);
             return;
         }
 
-        for (GamePlayer p: players) {
-            System.out.println("+-------+----+-----+----+-----+");
-            System.out.println(p.getName() + " " + p.getCurrentRole() + " " + p.getCurrentCharacter().getCardName() + "[" + p. getCurrentHp()+"/"+ p.getCurrentMaxHp()+"]");
-        }
-        System.out.println("+-------+----+-----+----+-----+");
-        System.out.println("iteration1");
+        engine.printGame(this);
 
         if (historyTracker.getCurrentTurn().getCurrPhase() instanceof GamePhaseDraw) {
-            log(1, "Turn[" + historyTracker.getCurrentTurn().getTurnCount() + "]");
-            List<DeckAble> drawn = activePlayer.getCurrentCharacter().resolveDrawingPhase(this);
-            log(1, "Drawn cards: " + drawn);
-            activePlayer.drawCards(drawn, false);
-
-            GamePhaseDraw drawPhase = (GamePhaseDraw) historyTracker.getCurrentTurn().getCurrPhase();
-            drawPhase.addDrawnCards(drawn);
-
-            historyTracker.getCurrentTurn().addPlayPhase(activePlayer);
+            resolveDrawingPhase();
 
             return;
         }
@@ -313,6 +310,30 @@ public class Game {
             return;
         }
 
+    }
+
+    private void resolveDrawingPhase() {
+        log(1, "Turn[" + historyTracker.getCurrentTurn().getTurnCount() + "]["+activePlayer.getName()+"]");
+        List<DeckAble> drawn = activePlayer.getCurrentCharacter().resolveDrawingPhase(this);
+        log(1, "Drawn cards: " + drawn);
+        activePlayer.drawCards(drawn, false);
+
+        GamePhaseDraw drawPhase = (GamePhaseDraw) historyTracker.getCurrentTurn().getCurrPhase();
+        drawPhase.addDrawnCards(drawn);
+
+        historyTracker.getCurrentTurn().addPlayPhase(activePlayer);
+    }
+
+    private void removeDead() {
+        for (GamePlayer alive: players) {
+            if (!alive.isAlive(this) && !alive.isEliminated()) {
+                eliminatePlayer(alive);
+            }
+        }
+    }
+
+    private void eliminatePlayer(GamePlayer alive) {
+        alive.setElimination(this);
     }
 
     private void showOption() {
@@ -351,7 +372,15 @@ public class Game {
     }
 
     public void resolveOption(OptionOption option) {
-        option.resolveInThisGame(this);
+
+
+        if (option != null && option.canBeResolved(this)) {
+
+            option.collectData(this);
+
+
+            option.resolveInThisGame(this);
+        }
     }
 
     public boolean wasPlayedLessThan(GameCard cardBang, int i) {
@@ -414,7 +443,7 @@ public class Game {
     public List<GamePlayer> getPlayersWithHandOtherThan(GamePlayer ownerPlayer) {
         ArrayList<GamePlayer> a = new ArrayList<>();
 
-        for (GamePlayer player: getActivePlayers(ownerPlayer)) {
+        for (GamePlayer player: getActivePlayersOtherThan(ownerPlayer)) {
             if (player.getAllCardsCount(CAUSE_FOR_ANY, HAND)> 0) {
                 a.add(player);
             }
@@ -423,7 +452,7 @@ public class Game {
         return a;
     }
 
-    public List<GamePlayer> getActivePlayers(GamePlayer ownerPlayer) {
+    public List<GamePlayer> getActivePlayersOtherThan(GamePlayer ownerPlayer) {
         List<GamePlayer> allActivePlayers = new ArrayList<>();
 
         for (GamePlayer testPlayer: players) {
@@ -435,7 +464,7 @@ public class Game {
         return allActivePlayers;
     }
 
-    public GameTurn geActtiveTurn() {
+    public GameTurn geActiveTurn() {
         return historyTracker.getCurrentTurn();
     }
 
@@ -500,11 +529,11 @@ public class Game {
     }
 
     public List<PairPlayerDistance> getPlayersFromPlayerAtMaxDistance(GamePlayer sourcePlayer, int maxRange) {
-        List<PairPlayerDistance> playesBelowDistance = new ArrayList();
+        List<PairPlayerDistance> playersBelowDistance = new ArrayList();
 
-        playesBelowDistance.addAll(gamePlayersWheel.calculateDistancesFromDeadCount(sourcePlayer, false));
+        playersBelowDistance.addAll(gamePlayersWheel.calculateDistancesFromDeadCount(sourcePlayer, false));
 
-        return playesBelowDistance;
+        return playersBelowDistance;
     }
 
     public String getUniqueId() {
@@ -523,7 +552,64 @@ public class Game {
         if (getActivePlayersCount() > 2) {
             return true;
         } else {
+            return true;
+        }
+    }
+    public void markStepAndCard(CardOption option, GameCard gameCard, GameStepPlayCardOnTargetPlayer target) {
+        GameStep step = new GameStep(this);
+
+        historyTracker.getCurrentTurn().addStepAndCard(step, gameCard);
+        gameCard.addRecordOfPlay();
+        log(2, "[" + option.getSourcePlayer() + "]"+ this + " was played on " + target);
+        if (option != null) {
+            option.markAsRecorded();
+        }
+    }
+
+    public void markStepAndCard(CardOption option, GameCard gameCard, GameStep step) {
+        historyTracker.getCurrentTurn().addStepAndCard(step, gameCard);
+        gameCard.addRecordOfPlay();
+        log(2, "[" + option.getSourcePlayer() + "]"+ this + " was played");
+        if (option != null) {
+            option.markAsRecorded();
+        }
+    }
+
+    public void markStep(GameStepDiscardWeapon gameStepDiscardWeapon) {
+        historyTracker.getCurrentTurn().addStep(gameStepDiscardWeapon);
+    }
+    public void printAllSteps() {
+        historyTracker.getCurrentTurn().getCurrPhase().printSteps();
+    }
+
+    public GamePlayer getCurrentPlayer() {
+        return activePlayer;
+    }
+
+    public boolean revealCard(IsRevealAble cardBarrel, int countOfReveal) {
+        List<DeckAble> revealed = new ArrayList<>();
+        boolean sucess = false;
+
+        for (int i = 0; i < countOfReveal; i++) {
+            revealed.add(drawCard());
+        }
+
+        if (revealed.isEmpty() || revealed.get(0) == null) {
             return false;
         }
+        if (revealed.size() == 1) {
+            sucess = GameCard.matchCard((GameCard) revealed.get(0), cardBarrel);
+            return sucess;
+        }
+
+        DeckAble chosen = OptionScanner.scanForObjectSpecificList("Choose one as result of reveal: ", revealed, 0, revealed.size(), null);
+
+        if (chosen == null) {
+            return false;
+        } else {
+            sucess = GameCard.matchCard((GameCard) chosen, cardBarrel);
+            return sucess;
+        }
+
     }
 }

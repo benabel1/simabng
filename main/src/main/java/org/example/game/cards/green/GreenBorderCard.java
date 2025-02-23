@@ -6,6 +6,11 @@ import org.example.game.cards.DistanceAllowedTarget;
 import org.example.game.cards.GameCard;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
+import org.example.game.deck.DeckAble;
+import org.example.game.history.steps.GameStepPlayCardOnTargetPlayer;
+import org.example.game.options.CardOption;
+import org.example.game.options.CardOptionPlacementInFrontOfMe;
+import org.example.game.options.OptionOption;
 
 import static org.example.game.cards.CardBorderColor.GREEN;
 
@@ -28,16 +33,25 @@ public class GreenBorderCard extends GameCard {
 
     @Override
     public boolean canBeUsedInGame(Game game) {
-        return turnOfPlay != game.geActtiveTurn();
+        return turnOfPlay != game.geActiveTurn();
     }
 
     @Override
-    public void playCardFromHand(Game game, GamePlayer sourcePlayer) {
+    public void playCardFromHand(Game game, CardOption option, GamePlayer sourcePlayer) {
         if (allowedTarget == DistanceAllowedTarget.MYSELF) {
-            super.playCardFromHand(game, sourcePlayer);
+            sourcePlayer.removeFromHand(this);
             sourcePlayer.placeInFrontCard(this);
-            turnOfPlay = game.geActtiveTurn();
+            turnOfPlay = game.geActiveTurn();
+            if (!option.isOptionRecordedInStep()) {
+                game.markStepAndCard(option, this, new GameStepPlayCardOnTargetPlayer(game, this, sourcePlayer, sourcePlayer));
+            }
         }
+        super.playCardFromHand(game, option, sourcePlayer);
+    }
+
+    @Override
+    public OptionOption generateOption(DeckAble card, GamePlayer gamePlayer) {
+        return new CardOptionPlacementInFrontOfMe((GameCard) card, gamePlayer);
     }
 }
 

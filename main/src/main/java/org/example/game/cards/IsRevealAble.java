@@ -1,11 +1,11 @@
 package org.example.game.cards;
 
-public interface RevealAble {
+public interface IsRevealAble {
     public default int getPriority() {
         return 100;
     }
 
-    public default int TopPriority(RevealAble a) {
+    public default int TopPriority(IsRevealAble a) {
         switch (a.getPriorityType()) {
             case "DYNAMITE": return 0;
             case "JAIL": return 1;
@@ -15,4 +15,6 @@ public interface RevealAble {
     }
 
     String getPriorityType();
+
+    boolean matchSuitAndPoker(GameCard deckAble);
 }

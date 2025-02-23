@@ -1,9 +1,9 @@
 package org.example.game.cards.characters.basic;
 
-import org.example.game.cards.GameRecordAble;
+import org.example.game.cards.IsGameRecordAble;
 import org.example.game.cards.characters.GameCharacter;
 
-public class CharBartCassidy extends GameCharacter implements GameRecordAble {
+public class CharBartCassidy extends GameCharacter implements IsGameRecordAble {
 
     public CharBartCassidy(){
         this.cardName = "BartCassidy";

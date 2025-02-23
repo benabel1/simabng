@@ -1,4 +1,4 @@
-package org.example.game.history;
+package org.example.game.history.sequence;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,5 +16,9 @@ public class GameRound {
 
     public ArrayList<GameTurn> getTurns() {
         return turns;
+    }
+
+    public int getRoundNumber() {
+        return roundNumber;
     }
 }

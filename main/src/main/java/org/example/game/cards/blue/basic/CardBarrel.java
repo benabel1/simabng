@@ -2,12 +2,11 @@ package org.example.game.cards.blue.basic;
 
 import org.example.game.Game;
 import org.example.game.GamePlayer;
-import org.example.game.cards.IAvoidable;
-import org.example.game.cards.PokerValue;
-import org.example.game.cards.Suit;
+import org.example.game.cards.*;
 import org.example.game.cards.blue.BlueBorderCard;
 
-public class CardBarrel extends BlueBorderCard implements IAvoidable {
+public class CardBarrel extends BlueBorderCard implements IAvoidable, IsRevealAble {
+    GameCard lastCardAvoided;
 
     public CardBarrel(Suit s, PokerValue p) {
         super(s, p);
@@ -20,10 +19,30 @@ public class CardBarrel extends BlueBorderCard implements IAvoidable {
     }
 
     @Override
-    public boolean processAvoidAction(Game game, GamePlayer defendingPlayer) {
-        addRecordOfUsageInPlay();
-        game.log(2, "[" + defendingPlayer + "]"+ this + " was played");
+    public boolean processAvoidAction(Game game, GamePlayer defendingPlayer, GameCard cardBang) {
+        if (cardBang != lastCardAvoided) {
+            addRecordOfUsageInPlay();
+            this.lastCardAvoided = cardBang;
+            game.log(2, "[" + defendingPlayer + "]"+ this + " was played");
 
-        return true;
+            boolean success = game.revealCard((IsRevealAble) this, defendingPlayer.getCountOfReveal());
+            if (success) {
+                addRecordOfSuccess();
+            }
+
+            return success;
+        } else {
+            return false;
+        }
     }
+
+    @Override
+    public boolean matchSuitAndPoker(GameCard deckAble) {
+        return deckAble.getSuit() == Suit.HEARTHS;
+    }
+    @Override
+    public String getPriorityType() {
+        return "NONE";
+    }
+
 }

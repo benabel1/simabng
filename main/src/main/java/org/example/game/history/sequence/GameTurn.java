@@ -1,14 +1,16 @@
-package org.example.game.history;
+package org.example.game.history.sequence;
 
 import org.example.game.Game;
 import org.example.game.GameConstatns;
 import org.example.game.GamePlayer;
 import org.example.game.cards.GameCard;
+import org.example.game.history.steps.GameStep;
+import org.example.game.history.steps.GameStepDiscardWeapon;
 
 import java.util.HashMap;
 
 public class GameTurn {
-    private GameRound round;
+    private final GameRound round;
     GamePhase drawPhase;
     GamePhase playPhase;
     GamePhase excessPhase;
@@ -17,7 +19,7 @@ public class GameTurn {
     int bangCount;
     int characterAbilityCount;
     public static HashMap<Integer,GameTurn> turnHistory = new HashMap<>();
-    private Integer turnCount;
+    private final Integer turnCount;
 
     public GameTurn(GamePlayer player, GameRound round) {
         this.player = player;
@@ -41,6 +43,7 @@ public class GameTurn {
         if (excessPhase == null) {
             System.out.println("Excess cards");
             excessPhase = new GamePhaseDiscard(this, player);
+            game.log(1, excessPhase.toString());
             currentPhase = excessPhase;
 
             excessPhase.reDiscard(game, player);
@@ -64,14 +67,17 @@ public class GameTurn {
         characterAbilityCount++;
     }
 
-    public void increaseLimit(Class<? extends GameCard> aClass) {
+    public void increaseLimit(Class aClass) {
         if (matchBangCategory(aClass)) {
             bangCount++;
         }
     }
 
-    private boolean matchBangCategory(Class<? extends GameCard> aClass) {
-        for (Class<? extends GameCard> a : GameConstatns.bangCategoryCards) {
+    private boolean matchBangCategory(Class aClass) {
+        if (aClass == null ){
+            return false;
+        }
+        for (Class a : GameConstatns.bangCategoryCards) {
             if (a == aClass) {
                 return true;
             }
@@ -90,5 +96,14 @@ public class GameTurn {
 
     public int getTurnCount() {
         return turnCount;
+    }
+
+    public void addStepAndCard(GameStep step, GameCard gameCard) {
+        getCurrPhase().logPlayingCard(gameCard);
+        getCurrPhase().logStep(step);
+    }
+
+    public void addStep(GameStep step) {
+        getCurrPhase().logStep(step);
     }
 }

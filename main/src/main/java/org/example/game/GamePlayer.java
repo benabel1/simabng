@@ -1,12 +1,12 @@
 package org.example.game;
 
 import org.example.game.cards.*;
-import org.example.game.cards.brown.basic.CardBang;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.cards.orange.OrangeBorderCard;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
-import org.example.game.history.GameTurn;
+import org.example.game.history.sequence.GameTurn;
+import org.example.game.history.steps.GameStepDiscardWeapon;
 import org.example.game.options.OptionOption;
 import org.example.game.options.scaner.OptionScanner;
 
@@ -38,6 +38,7 @@ public class GamePlayer {
      */
     private int loadCount;
     private int goldCount;
+    private int baseReach;
 
     public GamePlayer(String name, int orderNumber, Roles role) {
         this.name = name;
@@ -52,6 +53,8 @@ public class GamePlayer {
     private void initPlayerGameElements() {
         playerHand = new ArrayList<>();
         playerFront = new ArrayList<>();
+
+        baseReach = 1;
     }
 
     public void assignStartingCharacter(GameCharacter character) {
@@ -106,7 +109,7 @@ public class GamePlayer {
     }
 
     public void showHandAndFront(Game game) {
-        GameTurn turn = game.geActtiveTurn();
+        GameTurn turn = game.geActiveTurn();
         System.out.println("Turn " + turn + " BANGs: " + turn.getBangsCount());
 
         System.out.println("HAND");
@@ -166,7 +169,7 @@ public class GamePlayer {
 
     @Override
     public String toString() {
-        return name;
+        return name + "(" + getCurrentRole() +")";
     }
 
     public void restoreLife(int restoredAmountHp) {
@@ -183,14 +186,30 @@ public class GamePlayer {
         currentChar.notifyP(card, sourcePlayer, game);
     }
 
+    public void removeCard(DeckAble card) {
+        removeFromHand(card);
+        removeFromFront(card);
+    }
+
     public void removeFromHand(DeckAble handCard) {
         if (handCard != null) {
             playerHand.remove(handCard);
         }
     }
 
+    public void removeFromFront(DeckAble frontCard) {
+        if(frontCard != null) {
+            playerFront.remove(frontCard);
+        }
+    }
+
+
     public void placeInFrontCard(DeckAble frontCard) {
-        playerFront.add(frontCard);
+        if (frontCard instanceof IsWeapon) {
+            playerFront.add(0, frontCard);
+        } else {
+            playerFront.add(frontCard);
+        }
     }
 
     public void drawCard(DeckAble drawnCard, boolean wasShown) {
@@ -206,13 +225,14 @@ public class GamePlayer {
         System.out.println("Drawn cards: " + drawnCard);
     }
 
-    private void stealCard(DeckAble card, boolean see, GamePlayer previousOwner) {
+    private void stealCard(DeckAble card, GamePlayer previousOwner, boolean see) {
         playerHand.add(card);
+        previousOwner.removeFromHand(card);
+        previousOwner.removeFromFront(card);
         card.startNewRecordForHand(see);
         card.setPreviousOwnerKnown(previousOwner);
         card.addRecordOfSteal();
     }
-
     public int getAllCardsCount(CARD_ATTRIBUTE cardAttribute, ZONE zone) {
         switch (zone) {
             case HAND_FRONT:
@@ -256,16 +276,23 @@ public class GamePlayer {
         return null;
     }
 
-    public void stealCardFromPlayer(DeckAble card, GamePlayer player) {
+    public void stealCardFromPlayer(DeckAble card, GamePlayer player, boolean wasInFront) {
         if (card != null && player != null) {
-            this.stealCard(card, false, player);
+            this.stealCard(card, player, wasInFront);
+        }
+    }
+
+    public void discardCardFromPlayer(DeckAble card, GamePlayer playerWhoDiscard, boolean wasInFront) {
+        if (card != null && playerWhoDiscard != null) {
+            playerWhoDiscard.removeFromFront(card);
+            playerWhoDiscard.removeFromHand(card);
         }
     }
 
     public List<DeckAble> getAllTesting() {
         List<DeckAble> re = new ArrayList<>();
 
-        Comparator<RevealAble> comparator = (x, y) -> (x.getPriority() > y.getPriority()) ? 1 : -1;
+        Comparator<IsRevealAble> comparator = (x, y) -> (x.getPriority() > y.getPriority()) ? 1 : -1;
 
         return re;
     }
@@ -289,24 +316,36 @@ public class GamePlayer {
         return 1;
     }
 
-    public void responseToShotFromWithCard(Game game, GamePlayer sourcePlayer, CardBang cardBang) {
+    public void responseToShotFromWithCard(Game game, GamePlayer sourcePlayer, GameCard cardBang, int missedNeeded) {
         List<DeckAble> missOptions = getAllCardsWithMissed(game);
+
+        if (missOptions.isEmpty()) {
+            takeDamage(1);
+            return;
+        }
 
         DeckAble miss = OptionScanner.scanForObjectSpecificList("Choice missed option", missOptions, 0, missOptions.size(), null);
 
         if (miss != null) {
-            boolean wasSuccess = ((IAvoidable) miss).processAvoidAction(game, this);
+            boolean wasSuccess = ((IAvoidable) miss).processAvoidAction(game, this, cardBang);
+        } else {
+            takeDamage(1);
         }
     }
 
+    private void takeDamage(int i) {
+        currentHp--;
+        System.out.println(this + " suffer " + i + " damage.[" + currentHp + "/" + maxHp + "]");
+    }
+
     public List<DeckAble> getAllCardsWithMissed(Game game) {
-        List<DeckAble> missOtionCard = new ArrayList<>();
+        List<DeckAble> missOptions = new ArrayList<>();
 
         for (DeckAble handCard: playerHand) {
             if (handCard instanceof IAvoidable) {
                 IAvoidable miss = ((IAvoidable) handCard);
                 if (miss.canBeUsed(game)) {
-                    missOtionCard.add(handCard);
+                    missOptions.add(handCard);
                 }
             }
         }
@@ -315,16 +354,16 @@ public class GamePlayer {
             if (frontCard instanceof IAvoidable) {
                 IAvoidable miss = ((IAvoidable) frontCard);
                 if (miss.canBeUsed(game)) {
-                    missOtionCard.add(frontCard);
+                    missOptions.add(frontCard);
                 }
             }
         }
 
-        return missOtionCard;
+        return missOptions;
     }
 
     public int getLoadCount() {
-        return loadCount + getLoadCountAmongDangerous();
+        return currentChar.getloadCount() + getLoadCountAmongDangerous();
     }
 
     private int getLoadCountAmongDangerous() {
@@ -370,7 +409,131 @@ public class GamePlayer {
         for (DeckAble oldGun : oldWeapons) {
             game.getPile(DeckName.DISCARD_PILE).putOnTop(oldGun);
             playerFront.remove(oldGun);
+            game.markStep(new GameStepDiscardWeapon(game, this, (GameCard) oldGun, (GameCard) newGun));
         }
+    }
+
+    public int getMissedNeed(GameCard shootCard) {
+        return currentChar.howManyMissedNeededVs(shootCard);
+    }
+
+    public void print(GameEngine gameEngine, Game game, GamePlayer active, GamePlayer previous, GamePlayer next) {
+        printSeparation(previous, this, active, "-", "=");
+
+        System.out.println(getName() + " " + getCurrentRole() + " " + getCurrentCharacter().getCardName() + "[" + getCurrentHp()+"/"+ getCurrentMaxHp()+"]Hand:["+ getAllCardsCount(CARD_ATTRIBUTE.CAUSE_FOR_ANY, ZONE.HAND)+"/" + getCurrentHp() +"]");
+
+        System.out.println("Front[" + playerFront.size() + "]");
+
+        for (DeckAble front: playerFront) {
+            System.out.println("\t" + front);
+        }
+
+        printSeparation(this, next, active, "-", "=");
+        
+    }
+
+    private void printSeparation(GamePlayer previous, GamePlayer next, GamePlayer active, String signNormal, String signActive) {
+        String paint = signNormal;
+
+        if (this== active || previous == active || next == active) {
+            paint = signActive;
+        }
+
+        if (previous == null && next != null) {
+
+            for (int i = 0; i < 7; i++) {
+                System.out.print("+");
+                for (int j = 0; j < 5; j++) {
+                    System.out.print(paint);
+                }
+            }
+            System.out.print("+");
+            System.out.println();
+        }
+
+        if (previous == this && next != null) {
+            for (int i = 0; i < 7; i++) {
+                System.out.print("+");
+                for (int j = 0; j < 5; j++) {
+                    System.out.print(paint);
+                }
+            }
+            System.out.print("+");
+            System.out.println();
+        }
+
+        if (previous != null && next == null) {
+            for (int i = 0; i < 7; i++) {
+                System.out.print("+");
+                for (int j = 0; j < 5; j++) {
+                    System.out.print(paint);
+                }
+            }
+            System.out.print("+");
+            System.out.println();
+        }
+    }
+
+    public int getMaxReach() {
+        return calculateCurrentReach();
+    }
+
+    private int calculateCurrentReach() {
+        int reach = baseReach;
+
+        for (DeckAble front: playerFront) {
+            if (front instanceof IsReach) {
+                IsReach isReach = (IsReach) front;
+                baseReach += isReach.getReachInc();
+            }
+        }
+
+        return reach;
+    }
+
+    public int getCountOfReveal() {
+        return 1;
+    }
+
+    public boolean isEliminated() {
+        return  isEliminated;
+    }
+
+    public void setElimination(Game game) {
+        isEliminated = true;
+        game.deadPlayersCount++;
+        orderElimination = game.deadPlayersCount;
+
+        List<DeckAble> deadCards = getAllCards(CARD_ATTRIBUTE.CAUSE_FOR_ANY, ZONE.HAND_FRONT);
+        for (DeckAble deadCard: deadCards) {
+//            DeckAble orderdd = OptionScanner.scanForObjectSpecificList("Choose order: ",
+//                    deadCards,
+//                    0, deadCards.size(), null);
+//
+            removeCard(deadCard);
+            game.getPile(DeckName.DISCARD_PILE).putOnTop(deadCard);
+        }
+
+        game.log(1, "Elimination" + this + " cards:" + deadCards);
+    }
+
+    public List<DeckAble> getCardsWithLoad() {
+        List<DeckAble> loadCards = new ArrayList<>();
+
+        if (currentChar.getloadCount() > 0) {
+            loadCards.add(currentChar);
+        }
+
+        for (DeckAble front: playerFront) {
+            if (front instanceof OrangeBorderCard) {
+                OrangeBorderCard orange = (OrangeBorderCard) front;
+                if (orange.getLoadCount() > 0) {
+                    loadCards.add(front);
+                }
+            }
+        }
+
+        return loadCards;
     }
 }
 
