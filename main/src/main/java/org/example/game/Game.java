@@ -289,6 +289,7 @@ public class Game {
 
 
         if (!activePlayer.isAlive(this)) {
+            System.out.println("Active playes is dead: move to another");
             nextPlayerOrTurn(activePlayer);
             return;
         }
@@ -565,6 +566,7 @@ public class Game {
         log(2, "[" + option.getSourcePlayer() + "]"+ this + " was played on " + target);
         if (option != null) {
             option.markAsRecorded();
+            iteration++;
         }
     }
 

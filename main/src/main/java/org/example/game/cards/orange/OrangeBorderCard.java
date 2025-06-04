@@ -3,6 +3,7 @@ package org.example.game.cards.orange;
 import org.example.game.Game;
 import org.example.game.GamePlayer;
 import org.example.game.cards.GameCard;
+import org.example.game.cards.IsWeapon;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 import org.example.game.deck.DeckName;
@@ -31,6 +32,10 @@ public class OrangeBorderCard extends GameCard {
         addRecordOfPlay();
         sourcePlayer.placeInFrontCard(this);
         sourcePlayer.removeFromHand(this);
+
+        if (this instanceof IsWeapon) {
+            sourcePlayer.replaceOldWeapon(game, this);
+        }
     }
 
     @Override
