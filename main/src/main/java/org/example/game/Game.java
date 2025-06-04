@@ -1,13 +1,12 @@
 package org.example.game;
 
 import org.example.game.cards.*;
-import org.example.game.cards.blue.basic.CardBarrel;
 import org.example.game.cards.brown.basic.CardBang;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
 import org.example.game.deck.DeckOfCards;
-import org.example.game.history.*;
+import org.example.game.history.HistoryTracker;
 import org.example.game.history.sequence.GamePhaseDiscard;
 import org.example.game.history.sequence.GamePhaseDraw;
 import org.example.game.history.sequence.GamePhasePlay;
@@ -19,14 +18,16 @@ import org.example.game.options.CardOption;
 import org.example.game.options.OptionGenerator;
 import org.example.game.options.OptionOption;
 import org.example.game.options.scaner.OptionScanner;
-import org.example.game.wheel.PairPlayerDistance;
 import org.example.game.settings.BANGArmedAndDangerous;
 import org.example.game.settings.BANGBasicGameSetup;
 import org.example.game.settings.BANGDodgeCityGameSetup;
 import org.example.game.settings.GameExpansionSetup;
 import org.example.game.wheel.GamePlayersWheel;
+import org.example.game.wheel.PairPlayerDistance;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class Game {
     GameEngine engine;
     GameStep step;
     List<GameStep> steps;
-    private List<GamePlayer> players;
+    private final List<GamePlayer> players;
     public int deadPlayersCount;
 
     private List<DeckAble> allCharacters;
