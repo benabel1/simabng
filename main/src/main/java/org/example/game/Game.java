@@ -61,6 +61,7 @@ public class Game {
     private GamePlayersWheel gamePlayersWheel;
     private String winnerSide;
     private String directoryFileName;
+    private long iteration;
 
     public Game() {
         assignUuid();
@@ -611,5 +612,9 @@ public class Game {
             return sucess;
         }
 
+    }
+
+    public long getInteration() {
+        return iteration;
     }
 }

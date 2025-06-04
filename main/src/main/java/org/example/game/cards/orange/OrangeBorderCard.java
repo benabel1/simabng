@@ -30,6 +30,7 @@ public class OrangeBorderCard extends GameCard {
         this.loadCount = 3;
         addRecordOfPlay();
         sourcePlayer.placeInFrontCard(this);
+        sourcePlayer.removeFromHand(this);
     }
 
     @Override

@@ -163,7 +163,7 @@ public class GamePlayersWheel {
         return distanceResult;
     }
 
-    private int calDistToLeft(GamePlayer from, GamePlayer to, boolean deathCounts) {
+    private int calDistToLeft(GamePlayer from, GamePlayer to, boolean areDeadCounting) {
         PositionPlayerStruct counting =  moving;
         int distance = 0;
 
@@ -181,7 +181,7 @@ public class GamePlayersWheel {
         }
 
         while(counting.chair != to) {
-            if (deathCounts) {
+            if (areDeadCounting) {
                 counting = counting.leftSide;
                 distance++;
             } else {
