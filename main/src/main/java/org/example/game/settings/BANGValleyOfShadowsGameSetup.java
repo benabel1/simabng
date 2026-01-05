@@ -70,6 +70,7 @@ public class BANGValleyOfShadowsGameSetup extends GameExpansionSetup {
 
         result.add(new CharBlackFlower());
         result.add(new CharColoradoBill());
+        result.add(new CharTuco());
 
         return result;
     }

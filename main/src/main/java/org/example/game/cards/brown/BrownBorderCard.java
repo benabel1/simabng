@@ -17,8 +17,8 @@ import org.example.game.options.*;
 import static org.example.game.cards.CardBorderColor.BROWN;
 
 public class BrownBorderCard extends GameCard {
-    public BrownBorderCard(Suit s, PokerValue p) {
-        super(s, p);
+    public BrownBorderCard(Suit suit, PokerValue poker) {
+        super(suit, poker);
         //default setup values
         this.color = BROWN;
         this.canPlayedOnSideOfTurn = true;

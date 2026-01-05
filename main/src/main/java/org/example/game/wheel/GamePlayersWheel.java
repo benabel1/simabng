@@ -44,28 +44,28 @@ public class GamePlayersWheel {
     public List<GamePlayer> getPlayersInOrderFromNowSkippingEliminated(GamePlayer currentPlayer, boolean b) {
         List<GamePlayer> playersInOrderFromCurrToOthers = new ArrayList<>();
 
-        PositionPlayerStruct ff = moving;
+        PositionPlayerStruct pps = moving;
         int max = 20;
 
         //set position to currentPlayer
         do{
-            ff = ff.leftSide;
+            pps = pps.leftSide;
             max--;
-        } while(ff.chair != currentPlayer && max > 0);
+        } while(pps.chair != currentPlayer && max > 0);
 
-        if(ff.chair != currentPlayer || max <= 0) {
+        if(pps.chair != currentPlayer || max <= 0) {
             return playersInOrderFromCurrToOthers;
         }
 
         do {
-            playersInOrderFromCurrToOthers.add(ff.chair);
+            playersInOrderFromCurrToOthers.add(pps.chair);
 
             if (clockwiseTurning) {
-                ff = ff.leftSide;
+                pps = pps.leftSide;
             } else {
-                ff = ff.rightSide;
+                pps = pps.rightSide;
             }
-        } while (ff.chair != currentPlayer);
+        } while (pps.chair != currentPlayer);
 
         return playersInOrderFromCurrToOthers;
     }

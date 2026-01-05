@@ -18,10 +18,7 @@ import org.example.game.options.CardOption;
 import org.example.game.options.OptionGenerator;
 import org.example.game.options.OptionOption;
 import org.example.game.options.scaner.OptionScanner;
-import org.example.game.settings.BANGArmedAndDangerous;
-import org.example.game.settings.BANGBasicGameSetup;
-import org.example.game.settings.BANGDodgeCityGameSetup;
-import org.example.game.settings.GameExpansionSetup;
+import org.example.game.settings.*;
 import org.example.game.wheel.GamePlayersWheel;
 import org.example.game.wheel.PairPlayerDistance;
 
@@ -78,6 +75,7 @@ public class Game {
         settings[0] = new BANGBasicGameSetup();
         settings[1] = new BANGDodgeCityGameSetup();
         settings[2] = new BANGArmedAndDangerous();
+        settings[3] = new BANGValleyOfShadowsGameSetup();
 
         setupDecks();
 
