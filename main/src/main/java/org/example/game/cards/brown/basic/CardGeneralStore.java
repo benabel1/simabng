@@ -38,16 +38,15 @@ public class CardGeneralStore extends BrownBorderCard {
 
         for (int i = 0; i < generalStoreCards.size(); i++) {
             DeckAble pickedCard = null;
+            GamePlayer p = generalStorePlayers.get(i);
 
-           pickedCard =  OptionScanner.scanForObjectSpecificList("Select one card from " + this , generalStoreCards, 0, generalStoreCards.size(), null);
+           pickedCard =  OptionScanner.scanForObjectSpecificList(p.getName() + "Select one card from " + this , generalStoreCards, 0, generalStoreCards.size(), null);
 
            if (pickedCard != null){
-               GamePlayer p = generalStorePlayers.get(i);
                p.drawCard(pickedCard, true);
                generalStoreCards.remove(pickedCard);
            } else {
                pickedCard = generalStoreCards.get(0);
-               GamePlayer p = generalStorePlayers.get(i);
                p.drawCard(pickedCard, true);
                generalStoreCards.remove(pickedCard);
            }

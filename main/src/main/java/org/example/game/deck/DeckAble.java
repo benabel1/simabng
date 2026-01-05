@@ -46,13 +46,9 @@ public abstract class DeckAble {
         this.handAppearence++;
     }
 
-    public void addRecordOfPlay() {
-        playedCount++;
-    }
+    public void addRecordOfPlay() { playedCount++;}
 
-    protected void addRecordOfUsageInPlay() {
-        usageInPlayCount++;
-    }
+    protected void addRecordOfUsageInPlay() { usageInPlayCount++;}
 
     public void addRecordOfSteal() {
         stolenCount++;
