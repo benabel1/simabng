@@ -15,9 +15,6 @@ public class BlueBorderCard extends GameCard {
         //default setup values
         this.color = CardBorderColor.BLUE;
         this.allowedTarget = DistanceAllowedTarget.MYSELF;
-
-        this.canPlayedOnSideOfTurn = true;
-        this.canPlayedOutSideOfTurn = false;
     }
 
     @Override
@@ -32,9 +29,35 @@ public class BlueBorderCard extends GameCard {
         }
 
         if (allowedTarget == DistanceAllowedTarget.OTHER_THAN_SHERIFF) {
-            GamePlayer bluePlacementTarget = OptionScanner.scanForObjectSpecificList("Choose placement of " + this, game.getActivePlayersOtherThan(null), 0, game.getActivePlayersCount(),  null);
+            GamePlayer bluePlacementTarget = OptionScanner.scanForObjectSpecificList("Choose placement of " + this, game.getActivePlayersOtherThan(null), 0, game.getActivePlayersCount(),  game.getSheriffPlayer());
 
             if (bluePlacementTarget != null && bluePlacementTarget != game.getSheriffPlayer()) {
+                super.playCardFromHand(game, option, sourcePlayer);
+                bluePlacementTarget.placeInFrontCard(this);
+                sourcePlayer.removeFromHand(this);
+                if (!option.isOptionRecordedInStep()) {
+                    game.markStepAndCard(option, this, new GameStepPlayCardOnTargetPlayer(game, this, sourcePlayer, bluePlacementTarget));
+                }
+            }
+        }
+
+        if (allowedTarget == DistanceAllowedTarget.OTHER) {
+            GamePlayer bluePlacementTarget = OptionScanner.scanForObjectSpecificList("Choose placement of " + this, game.getActivePlayersOtherThan(null), 0, game.getActivePlayersCount(),  sourcePlayer);
+
+            if (bluePlacementTarget != null && bluePlacementTarget != sourcePlayer) {
+                super.playCardFromHand(game, option, sourcePlayer);
+                bluePlacementTarget.placeInFrontCard(this);
+                sourcePlayer.removeFromHand(this);
+                if (!option.isOptionRecordedInStep()) {
+                    game.markStepAndCard(option, this, new GameStepPlayCardOnTargetPlayer(game, this, sourcePlayer, bluePlacementTarget));
+                }
+            }
+        }
+
+        if (allowedTarget == DistanceAllowedTarget.ALL) {
+            GamePlayer bluePlacementTarget = OptionScanner.scanForObjectSpecificList("Choose placement of " + this, game.getActivePlayersOtherThan(null), 0, game.getActivePlayersCount(),  null);
+
+            if (bluePlacementTarget != null) {
                 super.playCardFromHand(game, option, sourcePlayer);
                 bluePlacementTarget.placeInFrontCard(this);
                 sourcePlayer.removeFromHand(this);

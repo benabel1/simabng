@@ -1,12 +1,9 @@
 package org.example.game.settings;
 
 import org.example.game.Game;
-import org.example.game.cards.blue.basic.*;
-import org.example.game.cards.blue.dodge.CardBinocular;
-import org.example.game.cards.blue.dodge.CardHideout;
-import org.example.game.cards.brown.valley.CardLastBeer;
-import org.example.game.cards.characters.valley.*;
-import org.example.game.cards.green.dodge.*;
+import org.example.game.cards.blue.animalpack.CardMule;
+import org.example.game.cards.blue.animalpack.CardTraitorousDog;
+import org.example.game.cards.brown.hiredguns.CardMysticDec;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
 
@@ -17,20 +14,19 @@ import static org.example.game.cards.PokerValue.*;
 import static org.example.game.cards.Suit.*;
 
 
-public class BANGValleyOfShadowsGameSetup extends GameExpansionSetup {
+public class BANGHiredGuns extends GameExpansionSetup {
 
-    public BANGValleyOfShadowsGameSetup() {
+    public BANGHiredGuns() {
         super();
         isTurnOn = true;
     }
 
     @Override
     public void applySetup(Game game) {
-
         insertCardsForDeck(game, DeckName.CHARACTERS);
         insertCardsForDeck(game, DeckName.PLAYING_CARDS);
 
-        game.log(0,"VALLEY OF SHADOW: ON");
+        game.log(0,"HIRED GUNS: ON");
     }
 
     @Override
@@ -53,7 +49,6 @@ public class BANGValleyOfShadowsGameSetup extends GameExpansionSetup {
 
         createBlueBorderCards(result);
         createBrownBorderCards(result);
-        //createGreenBorderCards(result);
 
         return result;
     }
@@ -61,15 +56,16 @@ public class BANGValleyOfShadowsGameSetup extends GameExpansionSetup {
     @Override
     protected List<DeckAble> createListCardsCharacterDeck(Game game) {
         List<DeckAble> result = new ArrayList<>();
-
-        //08 BASIC characters
-        result.add(new CharEvelynSheBang());
-        result.add(new CharHenryBlock());
-        result.add(new CharMickDefender());
-        result.add(new CharLemonadeJim());
-
-        result.add(new CharBlackFlower());
-        result.add(new CharColoradoBill());
+        //8 DANGEROUS characters
+//        result.add(new CharAlPreacher());
+//        result.add(new CharBassGreeves());
+//        result.add(new CharBloodyMary());
+//        result.add(new CharFrankieCanton());
+//
+//        result.add(new CharJulyCutter());
+//        result.add(new CharMsAbigail());
+//        result.add(new CharMexicaliKid());
+//        result.add(new CharRedRingo());
 
         return result;
     }
@@ -83,41 +79,25 @@ public class BANGValleyOfShadowsGameSetup extends GameExpansionSetup {
 
     @Override
     protected void createBlueBorderCards(List<DeckAble> result) {
-        //01 BARREL ♣: A
-        result.add(new CardBarrel(CLUBS, __A));
+        //01 ACE UP THE SLEEVE ♥: A
+        result.add(new CardTraitorousDog(DIAMONDS, __J));
+        result.add(new CardMule(CLUBS, __J));
 
-        //01 BINOCULAR  ♦: 10
-        result.add(new CardBinocular(DIAMONDS, _10));
-
-        //01 DYNAMITE ♦: 10
-        result.add(new CardDynamit(CLUBS, _10));
-
-        //01 MUSTANG ♥: 5
-        result.add(new CardMustang(HEARTHS, _05));
-
-        //01 HIDEOUT ♦: 6
-        result.add(new CardHideout(SPADE, _05));
-
-        //01 REMINGTON ♦: 6
-        result.add(new CardGun3Remington(DIAMONDS, _06));
-
-        //01 REC CARABINA ♦: 6
-        result.add(new CardGun4RevCarabine(SPADE, _05));
     }
 
     @Override
     protected void createBrownBorderCards(List<DeckAble> result) {
         //BROWN
-        //04 BANG ♣: 5,6,K ♠: 8
-        //TODO
-        result.add(new CardLastBeer(CLUBS, _05));
-        result.add(new CardLastBeer(CLUBS, _05));
 
+        //01 ARROW ♦: 5
+        result.add(new CardMysticDec(DIAMONDS, _05));
     }
 
     @Override
     protected void createGreenBorderCards(List<DeckAble> result) {
-
+        //GREEN
+        //01 BIBLE ♥: 10
+        //result.add(new CardBible(HEARTHS, _10));
     }
 
 }

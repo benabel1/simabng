@@ -2,6 +2,7 @@ package org.example.game;
 
 import org.example.game.cards.*;
 import org.example.game.cards.blue.basic.CardBarrel;
+import org.example.game.cards.brown.BrownBorderCard;
 import org.example.game.cards.brown.basic.CardBang;
 import org.example.game.cards.characters.GameCharacter;
 import org.example.game.deck.DeckAble;
@@ -544,7 +545,7 @@ public class Game {
         return winnerSide;
     }
 
-    public void increaseLimitTurnCount(Class<? extends CardBang> aClass) {
+    public void increaseLimitTurnCount(Class<? extends BrownBorderCard> aClass) {
         historyTracker.getCurrentTurn().increaseLimit(aClass);
     }
 

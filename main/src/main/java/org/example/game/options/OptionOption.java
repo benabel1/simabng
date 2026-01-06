@@ -25,7 +25,7 @@ public class OptionOption {
     }
 
     public boolean canBeResolved(Game game) {
-        return false;
+        return true;
     }
 
     public boolean isOptionRecordedInStep() {

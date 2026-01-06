@@ -1,16 +1,16 @@
-package org.example.game.cards.blue.basic;
+package org.example.game.cards.blue.hiredguns;
 
 import org.example.game.cards.GameCard;
-import org.example.game.cards.PokerValue;
 import org.example.game.cards.IsRevealAble;
+import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 import org.example.game.cards.blue.BlueBorderCard;
 
-public class CardDynamit extends BlueBorderCard implements IsRevealAble {
+public class CardMedicKit extends BlueBorderCard implements IsRevealAble {
 
-    public CardDynamit(Suit s, PokerValue p) {
+    public CardMedicKit(Suit s, PokerValue p) {
         super(s, p);
-        this.cardName = "DYNAMITE";
+        this.cardName = "CardMedicKit";
     }
 
     @Override
@@ -25,7 +25,7 @@ public class CardDynamit extends BlueBorderCard implements IsRevealAble {
 
     @Override
     public boolean matchSuitAndPoker(GameCard deckAble) {
-        return deckAble.getSuit() == Suit.SPADE &&
-                PokerValue.matchValue(deckAble.getPoker()) >= 2 && PokerValue.matchValue(deckAble.getPoker()) <= 9;
+
+        return deckAble.getSuit() == Suit.HEARTHS;
     }
 }

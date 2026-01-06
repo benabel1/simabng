@@ -45,4 +45,8 @@ public class CardBarrel extends BlueBorderCard implements IAvoidable, IsRevealAb
         return "NONE";
     }
 
+    @Override
+    public boolean mustBeDiscardedAfterSuccessMiss() {
+        return false;
+    }
 }

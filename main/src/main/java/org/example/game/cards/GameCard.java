@@ -30,6 +30,7 @@ public abstract class GameCard extends DeckAble {
         this.poker = p;
 
         this.cardName = this.getClass().getName();
+        setPlayableInTurnByDefault();
         canBePlayerOnDeadToo = false;
     }
 
@@ -88,5 +89,14 @@ public abstract class GameCard extends DeckAble {
 
     public Suit getSuit() {
         return suit;
+    }
+
+    public PokerValue getPoker() {
+        return poker;
+    }
+
+    protected void setPlayableInTurnByDefault() {
+        this.canPlayedOnSideOfTurn = true;
+        this.canPlayedOutSideOfTurn = false;
     }
 }

@@ -22,7 +22,7 @@ public class CardCreate extends OrangeBorderCard implements IAvoidable {
     }
 
     @Override
-    public boolean processAvoidAction(Game game, GamePlayer gamePlayer, GameCard cardBang) {
+    public boolean processAvoidAction(Game game, GamePlayer defendingPlayer, GameCard cardBang) {
         return false;
     }
 

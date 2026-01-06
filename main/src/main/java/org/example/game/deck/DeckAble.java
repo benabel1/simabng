@@ -6,7 +6,9 @@ import org.example.game.history.sequence.GameTurn;
 import org.example.game.options.OptionOption;
 
 public abstract class DeckAble {
+    protected long cardHiredGunsIndex;
     protected String cardName;
+    protected  String textOnCard;
     /**
      * Visibility of card for others and one previous owner
      */

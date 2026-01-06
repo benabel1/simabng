@@ -318,19 +318,44 @@ public class GamePlayer {
 
     public void responseToShotFromWithCard(Game game, GamePlayer sourcePlayer, GameCard cardBang, int missedNeeded) {
         List<DeckAble> missOptions = getAllCardsWithMissed(game);
+        int missedUsed = 0;
+        List<DeckAble> burnedMissed = new ArrayList<>();
 
         if (missOptions.isEmpty()) {
             takeDamage(1);
             return;
         }
 
-        DeckAble miss = OptionScanner.scanForObjectSpecificList("Choice missed option", missOptions, 0, missOptions.size(), null);
+        for (int i = 0; i < missedNeeded; i++) {
+            DeckAble missCard = OptionScanner.scanForObjectSpecificList("Choice missed option", missOptions, 0, missOptions.size(), null);
 
-        if (miss != null) {
-            boolean wasSuccess = ((IAvoidable) miss).processAvoidAction(game, this, cardBang);
-        } else {
+            if (missCard != null && missCard instanceof IAvoidable) {
+                IAvoidable missType = (IAvoidable) missCard;
+                boolean wasSuccess = missType.processAvoidAction(game, this, cardBang);
+                //BARREL can be use once
+                missOptions.remove(missCard);
+
+                if (wasSuccess) {
+                    missedUsed++;
+                    if (missType.mustBeDiscardedAfterSuccessMiss()) {
+                        burnedMissed.add(missCard);
+
+                    }
+                }
+
+            }
+
+        }
+
+        if (missedUsed < missedNeeded) {
             takeDamage(1);
         }
+
+        for (DeckAble miss: burnedMissed) {
+            this.removeFromHand(miss);
+            game.getPile(DeckName.DISCARD_PILE).putOnTop(miss);
+        }
+
     }
 
     private void takeDamage(int i) {
