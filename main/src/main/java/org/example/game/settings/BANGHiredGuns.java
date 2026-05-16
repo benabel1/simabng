@@ -3,7 +3,10 @@ package org.example.game.settings;
 import org.example.game.Game;
 import org.example.game.cards.blue.animalpack.CardMule;
 import org.example.game.cards.blue.animalpack.CardTraitorousDog;
-import org.example.game.cards.brown.hiredguns.CardMysticDec;
+import org.example.game.cards.blue.hiredguns.CardSkunk;
+import org.example.game.cards.brown.animalpack.CardRaven;
+import org.example.game.cards.brown.hiredguns.CardMysticDen;
+import org.example.game.cards.green.hiredguns.CardFourLeafClover;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
 
@@ -82,6 +85,9 @@ public class BANGHiredGuns extends GameExpansionSetup {
         //01 ACE UP THE SLEEVE ♥: A
         result.add(new CardTraitorousDog(DIAMONDS, __J));
         result.add(new CardMule(CLUBS, __J));
+        result.add(new CardRaven(CLUBS, __J));
+        result.add(new CardSkunk(CLUBS, __J));
+
 
     }
 
@@ -90,7 +96,8 @@ public class BANGHiredGuns extends GameExpansionSetup {
         //BROWN
 
         //01 ARROW ♦: 5
-        result.add(new CardMysticDec(DIAMONDS, _05));
+        result.add(new CardMysticDen(DIAMONDS, _05));
+        result.add(new CardFourLeafClover(CLUBS, __J));
     }
 
     @Override

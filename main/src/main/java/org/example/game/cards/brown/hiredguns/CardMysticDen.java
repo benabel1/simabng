@@ -9,11 +9,10 @@ import org.example.game.cards.Suit;
 import org.example.game.cards.brown.BrownBorderCard;
 import org.example.game.deck.DeckAble;
 import org.example.game.deck.DeckName;
-import org.example.game.options.OptionOption;
 import org.example.game.options.scaner.OptionScanner;
 
-public class CardMysticDec extends BrownBorderCard implements IAvoidable {
-    public CardMysticDec(Suit suit, PokerValue pokerValue) {
+public class CardMysticDen extends BrownBorderCard implements IAvoidable {
+    public CardMysticDen(Suit suit, PokerValue pokerValue) {
         super(suit, pokerValue);
         this.cardName = "MYSTIC DEN";
     }
