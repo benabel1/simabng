@@ -26,6 +26,8 @@ public abstract class DeckAble {
     private long excessDiscardCount;
     private long successCount;
 
+    protected int cardDamage;
+
     public String getCardName() {
         return cardName;
     }
@@ -77,5 +79,9 @@ public abstract class DeckAble {
 
     public boolean wasShown() {
         return cardWasShown;
+    }
+
+    public int getCardDamage() {
+        return cardDamage;
     }
 }

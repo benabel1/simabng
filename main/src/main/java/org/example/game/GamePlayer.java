@@ -358,7 +358,7 @@ public class GamePlayer {
 
     }
 
-    private void takeDamage(int i) {
+    public void takeDamage(int i) {
         currentHp--;
         System.out.println(this + " suffer " + i + " damage.[" + currentHp + "/" + maxHp + "]");
     }
@@ -559,6 +559,30 @@ public class GamePlayer {
         }
 
         return loadCards;
+    }
+
+    public List<DeckAble> getAllCardsWithBangs(Game game) {
+        List<DeckAble> bangOptions = new ArrayList<>();
+
+        for (DeckAble handCard: playerHand) {
+            if (handCard instanceof IBangAble) {
+                IBangAble bang = ((IBangAble) handCard);
+                if (bang.canBeUsed(game)) {
+                    bangOptions.add(handCard);
+                }
+            }
+        }
+
+        for (DeckAble frontCard: playerFront) {
+            if (frontCard instanceof IBangAble) {
+                IBangAble bang = ((IBangAble) frontCard);
+                if (bang.canBeUsed(game)) {
+                    bangOptions.add(frontCard);
+                }
+            }
+        }
+
+        return bangOptions;
     }
 }
 

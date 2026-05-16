@@ -9,6 +9,8 @@ public class OptionOption {
 
     protected boolean wasRecorded;
 
+    protected boolean wasResolved;
+
     public OptionOption(GamePlayer sourcePlayer) {
         this.sourcePlayer = sourcePlayer;
     }
@@ -39,5 +41,9 @@ public class OptionOption {
 
     public void collectData(Game game) {
         System.out.println("I don t have any datas");
+    }
+
+    public void setAsResolved() {
+        wasResolved = true;
     }
 }

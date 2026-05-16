@@ -3,6 +3,7 @@ package org.example.game.cards.brown.basic;
 import org.example.game.Game;
 import org.example.game.GamePlayer;
 import org.example.game.cards.DistanceAllowedTarget;
+import org.example.game.cards.IBangAble;
 import org.example.game.cards.PokerValue;
 import org.example.game.cards.Suit;
 import org.example.game.cards.brown.BrownBorderCard;
@@ -11,7 +12,7 @@ import org.example.game.options.CardOption;
 import org.example.game.options.CardOptionAtWeaponRange;
 import org.example.game.options.OptionOption;
 
-public class CardBang extends BrownBorderCard {
+public class CardBang extends BrownBorderCard implements IBangAble {
 
     public CardBang(Suit s, PokerValue p) {
         super(s, p);
@@ -34,4 +35,8 @@ public class CardBang extends BrownBorderCard {
         }
     }
 
+    @Override
+    public boolean canBeUsed(Game game) {
+        return true;
+    }
 }

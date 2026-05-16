@@ -25,4 +25,5 @@ public class CardBeer extends BrownBorderCard {
         }
         game.notifyAllOther(this, sourcePlayer);
     }
+
 }

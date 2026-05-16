@@ -38,8 +38,8 @@ public class CardCatBalou extends BrownBorderCard {
             }
 
             super.playCardFromHand(game, option, sourcePlayer);
+            option.setAsResolved();
         }
-
 
     }
 }
